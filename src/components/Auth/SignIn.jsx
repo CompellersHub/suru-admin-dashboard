@@ -46,7 +46,7 @@ const SignIn = () => {
         throw new Error(data.error);
       }
 
-      console.log(data);
+      // console.log(data);
       toast.success("Login successfully");
       dispatch(
         authAction.login({
@@ -56,6 +56,7 @@ const SignIn = () => {
         })
       );
       localStorage.setItem("userData", JSON.stringify(data));
+
       setTimeout(() => {
         navigate("/admin/dashboard");
       }, 1000);
