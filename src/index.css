@@ -1,0 +1,14 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+:root {
+  --navbar-color: #5ec401;
+  --primary-color: #fe1717;
+  --secondary-color: #ff5e00;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  margin: 0;
+}
