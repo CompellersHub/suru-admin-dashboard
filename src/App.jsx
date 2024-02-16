@@ -10,8 +10,24 @@ import SignInPage from "./pages/Auth/SignInPage";
 import SignUpPage from "./pages/Auth/SignUpPage";
 import AdminOtpPage from "./pages/Auth/AdminOtpPage";
 import "react-toastify/dist/ReactToastify.css";
+import { authAction } from "./store/auth-slice";
+import { useDispatch } from "react-redux";
 
 function App() {
+  const dispatch = useDispatch();
+
+  const userData = JSON.parse(localStorage.getItem("userData"));
+
+  if (userData) {
+    dispatch(
+      authAction.login({
+        user: userData.data,
+        userToken: userData.user_token,
+        type: "admin",
+      })
+    );
+  }
+
   return (
     <Routes>
       <Route path="/" element={<SignInPage />} />

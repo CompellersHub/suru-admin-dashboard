@@ -46,20 +46,27 @@ const SignIn = () => {
         throw new Error(data.error);
       }
 
-      // console.log(data);
-      toast.success("Login successfully");
-      dispatch(
-        authAction.login({
-          user: data.user,
-          userToken: data.user_token,
-          type: "buyer",
-        })
-      );
-      localStorage.setItem("userData", JSON.stringify(data));
+  
 
-      setTimeout(() => {
+     if(data.data.super_admin) {
+    // console.log(data);
+    toast.success("Login successfully");
+    dispatch(
+      authAction.login({
+        user: data.user,
+        userToken: data.user_token,
+        type: "admin",
+      })
+    );
+    localStorage.setItem("userData", JSON.stringify(data));
+
+       setTimeout(() => {
         navigate("/admin/dashboard");
       }, 1000);
+      
+     } else {
+      toast.error(`User is not ad admin`)
+     }
     } catch (err) {
       console.log(err);
       toast.error(`${err.message}`);

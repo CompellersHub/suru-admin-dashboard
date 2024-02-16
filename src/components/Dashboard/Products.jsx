@@ -1,13 +1,82 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CiSearch } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../hooks/api";
+import { useSelector } from "react-redux";
 
 const Products = () => {
   const navigate = useNavigate();
   const [orderType, setOrderType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("id");
+  const [product, setProduct] = useState([]);
+  const [productData, setProductData] = useState();
+  const [newData, setNewData] = useState();
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const user = useSelector((state) => state.auth);
 
   let arr = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
+
+  const getProduct = async (type) => {
+    try {
+      const response = await fetch(`${api.get_product}${type}`, {
+        headers: {
+          authorization: `${user.userToken}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      // console.log(data.data);
+      const newData = data.data.map((item) => item);
+
+      // Update the state once with the new array
+      setProduct((prevState) => [...prevState, ...newData]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // useEffect to first get all the products
+  useEffect(() => {
+    getProduct("toprestaurant");
+    getProduct("topbasket");
+    getProduct("topdiet");
+  }, []);
+
+  // filtering the prduct so that no prdocut with same id appears twice
+  useEffect(() => {
+    const uniqueProducts = {};
+    product.forEach((item) => {
+      uniqueProducts[item._id] = item;
+    });
+    setNewData(Object.values(uniqueProducts).flatMap((item) => item));
+    setProductData(Object.values(uniqueProducts).flatMap((item) => item));
+  }, [product]);
+
+  // filter by stock level
+  const filterByStock = (stock) => {
+    if (stock === "low") {
+      setProductData(newData.filter((item) => item.stock < 20));
+    } else if (stock === "out") {
+      setProductData(newData.filter((item) => item.stock === 0));
+    } else if (stock === "all") {
+      setProductData(newData);
+    } else {
+      setProductData(newData.filter((item) => item.stock > 20));
+    }
+
+    // Reset page to 0 when filter changes
+    setPage(0);
+  };
+
+  const searchFilter = () => {
+    console.log(`search in ${searchTerm}`);
+  };
 
   return (
     <div className="flex flex-col gap-3 p-5">
@@ -21,25 +90,37 @@ const Products = () => {
       {/* navs */}
       <div className="flex justify-between bg-white rounded-md py-3 px-5">
         <button
-          onClick={() => setOrderType("all")}
+          onClick={() => {
+            setOrderType("all");
+            filterByStock("all");
+          }}
           className={orderType === "all" && "text-navbar-color font-bold"}
         >
           All Products
         </button>
         <button
-          onClick={() => setOrderType("available")}
+          onClick={() => {
+            setOrderType("available");
+            filterByStock("available");
+          }}
           className={orderType === "available" && "text-navbar-color font-bold"}
         >
           Available Products
         </button>
         <button
-          onClick={() => setOrderType("out")}
+          onClick={() => {
+            setOrderType("out");
+            filterByStock("out");
+          }}
           className={orderType === "out" && "text-navbar-color font-bold"}
         >
           Out Of Stock
         </button>
         <button
-          onClick={() => setOrderType("low")}
+          onClick={() => {
+            setOrderType("low");
+            filterByStock("low");
+          }}
           className={orderType === "low" && "text-navbar-color font-bold"}
         >
           Low Stock
@@ -89,27 +170,63 @@ const Products = () => {
 
         {/* body */}
         <tbody className="mt-5 bg-white text-[#3A3A3A]">
-          {arr.map((item, index) => (
-            <tr
-              key={index}
-              onClick={() => navigate(`/product/details/${index}`)}
-              className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
-            >
-              <td className="w-[20%]">Orange</td>
-              <td className="w-[20%]">Fortune Oliseyenum</td>
-              <td className="w-[20%]">24-10-2023</td>
-              <td className="w-[20%]">Farmer</td>
-              <td className="w-[20%]">Available</td>
-            </tr>
-          ))}
+          {productData &&
+            productData.slice(page, page + 10).map((item) => (
+              <tr
+                key={item._id}
+                onClick={() => navigate(`/product/details/${item._id}`)}
+                className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
+              >
+                <td className="w-[20%]">{item.name}</td>
+                <td className="w-[20%]">{item.creatorName}</td>
+                <td className="w-[20%]">24-10-2023</td>
+                <td className="w-[20%]">{item.vendorType}</td>
+                <td
+                  className={`w-[20%] ${
+                    item.stock < 20
+                      ? "text-orange-400"
+                      : item.stock === 0
+                      ? "text-red-500"
+                      : "text-navbar-color"
+                  }`}
+                >
+                  {item.stock < 20
+                    ? "Low Stock"
+                    : item.stock === 0
+                    ? "Out of Stock"
+                    : "Available"}
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
+      {productData && productData.length === 0 && (
+        <p className="text-center">No product available yet!</p>
+      )}
 
       <div className="flex justify-center gap-20 bg-white rounded-md py-3 px-5 text-navbar-color">
-        <button className="py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200">
+        <button
+          onClick={() => {
+            if (page === 0) {
+              return;
+            } else {
+              setPage(page - 10);
+            }
+          }}
+          className="py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200"
+        >
           Previous
         </button>
-        <button className="py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200">
+        <button
+          onClick={() => {
+            if (page + 10 < newData.length) {
+              setPage(page + 10);
+            } else {
+              console.log(newData.length, "no");
+            }
+          }}
+          className="py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200"
+        >
           Next
         </button>
       </div>
