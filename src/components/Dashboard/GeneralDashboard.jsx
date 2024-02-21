@@ -7,6 +7,7 @@ import Withdrawals from "./Withdrawals";
 import Orders from "./Orders";
 import Uploads from "./Uploads";
 import Products from "./Products";
+import { ToastContainer } from "react-toastify";
 
 import { useSelector } from "react-redux";
 
@@ -43,6 +44,7 @@ const GeneralDashboard = () => {
           )}
         </div>
       </div>
+      <ToastContainer position="top-right" />
     </section>
   );
 };

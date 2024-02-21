@@ -3,22 +3,22 @@ import { CiSearch } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../hooks/api";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const Products = () => {
   const navigate = useNavigate();
   const [orderType, setOrderType] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("id");
   const [product, setProduct] = useState([]);
-  const [productData, setProductData] = useState();
-  const [newData, setNewData] = useState();
+  const [filteredProduct, setFilteredProduct] = useState([]);
+  const [filterTerm, setFilterTerm] = useState("all");
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
+  const [category, setCategory] = useState("toprestaurant");
   const user = useSelector((state) => state.auth);
-
-  let arr = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
 
   const getProduct = async (type) => {
     try {
+      setLoading(true);
       const response = await fetch(`${api.get_product}${type}`, {
         headers: {
           authorization: `${user.userToken}`,
@@ -31,51 +31,45 @@ const Products = () => {
         throw new Error(data.message);
       }
 
-      // console.log(data.data);
-      const newData = data.data.map((item) => item);
-
       // Update the state once with the new array
-      setProduct((prevState) => [...prevState, ...newData]);
+      setProduct(data.data);
+      setFilteredProduct(data.data);
     } catch (err) {
-      console.log(err);
+      toast.error(`${err.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
   // useEffect to first get all the products
   useEffect(() => {
-    getProduct("toprestaurant");
-    getProduct("topbasket");
-    getProduct("topdiet");
-  }, []);
-
-  // filtering the prduct so that no prdocut with same id appears twice
-  useEffect(() => {
-    const uniqueProducts = {};
-    product.forEach((item) => {
-      uniqueProducts[item._id] = item;
-    });
-    setNewData(Object.values(uniqueProducts).flatMap((item) => item));
-    setProductData(Object.values(uniqueProducts).flatMap((item) => item));
-  }, [product]);
+    getProduct(category);
+  }, [category]);
 
   // filter by stock level
   const filterByStock = (stock) => {
     if (stock === "low") {
-      setProductData(newData.filter((item) => item.stock < 20));
+      setFilteredProduct(product.filter((item) => item.stock <= 20));
     } else if (stock === "out") {
-      setProductData(newData.filter((item) => item.stock === 0));
+      setFilteredProduct(product.filter((item) => item.stock === 0));
     } else if (stock === "all") {
-      setProductData(newData);
+      setFilteredProduct(product);
     } else {
-      setProductData(newData.filter((item) => item.stock > 20));
+      setFilteredProduct(product.filter((item) => item.stock > 20));
     }
 
     // Reset page to 0 when filter changes
     setPage(0);
   };
 
-  const searchFilter = () => {
-    console.log(`search in ${searchTerm}`);
+  // search for product by name
+  const searchFilter = (event) => {
+    const value = event.target.value;
+    setFilteredProduct(
+      product.filter((item) =>
+        item.name.toLowerCase().includes(value.toLowerCase())
+      )
+    );
   };
 
   return (
@@ -83,7 +77,7 @@ const Products = () => {
       <h3 className="flex items-center gap-3 text-2xl font-bold text-gray-700">
         Products
         <span className="text-navbar-color text-base bg-green-100 font-bold rounded-md p-1">
-          50 products
+          {filteredProduct.length} products
         </span>
       </h3>
 
@@ -92,38 +86,37 @@ const Products = () => {
         <button
           onClick={() => {
             setOrderType("all");
-            filterByStock("all");
+            setCategory("toprestaurant");
           }}
-          className={orderType === "all" && "text-navbar-color font-bold"}
+          className={
+            orderType === "all" ? "text-navbar-color font-bold" : "text-black"
+          }
         >
-          All Products
+          Top Restaurant
         </button>
         <button
           onClick={() => {
             setOrderType("available");
-            filterByStock("available");
+            setCategory("topdiet");
           }}
-          className={orderType === "available" && "text-navbar-color font-bold"}
+          className={
+            orderType === "available"
+              ? "text-navbar-color font-bold"
+              : "text-black"
+          }
         >
-          Available Products
+          Top Diet
         </button>
         <button
           onClick={() => {
             setOrderType("out");
-            filterByStock("out");
+            setCategory("topbasket");
           }}
-          className={orderType === "out" && "text-navbar-color font-bold"}
+          className={
+            orderType === "out" ? "text-navbar-color font-bold" : "text-black"
+          }
         >
-          Out Of Stock
-        </button>
-        <button
-          onClick={() => {
-            setOrderType("low");
-            filterByStock("low");
-          }}
-          className={orderType === "low" && "text-navbar-color font-bold"}
-        >
-          Low Stock
+          Top Basket
         </button>
       </div>
 
@@ -133,7 +126,8 @@ const Products = () => {
           <input
             className="p-[10px] px-10 border-[1px] rounded-md border-green-300 w-full placeholder:text-navbar-color"
             type="text"
-            placeholder="Search by Customer ID or Customer Name"
+            placeholder="Search by product Name"
+            onChange={searchFilter}
           />
           <div className="absolute top-[50%] -translate-y-[50%] left-2 text-2xl">
             <CiSearch />
@@ -143,15 +137,23 @@ const Products = () => {
         {/* search filter */}
         <select
           className="border-[1px] border-navbar-color rounded-md"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          value={filterTerm}
+          onChange={(e) => {
+            setFilterTerm(e.target.value);
+          }}
         >
-          <option value="id">Customer Id</option>
-          <option value="name">Customer Name</option>
+          <option value="all">All</option>
+          <option value="available">Available</option>
+          <option value="low">low stock</option>
+          <option value="out">out of stock</option>
         </select>
 
-        <button className="py-[10px] border-[1px] border-navbar-color px-5 rounded-md bg-navbar-color text-white">
-          Search
+        <button
+          type="button"
+          onClick={() => filterByStock(filterTerm)}
+          className="py-[10px] border-[1px] border-navbar-color px-5 rounded-md bg-navbar-color text-white"
+        >
+          Filter
         </button>
       </form>
 
@@ -170,11 +172,14 @@ const Products = () => {
 
         {/* body */}
         <tbody className="mt-5 bg-white text-[#3A3A3A]">
-          {productData &&
-            productData.slice(page, page + 10).map((item) => (
+          {!loading &&
+            filteredProduct &&
+            filteredProduct.slice(page, page + 10).map((item) => (
               <tr
                 key={item._id}
-                onClick={() => navigate(`/product/details/${item._id}`)}
+                onClick={() =>
+                  navigate(`/product/details/${category}/${item._id}`)
+                }
                 className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
               >
                 <td className="w-[20%]">{item.name}</td>
@@ -200,9 +205,10 @@ const Products = () => {
             ))}
         </tbody>
       </table>
-      {productData && productData.length === 0 && (
+      {!loading && filteredProduct && filteredProduct.length === 0 && (
         <p className="text-center">No product available yet!</p>
       )}
+      {loading && <p className="text-center">Loading...</p>}
 
       <div className="flex justify-center gap-20 bg-white rounded-md py-3 px-5 text-navbar-color">
         <button
@@ -219,10 +225,10 @@ const Products = () => {
         </button>
         <button
           onClick={() => {
-            if (page + 10 < newData.length) {
+            if (page + 10 < product.length) {
               setPage(page + 10);
             } else {
-              console.log(newData.length, "no");
+              console.log(product.length, "no");
             }
           }}
           className="py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200"

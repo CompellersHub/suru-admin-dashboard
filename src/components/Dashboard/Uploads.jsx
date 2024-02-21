@@ -1,13 +1,78 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../hooks/api";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const Uploads = () => {
   const navigate = useNavigate();
-  const [orderType, setOrderType] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("id");
+  const [uploads, setUploads] = useState([]);
+  const [filteredUploads, setFilteredUploads] = useState([]);
+  const [filterTerm, setFilterTerm] = useState("all");
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [category, setCategory] = useState("toprestaurant");
+  const user = useSelector((state) => state.auth);
 
-  let arr = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
+  useEffect(() => {
+    getUploadedItem(category);
+  }, [category]);
+
+  const getUploadedItem = async (type) => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${api.get_uploads}/${category}?status=pending`,
+        {
+          headers: {
+            authorization: `${user.userToken}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      setUploads(data.data);
+      setFilteredUploads(data.data);
+    } catch (err) {
+      toast.error(`${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // filter by stock level
+  const filterByStock = (stock) => {
+    if (stock === "low") {
+      setFilteredUploads(uploads.filter((item) => item.stock <= 20));
+    }
+    // else if (stock === "out") {
+    //   setFilteredUploads(uploads.filter((item) => item.stock === 0));
+    // }
+    else if (stock === "all") {
+      setFilteredUploads(uploads);
+    } else {
+      setFilteredUploads(uploads.filter((item) => item.stock > 20));
+    }
+
+    // Reset page to 0 when filter changes
+    setPage(0);
+  };
+
+  // search for product by name
+  const searchFilter = (event) => {
+    const value = event.target.value;
+    setFilteredUploads(
+      uploads.filter((item) =>
+        item.name.toLowerCase().includes(value.toLowerCase())
+      )
+    );
+  };
 
   return (
     <div className="flex flex-col gap-3 p-5">
@@ -21,30 +86,24 @@ const Uploads = () => {
       {/* navs */}
       <div className="flex justify-between bg-white rounded-md py-3 px-5">
         <button
-          onClick={() => setOrderType("all")}
-          className={orderType === "all" && "text-navbar-color font-bold"}
+          onClick={() => setCategory("toprestaurant")}
+          className={
+            category === "toprestaurant" && "text-navbar-color font-bold"
+          }
         >
-          All Uploads
+          Restaurant/Eatery
         </button>
         <button
-          onClick={() => setOrderType("farm")}
-          className={orderType === "farm" && "text-navbar-color font-bold"}
-        >
-          Farm Products
-        </button>
-        <button
-          onClick={() => setOrderType("processed")}
-          className={orderType === "processed" && "text-navbar-color font-bold"}
+          onClick={() => setCategory("topdiet")}
+          className={category === "topdiet" && "text-navbar-color font-bold"}
         >
           Processed Foods
         </button>
         <button
-          onClick={() => setOrderType("restaurant")}
-          className={
-            orderType === "restaurant" && "text-navbar-color font-bold"
-          }
+          onClick={() => setCategory("topbasket")}
+          className={category === "topbasket" && "text-navbar-color font-bold"}
         >
-          Restaurant/Eatery
+          Farm Products
         </button>
       </div>
 
@@ -54,7 +113,8 @@ const Uploads = () => {
           <input
             className="p-[10px] px-10 border-[1px] rounded-md border-green-300 w-full placeholder:text-navbar-color"
             type="text"
-            placeholder="Search by Customer ID or Customer Name"
+            placeholder="Search by product Name"
+            onChange={searchFilter}
           />
           <div className="absolute top-[50%] -translate-y-[50%] left-2 text-2xl">
             <CiSearch />
@@ -64,15 +124,22 @@ const Uploads = () => {
         {/* search filter */}
         <select
           className="border-[1px] border-navbar-color rounded-md"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          value={filterTerm}
+          onChange={(e) => {
+            setFilterTerm(e.target.value);
+          }}
         >
-          <option value="id">Customer Id</option>
-          <option value="name">Customer Name</option>
+          <option value="all">All</option>
+          <option value="available">Available</option>
+          <option value="low">low stock</option>
         </select>
 
-        <button className="py-[10px] border-[1px] border-navbar-color px-5 rounded-md bg-navbar-color text-white">
-          Search
+        <button
+          type="button"
+          onClick={() => filterByStock(filterTerm)}
+          className="py-[10px] border-[1px] border-navbar-color px-5 rounded-md bg-navbar-color text-white"
+        >
+          Filter
         </button>
       </form>
 
@@ -91,27 +158,64 @@ const Uploads = () => {
 
         {/* body */}
         <tbody className="mt-5 bg-white text-[#3A3A3A]">
-          {arr.map((item, index) => (
-            <tr
-              key={index}
-              onClick={() => navigate(`/upload/details/${index}`)}
-              className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
-            >
-              <td className="w-[20%]">Orange</td>
-              <td className="w-[20%]">Fortune Oliseyenum</td>
-              <td className="w-[20%]">24-10-2023</td>
-              <td className="w-[20%]">Farmer</td>
-              <td className="w-[20%]">50</td>
-            </tr>
-          ))}
+          {!loading &&
+            filteredUploads.slice(page, page + 10).map((item) => {
+              const options = {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              };
+
+              const dateObject = new Date(item.createdAt);
+              const readableDate = dateObject.toLocaleString("en-US", options);
+
+              return (
+                <tr
+                  key={item._id}
+                  onClick={() =>
+                    navigate(`/upload/details/${category}/${item._id}`)
+                  }
+                  className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
+                >
+                  <td className="w-[20%]">{item.name}</td>
+                  <td className="w-[20%]">{item.creatorName}</td>
+                  <td className="w-[20%]">{readableDate}</td>
+                  <td className="w-[20%]">{item.vendorType}</td>
+                  <td className="w-[20%]">{item.stock}</td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
 
+      {!loading && filteredUploads && filteredUploads.length === 0 && (
+        <p className="text-center">No product available yet!</p>
+      )}
+      {loading && <p className="text-center">Loading...</p>}
+
       <div className="flex justify-center gap-20 bg-white rounded-md py-3 px-5 text-navbar-color">
-        <button className="py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200">
+        <button
+          onClick={() => {
+            if (page === 0) {
+              return;
+            } else {
+              setPage(page - 10);
+            }
+          }}
+          className="py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200"
+        >
           Previous
         </button>
-        <button className="py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200">
+        <button
+          onClick={() => {
+            if (page + 10 < uploads.length) {
+              setPage(page + 10);
+            } else {
+              console.log(uploads.length, "no");
+            }
+          }}
+          className="py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200"
+        >
           Next
         </button>
       </div>
