@@ -61,11 +61,9 @@ const OrderDetails = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        console.log(data);
         throw new Error(data.message);
       }
 
-      console.log(data);
       toast.success("Order Status Updated!");
       getOrderDetails();
     } catch (err) {

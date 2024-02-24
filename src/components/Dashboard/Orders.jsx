@@ -11,7 +11,6 @@ const Orders = () => {
   const [orderList, setOrderList] = useState([]);
   const [orderCount, setOrderCount] = useState(0);
   const [filteredOrder, setFilteredOrder] = useState([]);
-  const [filterTerm, setFilterTerm] = useState("all");
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const user = useSelector((state) => state.auth);
@@ -151,25 +150,6 @@ const Orders = () => {
             <CiSearch />
           </div>
         </div>
-
-        {/* search filter
-        <select
-          className="border-[1px] border-navbar-color rounded-md"
-          value={filterTerm}
-          onChange={(e) => setFilterTerm(e.target.value)}
-        >
-          <option value="all">All</option>
-          <option value="name">Completed</option>
-          <option value="name">In Progress</option>
-          <option value="name">Cancelled</option>
-        </select> */}
-
-        {/* <button
-          type="button"
-          className="py-[10px] border-[1px] border-navbar-color px-5 rounded-md bg-navbar-color text-white"
-        >
-          Filter
-        </button> */}
       </form>
 
       {/* table */}

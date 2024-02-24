@@ -88,20 +88,30 @@ const Uploads = () => {
         <button
           onClick={() => setCategory("toprestaurant")}
           className={
-            category === "toprestaurant" && "text-navbar-color font-bold"
+            category === "toprestaurant"
+              ? "text-navbar-color font-bold"
+              : "text-black"
           }
         >
           Restaurant/Eatery
         </button>
         <button
           onClick={() => setCategory("topdiet")}
-          className={category === "topdiet" && "text-navbar-color font-bold"}
+          className={
+            category === "topdiet"
+              ? "text-navbar-color font-bold"
+              : "text-black"
+          }
         >
           Processed Foods
         </button>
         <button
           onClick={() => setCategory("topbasket")}
-          className={category === "topbasket" && "text-navbar-color font-bold"}
+          className={
+            category === "topbasket"
+              ? "text-navbar-color font-bold"
+              : "text-black"
+          }
         >
           Farm Products
         </button>

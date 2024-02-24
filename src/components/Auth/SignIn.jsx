@@ -29,7 +29,7 @@ const SignIn = () => {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch(api.login, {
+      const response = await fetch(api.signin, {
         method: "POST",
         body: JSON.stringify({
           email: email,
@@ -65,7 +65,6 @@ const SignIn = () => {
         toast.error(`User is not ad admin`);
       }
     } catch (err) {
-      console.log(err);
       toast.error(`${err.message}`);
     } finally {
       setLoading(false);
@@ -79,9 +78,6 @@ const SignIn = () => {
           <img src={logo} alt="logo" className="w-10 md:w-20" />
           <img src={suru} alt="company name" className="w-14 md:w-32 lg:w-40" />
         </Link>
-        <button className="bg-white text-navbar-color md:font-bold border-2 border-white transition-all duration-200 hover:bg-navbar-color hover:text-white p-2 md:px-4 rounded-full">
-          Become a Vendor
-        </button>
       </header>
 
       <section className="flex flex-col gap-10 items-center justify-center min-h-[100vh] py-10 px-5">

@@ -19,7 +19,7 @@ const Products = () => {
   const getProduct = async (type) => {
     try {
       setLoading(true);
-      const response = await fetch(`${api.get_product}${type}`, {
+      const response = await fetch(`${api.get_product}${type}?status=accept`, {
         headers: {
           authorization: `${user.userToken}`,
         },
