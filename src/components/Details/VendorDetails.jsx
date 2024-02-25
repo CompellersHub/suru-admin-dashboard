@@ -37,9 +37,7 @@ const VendorDetails = () => {
       }
 
       setVendorDetails(data.data);
-      console.log(data);
     } catch (err) {
-      console.log(err);
       toast.error(`${err.message}`);
     } finally {
       setLoading(null);

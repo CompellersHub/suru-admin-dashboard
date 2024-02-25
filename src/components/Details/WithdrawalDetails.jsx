@@ -64,7 +64,7 @@ const WithdrawalDetails = () => {
         {/* loading state */}
         {loading && (
           <div className="flex flex-col gap-2 items-center">
-            <p className="text-2xl  self-center animate-spin">
+            <p className="text-2xl self-center animate-spin">
               <AiOutlineLoading3Quarters />
             </p>
             <span>Getting order details...</span>
@@ -78,7 +78,7 @@ const WithdrawalDetails = () => {
         {withdrawalDetails && (
           <img
             className="w-40 h-40 rounded-full"
-            src={withdrawalDetails.vendorInfo.image}
+            src={withdrawalDetails.vendorId.image}
             alt="fortune"
           />
         )}
@@ -88,15 +88,23 @@ const WithdrawalDetails = () => {
             {/* account status */}
             <div className="flex justify-between w-full">
               <strong>Account Status:</strong>
-              <p className="text-navbar-color">
-                {withdrawalDetails.vendorInfo.vendorStatus}
+              <p
+                className={`${
+                  withdrawalDetails.vendorId.isVerified
+                    ? "text-navbar-color"
+                    : "text-red-400"
+                }`}
+              >
+                {withdrawalDetails.vendorId.isVerified
+                  ? "Verified"
+                  : "No Verified"}
               </p>
             </div>
 
             {/* vendor name */}
             <div className="flex justify-between w-full">
               <strong>Vendor Name:</strong>
-              <p>{withdrawalDetails.vendorInfo.name}</p>
+              <p>{withdrawalDetails.vendorId.companyName}</p>
             </div>
 
             {/* Account name */}

@@ -13,6 +13,7 @@ import AdminOtpPage from "./pages/Auth/AdminOtpPage";
 import "react-toastify/dist/ReactToastify.css";
 import { authAction } from "./store/auth-slice";
 import { useDispatch } from "react-redux";
+import RequireAuth from "./components/RequireAuth";
 
 function App() {
   const dispatch = useDispatch();
@@ -34,20 +35,53 @@ function App() {
       <Route path="/" element={<SignInPage />} />
       <Route path="sign-up/admin" element={<SignUpPage />} />
       <Route path="otp/admin" element={<AdminOtpPage />} />
-      <Route path="admin/dashboard" element={<DashboardPage />} />
-      <Route path="vendor/details/:vendorId" element={<VendorDetailsPage />} />
+      <Route
+        path="admin/dashboard"
+        element={
+          <RequireAuth>
+            <DashboardPage />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="vendor/details/:vendorId"
+        element={
+          <RequireAuth>
+            <VendorDetailsPage />
+          </RequireAuth>
+        }
+      />
       <Route
         path="product/details/:category/:productId"
-        element={<ProductDetailsPage />}
+        element={
+          <RequireAuth>
+            <ProductDetailsPage />
+          </RequireAuth>
+        }
       />
-      <Route path="orders/details/:orderId" element={<OrderDetailsPage />} />
+      <Route
+        path="orders/details/:orderId"
+        element={
+          <RequireAuth>
+            <OrderDetailsPage />
+          </RequireAuth>
+        }
+      />
       <Route
         path="upload/details/:category/:productId"
-        element={<UploadDetailsPage />}
+        element={
+          <RequireAuth>
+            <UploadDetailsPage />
+          </RequireAuth>
+        }
       />
       <Route
         path="withdrawal/details/:vendorId"
-        element={<WithdrawalDetailsPage />}
+        element={
+          <RequireAuth>
+            <WithdrawalDetailsPage />
+          </RequireAuth>
+        }
       />
     </Routes>
   );

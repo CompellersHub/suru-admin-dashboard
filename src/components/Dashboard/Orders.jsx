@@ -33,6 +33,7 @@ const Orders = () => {
       if (!response.ok) {
         throw new Error(data.message);
       }
+
       setOrderList(data.data);
       setFilteredOrder(data.data);
       setOrderCount(data.count);
@@ -167,30 +168,31 @@ const Orders = () => {
 
         {/* body */}
         <tbody className="mt-5 bg-white text-[#3A3A3A]">
-          {filteredOrder.slice(page, page + 10).map((item) => {
-            const options = {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            };
+          {filteredOrder &&
+            filteredOrder.slice(page, page + 10).map((item) => {
+              const options = {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              };
 
-            const dateObject = new Date(item.createdAt);
-            const readableDate = dateObject.toLocaleString("en-US", options);
+              const dateObject = new Date(item.createdAt);
+              const readableDate = dateObject.toLocaleString("en-US", options);
 
-            return (
-              <tr
-                key={item._id}
-                onClick={() => navigate(`/orders/details/${item._id}`)}
-                className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
-              >
-                <td>{item._id}</td>
-                <td>{item.userInfo.name}</td>
-                <td>{readableDate}</td>
-                <td>N{item.bill}</td>
-                <td>{item.status}</td>
-              </tr>
-            );
-          })}
+              return (
+                <tr
+                  key={item._id}
+                  onClick={() => navigate(`/orders/details/${item._id}`)}
+                  className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
+                >
+                  <td>{item._id}</td>
+                  <td>{item.userInfo?.name}</td>
+                  <td>{readableDate}</td>
+                  <td>N{item.bill}</td>
+                  <td>{item.status}</td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
 

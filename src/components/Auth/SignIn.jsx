@@ -1,13 +1,13 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { BiHide } from "react-icons/bi";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import suru from "../../assets/suru.png";
 import logo from "../../assets/logo.png";
 import { ToastContainer, toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authAction } from "../../store/auth-slice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { api } from "../../hooks/api";
 
 const SignIn = () => {
@@ -17,6 +17,16 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const user = useSelector((state) => state.auth.userToken);
+
+  const redirectPath = location.state?.path || "/admin/dashboard";
+
+  useEffect(() => {
+    if (user) {
+      navigate(redirectPath, { replace: true });
+    }
+  }, [user, redirectPath]);
 
   const setVeiw = () => {
     setViewPassword(true);
@@ -59,10 +69,10 @@ const SignIn = () => {
         localStorage.setItem("userData", JSON.stringify(data));
 
         setTimeout(() => {
-          navigate("/admin/dashboard");
+          navigate(redirectPath, { replace: true });
         }, 1000);
       } else {
-        toast.error(`User is not ad admin`);
+        toast.error(`User is not an admin`);
       }
     } catch (err) {
       toast.error(`${err.message}`);
