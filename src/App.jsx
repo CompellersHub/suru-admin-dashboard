@@ -18,7 +18,7 @@ import RequireAuth from "./components/RequireAuth";
 function App() {
   const dispatch = useDispatch();
 
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
 
   if (userData) {
     dispatch(

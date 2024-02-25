@@ -161,7 +161,7 @@ const Navigation = () => {
         <CiLogout />
         <button
           onClick={() => {
-            localStorage.clear();
+            sessionStorage.clear();
             dispatch(authAction.logout());
           }}
         >

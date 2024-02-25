@@ -66,7 +66,7 @@ const SignIn = () => {
             type: "admin",
           })
         );
-        localStorage.setItem("userData", JSON.stringify(data));
+        sessionStorage.setItem("userData", JSON.stringify(data));
 
         setTimeout(() => {
           navigate(redirectPath, { replace: true });

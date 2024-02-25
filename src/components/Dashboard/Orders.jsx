@@ -186,7 +186,7 @@ const Orders = () => {
                   className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
                 >
                   <td>{item._id}</td>
-                  <td>{item.userInfo?.name}</td>
+                  <td>{item.userId?.name}</td>
                   <td>{readableDate}</td>
                   <td>N{item.bill}</td>
                   <td>{item.status}</td>
