@@ -79,7 +79,7 @@ const Uploads = () => {
       <h3 className="flex items-center gap-3 text-2xl font-bold text-gray-700">
         Pending Uploads
         <span className="text-navbar-color text-base bg-green-100 font-bold rounded-md p-1">
-          50 uploads
+          {uploads?.length} Uploads
         </span>
       </h3>
 
@@ -88,20 +88,30 @@ const Uploads = () => {
         <button
           onClick={() => setCategory("toprestaurant")}
           className={
-            category === "toprestaurant" && "text-navbar-color font-bold"
+            category === "toprestaurant"
+              ? "text-navbar-color font-bold"
+              : "text-black"
           }
         >
           Restaurant/Eatery
         </button>
         <button
           onClick={() => setCategory("topdiet")}
-          className={category === "topdiet" && "text-navbar-color font-bold"}
+          className={
+            category === "topdiet"
+              ? "text-navbar-color font-bold"
+              : "text-black"
+          }
         >
           Processed Foods
         </button>
         <button
           onClick={() => setCategory("topbasket")}
-          className={category === "topbasket" && "text-navbar-color font-bold"}
+          className={
+            category === "topbasket"
+              ? "text-navbar-color font-bold"
+              : "text-black"
+          }
         >
           Farm Products
         </button>

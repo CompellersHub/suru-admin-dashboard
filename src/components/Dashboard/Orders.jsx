@@ -11,7 +11,6 @@ const Orders = () => {
   const [orderList, setOrderList] = useState([]);
   const [orderCount, setOrderCount] = useState(0);
   const [filteredOrder, setFilteredOrder] = useState([]);
-  const [filterTerm, setFilterTerm] = useState("all");
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const user = useSelector((state) => state.auth);
@@ -34,6 +33,7 @@ const Orders = () => {
       if (!response.ok) {
         throw new Error(data.message);
       }
+
       setOrderList(data.data);
       setFilteredOrder(data.data);
       setOrderCount(data.count);
@@ -151,25 +151,6 @@ const Orders = () => {
             <CiSearch />
           </div>
         </div>
-
-        {/* search filter
-        <select
-          className="border-[1px] border-navbar-color rounded-md"
-          value={filterTerm}
-          onChange={(e) => setFilterTerm(e.target.value)}
-        >
-          <option value="all">All</option>
-          <option value="name">Completed</option>
-          <option value="name">In Progress</option>
-          <option value="name">Cancelled</option>
-        </select> */}
-
-        {/* <button
-          type="button"
-          className="py-[10px] border-[1px] border-navbar-color px-5 rounded-md bg-navbar-color text-white"
-        >
-          Filter
-        </button> */}
       </form>
 
       {/* table */}
@@ -187,30 +168,31 @@ const Orders = () => {
 
         {/* body */}
         <tbody className="mt-5 bg-white text-[#3A3A3A]">
-          {filteredOrder.slice(page, page + 10).map((item) => {
-            const options = {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            };
+          {filteredOrder &&
+            filteredOrder.slice(page, page + 10).map((item) => {
+              const options = {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              };
 
-            const dateObject = new Date(item.createdAt);
-            const readableDate = dateObject.toLocaleString("en-US", options);
+              const dateObject = new Date(item.createdAt);
+              const readableDate = dateObject.toLocaleString("en-US", options);
 
-            return (
-              <tr
-                key={item._id}
-                onClick={() => navigate(`/orders/details/${item._id}`)}
-                className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
-              >
-                <td>{item._id}</td>
-                <td>{item.userInfo.name}</td>
-                <td>{readableDate}</td>
-                <td>N{item.bill}</td>
-                <td>{item.status}</td>
-              </tr>
-            );
-          })}
+              return (
+                <tr
+                  key={item._id}
+                  onClick={() => navigate(`/orders/details/${item._id}`)}
+                  className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
+                >
+                  <td>{item._id}</td>
+                  <td>{item.userId?.name}</td>
+                  <td>{readableDate}</td>
+                  <td>N{item.bill}</td>
+                  <td>{item.status}</td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
 

@@ -1,13 +1,13 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { BiHide } from "react-icons/bi";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import suru from "../../assets/suru.png";
 import logo from "../../assets/logo.png";
 import { ToastContainer, toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authAction } from "../../store/auth-slice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { api } from "../../hooks/api";
 
 const SignIn = () => {
@@ -17,6 +17,16 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const user = useSelector((state) => state.auth.userToken);
+
+  const redirectPath = location.state?.path || "/admin/dashboard";
+
+  useEffect(() => {
+    if (user) {
+      navigate(redirectPath, { replace: true });
+    }
+  }, [user, redirectPath]);
 
   const setVeiw = () => {
     setViewPassword(true);
@@ -29,7 +39,7 @@ const SignIn = () => {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch(api.login, {
+      const response = await fetch(api.signin, {
         method: "POST",
         body: JSON.stringify({
           email: email,
@@ -56,16 +66,15 @@ const SignIn = () => {
             type: "admin",
           })
         );
-        localStorage.setItem("userData", JSON.stringify(data));
+        sessionStorage.setItem("userData", JSON.stringify(data));
 
         setTimeout(() => {
-          navigate("/admin/dashboard");
+          navigate(redirectPath, { replace: true });
         }, 1000);
       } else {
-        toast.error(`User is not ad admin`);
+        toast.error(`User is not an admin`);
       }
     } catch (err) {
-      console.log(err);
       toast.error(`${err.message}`);
     } finally {
       setLoading(false);
@@ -79,9 +88,6 @@ const SignIn = () => {
           <img src={logo} alt="logo" className="w-10 md:w-20" />
           <img src={suru} alt="company name" className="w-14 md:w-32 lg:w-40" />
         </Link>
-        <button className="bg-white text-navbar-color md:font-bold border-2 border-white transition-all duration-200 hover:bg-navbar-color hover:text-white p-2 md:px-4 rounded-full">
-          Become a Vendor
-        </button>
       </header>
 
       <section className="flex flex-col gap-10 items-center justify-center min-h-[100vh] py-10 px-5">

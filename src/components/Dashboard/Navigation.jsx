@@ -7,6 +7,7 @@ import { FaUpload } from "react-icons/fa6";
 import { IoCashOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { navAction } from "../../store/nav-slice";
+import { authAction } from "../../store/auth-slice";
 
 const Navigation = () => {
   const activeNav = useSelector((state) => state.nav.nav);
@@ -158,7 +159,14 @@ const Navigation = () => {
       </div>
       <div className="flex items-center gap-3 text-xl mt-auto ml-10 text-[#EB5757]">
         <CiLogout />
-        <Link to="/">Logout</Link>
+        <button
+          onClick={() => {
+            sessionStorage.clear();
+            dispatch(authAction.logout());
+          }}
+        >
+          Logout
+        </button>
       </div>
     </nav>
   );
