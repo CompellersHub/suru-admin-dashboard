@@ -45,6 +45,16 @@ const WithdrawalDetails = () => {
     }
   };
 
+  console.log(withdrawalDetails);
+
+  //   const approveWithdrawal = async() => {
+  //     try {
+  // const response = await fetch(`${api.confirm_withdrawal}/${withdrawalDetails.}`)
+  //     }catch(err) {
+  //       console.log(err)
+  //     }
+  //   }
+
   return (
     <section className="bg-gray-200 min-h-[100vh]">
       {/* dashboard header */}
@@ -134,7 +144,7 @@ const WithdrawalDetails = () => {
             {/* total Available Product */}
             <div className="flex justify-between w-full">
               <strong>Current Balance:</strong>
-              <p>N{withdrawalDetails.vendorBalance}</p>
+              <p>N{withdrawalDetails.vendorId.nairaBalance}</p>
             </div>
 
             {/* total Available Product */}

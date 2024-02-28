@@ -70,7 +70,7 @@ const Orders = () => {
     const value = event.target.value;
     setFilteredOrder(
       orderList.filter((item) =>
-        item.userInfo.name.toLowerCase().includes(value.toLowerCase())
+        item.userId.name.toLowerCase().includes(value.toLowerCase())
       )
     );
   };

@@ -62,6 +62,7 @@ const VendorDetails = () => {
       }
 
       console.log(data);
+      toast.success(`${data.message}`);
     } catch (err) {
       console.log(err);
       toast.error(`${err.message}`);

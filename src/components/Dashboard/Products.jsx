@@ -32,8 +32,9 @@ const Products = () => {
       }
 
       // Update the state once with the new array
-      setProduct(data.data);
-      setFilteredProduct(data.data);
+      const sortedData = data.data.reverse();
+      setProduct(sortedData);
+      setFilteredProduct(sortedData);
     } catch (err) {
       toast.error(`${err.message}`);
     } finally {
@@ -174,35 +175,46 @@ const Products = () => {
         <tbody className="mt-5 bg-white text-[#3A3A3A]">
           {!loading &&
             filteredProduct &&
-            filteredProduct.slice(page, page + 10).map((item) => (
-              <tr
-                key={item._id}
-                onClick={() =>
-                  navigate(`/product/details/${category}/${item._id}`)
-                }
-                className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
-              >
-                <td className="w-[20%]">{item.name}</td>
-                <td className="w-[20%]">{item.creatorName}</td>
-                <td className="w-[20%]">24-10-2023</td>
-                <td className="w-[20%]">{item.vendorType}</td>
-                <td
-                  className={`w-[20%] ${
-                    item.stock < 20
-                      ? "text-orange-400"
-                      : item.stock === 0
-                      ? "text-red-500"
-                      : "text-navbar-color"
-                  }`}
+            filteredProduct.slice(page, page + 10).map((item) => {
+              const options = {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              };
+
+              const dateObject = new Date(item.createdAt);
+              const readableDate = dateObject.toLocaleString("en-US", options);
+
+              return (
+                <tr
+                  key={item._id}
+                  onClick={() =>
+                    navigate(`/product/details/${category}/${item._id}`)
+                  }
+                  className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
                 >
-                  {item.stock < 20
-                    ? "Low Stock"
-                    : item.stock === 0
-                    ? "Out of Stock"
-                    : "Available"}
-                </td>
-              </tr>
-            ))}
+                  <td className="w-[20%]">{item.name}</td>
+                  <td className="w-[20%]">{item.creatorName}</td>
+                  <td className="w-[20%]">{readableDate}</td>
+                  <td className="w-[20%]">{item.vendorType}</td>
+                  <td
+                    className={`w-[20%] ${
+                      item.stock < 20
+                        ? "text-orange-400"
+                        : item.stock === 0
+                        ? "text-red-500"
+                        : "text-navbar-color"
+                    }`}
+                  >
+                    {item.stock < 20
+                      ? "Low Stock"
+                      : item.stock === 0
+                      ? "Out of Stock"
+                      : "Available"}
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
       {!loading && filteredProduct && filteredProduct.length === 0 && (
