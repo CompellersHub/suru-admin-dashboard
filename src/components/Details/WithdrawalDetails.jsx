@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import suru from "../../assets/suru.png";
 import logo from "../../assets/logo.png";
-import fortune from "../../assets/fortune-profile-photo-1.jpg";
 import { useNavigate } from "react-router-dom";
 import { IoMdArrowBack } from "react-icons/io";
 import { useParams } from "react-router-dom";
 import { api } from "../../hooks/api";
 import { useSelector } from "react-redux";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { banks } from "../banklist";
+import { ToastContainer, toast } from "react-toastify";
 
 const WithdrawalDetails = () => {
   const navigate = useNavigate();
@@ -45,15 +46,36 @@ const WithdrawalDetails = () => {
     }
   };
 
-  console.log(withdrawalDetails);
+  const userBank = banks.filter(
+    (bank) =>
+      bank.name.toLowerCase() === withdrawalDetails.bankName.toLowerCase()
+  );
+  const userBankCode = userBank[0].code;
+  const approveWithdrawal = async () => {
+    try {
+      const response = await fetch(
+        `${api.confirm_withdrawal}/${withdrawalDetails._id}`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            account_bank: userBankCode,
+            account_number: withdrawalDetails.accountNumber,
+            amount: withdrawalDetails.withdrawalAmount,
+          }),
+        }
+      );
 
-  //   const approveWithdrawal = async() => {
-  //     try {
-  // const response = await fetch(`${api.confirm_withdrawal}/${withdrawalDetails.}`)
-  //     }catch(err) {
-  //       console.log(err)
-  //     }
-  //   }
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <section className="bg-gray-200 min-h-[100vh]">
@@ -161,12 +183,16 @@ const WithdrawalDetails = () => {
               </p>
             </div>
 
-            <button className="bg-navbar-color mt-5 text-white hover:text-navbar-color hover:bg-white py-2 px-5 rounded-md border border-navbar-color transition-all duration-200">
+            <button
+              onClick={approveWithdrawal}
+              className="bg-navbar-color mt-5 text-white hover:text-navbar-color hover:bg-white py-2 px-5 rounded-md border border-navbar-color transition-all duration-200"
+            >
               Approve
             </button>
           </div>
         )}
       </div>
+      <ToastContainer position="top-right" />
     </section>
   );
 };

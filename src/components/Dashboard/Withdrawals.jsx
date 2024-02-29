@@ -65,13 +65,13 @@ const Withdrawals = () => {
 
   const searchFilter = (event) => {
     const value = event.target.value;
-    console.log(filteredWithdrawal);
     setFilteredWithdrawal(
-      withdrawalList.filter((item) =>
-        item.bankHolderName.toLowerCase().includes(value.toLowerCase())
+      withdrawalList.filter(
+        (item) =>
+          item.bankHolderName &&
+          item.bankHolderName.toLowerCase().includes(value.toLowerCase())
       )
     );
-    console.log(withdrawalList);
   };
 
   return (
