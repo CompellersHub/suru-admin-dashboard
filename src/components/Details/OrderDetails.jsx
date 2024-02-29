@@ -140,6 +140,8 @@ const OrderDetails = () => {
                   ? "bg-yellow-400"
                   : orderItem.status === "shipped"
                   ? "bg-gray-400"
+                  : orderItem.status === "cancelled"
+                  ? "bg-red-500"
                   : "bg-navbar-color"
               } px-2 py-1 rounded-md text-white`}
             >
