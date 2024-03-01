@@ -13,7 +13,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const user = useSelector((state) => state.auth);
-
+  console.log(user);
   useEffect(() => {
     getVendorsList();
   }, []);
@@ -71,7 +71,7 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col gap-3 p-5">
       <h3 className="flex items-center gap-3 text-2xl font-bold text-gray-700">
-        Welcome Admin Fortune
+        Welcome {user?.user?.name}
       </h3>
 
       <form className="flex gap-5 bg-white rounded-md py-3 px-5 text-navbar-color">
