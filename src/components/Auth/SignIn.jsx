@@ -56,7 +56,7 @@ const SignIn = () => {
         throw new Error(data.error);
       }
 
-      if (data.data.super_admin) {
+      if (data.data.super_admin || data.data.admin) {
         // console.log(data);
         toast.success("Login successfully");
         dispatch(
