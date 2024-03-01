@@ -53,7 +53,11 @@ const WithdrawalDetails = () => {
         bank.name.toLowerCase() === withdrawalDetails.bankName.toLowerCase()
     );
     const userBankCode = userBank && userBank[0].code;
+
     try {
+      if (!userBankCode) {
+        throw new Error("User bank is not supported!");
+      }
       const response = await fetch(
         `${api.confirm_withdrawal}/${withdrawalDetails._id}`,
         {
@@ -61,8 +65,12 @@ const WithdrawalDetails = () => {
           body: JSON.stringify({
             account_bank: userBankCode,
             account_number: withdrawalDetails.accountNumber,
-            amount: withdrawalDetails.withdrawalAmount,
+            amount: 100,
           }),
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `${user.userToken}`,
+          },
         }
       );
 
