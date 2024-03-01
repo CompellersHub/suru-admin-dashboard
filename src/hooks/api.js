@@ -11,5 +11,5 @@ export const api = {
   get_order: `${base}/superadmin/order`,
   get_uploads: `${base}/superadmin/`,
   get_withdrawal: `${base}/superadmin/withdraw`,
-  confirm_withdrawal: `${base}/transaction/vendor`,
+  confirm_withdrawal: `${base}/superadmin/transaction/vendor`,
 };
