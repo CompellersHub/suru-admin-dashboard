@@ -46,12 +46,13 @@ const WithdrawalDetails = () => {
     }
   };
 
-  const userBank = banks.filter(
-    (bank) =>
-      bank.name.toLowerCase() === withdrawalDetails.bankName.toLowerCase()
-  );
-  const userBankCode = userBank[0].code;
   const approveWithdrawal = async () => {
+    toast.success("Approving Withdrawal...");
+    const userBank = banks.filter(
+      (bank) =>
+        bank.name.toLowerCase() === withdrawalDetails.bankName.toLowerCase()
+    );
+    const userBankCode = userBank && userBank[0].code;
     try {
       const response = await fetch(
         `${api.confirm_withdrawal}/${withdrawalDetails._id}`,
@@ -68,12 +69,15 @@ const WithdrawalDetails = () => {
       const data = await response.json();
 
       if (!response.ok) {
+        console.log(data);
         throw new Error(data.message);
       }
 
       console.log(data);
+      toast.success("Withdrawal Approved Successfully");
     } catch (err) {
       console.log(err);
+      toast.error(`${err.message}`);
     }
   };
 
