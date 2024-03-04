@@ -13,7 +13,6 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const user = useSelector((state) => state.auth);
-  console.log(user);
   useEffect(() => {
     getVendorsList();
   }, []);
@@ -132,7 +131,7 @@ const Dashboard = () => {
             >
               <td className="w-[20%]">{item.companyName}</td>
               <td className="w-[20%]">{item.totalProducts}</td>
-              <td className="w-[20%]">N{item.productSold}</td>
+              <td className="w-[20%]">N{item.nairaBalance}</td>
               <td className="w-[20%]">{item.category}</td>
               <td
                 className={`w-[20%] ${

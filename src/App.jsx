@@ -8,8 +8,6 @@ import UploadDetailsPage from "./pages/Details/UploadDetailsPage";
 import WithdrawalDetailsPage from "./pages/Details/WithdrawalDetailsPage";
 import OrderDetailsPage from "./pages/Details/OrderDetailsPage";
 import SignInPage from "./pages/Auth/SignInPage";
-import SignUpPage from "./pages/Auth/SignUpPage";
-import AdminOtpPage from "./pages/Auth/AdminOtpPage";
 import "react-toastify/dist/ReactToastify.css";
 import { authAction } from "./store/auth-slice";
 import { useDispatch } from "react-redux";
@@ -33,8 +31,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<SignInPage />} />
-      <Route path="sign-up/admin" element={<SignUpPage />} />
-      <Route path="otp/admin" element={<AdminOtpPage />} />
+      <Route path="*" element={<SignInPage />} />
       <Route
         path="admin/dashboard"
         element={

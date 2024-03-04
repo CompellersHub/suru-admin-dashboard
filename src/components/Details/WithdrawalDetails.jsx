@@ -37,7 +37,7 @@ const WithdrawalDetails = () => {
       if (!response.ok) {
         throw new Error(data.message);
       }
-
+console.log(data)
       setWithdrawalDetails(data.data);
     } catch (err) {
       setError(true);
@@ -65,7 +65,7 @@ const WithdrawalDetails = () => {
           body: JSON.stringify({
             account_bank: userBankCode,
             account_number: withdrawalDetails.accountNumber,
-            amount: 100,
+            amount: withdrawalDetails.withdrawalAmount,
           }),
           headers: {
             "Content-Type": "application/json",
