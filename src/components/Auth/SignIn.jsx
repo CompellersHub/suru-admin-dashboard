@@ -57,7 +57,6 @@ const SignIn = () => {
       }
 
       if (data.data.super_admin || data.data.admin) {
-        // console.log(data);
         toast.success("Login successfully");
         dispatch(
           authAction.login({
@@ -140,25 +139,10 @@ const SignIn = () => {
             </div>
           </div>
 
-          {/* forgot password link */}
-          {/* <Link
-            to="/forgot-password"
-            className="self-end text-navbar-color font-semibold"
-          >
-            Forgot Password
-          </Link> */}
-
           {/* submit button */}
           <button className="bg-navbar-color p-4 rounded-full text-white font-semibold transition-all duration-200 border-navbar-color border hover:text-navbar-color hover:bg-white">
             {loading ? "Loading..." : "Login"}
           </button>
-
-          <div className="flex self-center gap-2">
-            <p>Dont have an account?</p>
-            <Link className="text-navbar-color" to="/sign-up/admin">
-              Signup
-            </Link>
-          </div>
         </form>
 
         <ToastContainer position="top-right" />

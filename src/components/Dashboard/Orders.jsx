@@ -33,7 +33,6 @@ const Orders = () => {
       if (!response.ok) {
         throw new Error(data.message);
       }
-
       setOrderList(data.data);
       setFilteredOrder(data.data);
       setOrderCount(data.count);
