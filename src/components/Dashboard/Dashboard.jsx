@@ -127,11 +127,11 @@ const Dashboard = () => {
             <tr
               key={item._id}
               onClick={() => navigate(`/vendor/details/${item._id}`)}
-              className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
+              className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200 hover:bg-slate-100 hover:cursor-pointer"
             >
-              <td className="w-[20%]">{item.companyName}</td>
+              <td className="w-[20%] text-start pl-2">{item.companyName}</td>
               <td className="w-[20%]">{item.totalProducts}</td>
-              <td className="w-[20%]">N{item.nairaBalance}</td>
+              <td className="w-[20%]">₦{item.nairaBalance}</td>
               <td className="w-[20%]">{item.category}</td>
               <td
                 className={`w-[20%] ${
