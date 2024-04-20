@@ -23,19 +23,15 @@ const VendorDetails = () => {
   const getVendorDetaisl = async () => {
     try {
       setLoading("getting");
-
       const response = await fetch(`${api.get_vendors}/${vendorId}`, {
         headers: {
           authorization: `${user.userToken}`,
         },
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.message);
       }
-
       setVendorDetails(data.data);
     } catch (err) {
       toast.error(`${err.message}`);
@@ -72,12 +68,12 @@ const VendorDetails = () => {
   };
 
   return (
-    <section className="bg-gray-200 min-h-[100vh]">
+    <section className="bg-gray-200 min-h-[100vh] font-sans">
       {/* dashboard header */}
       <header className="flex items-center justify-between gap-5 bg-navbar-color p-3 md:px-10">
         <div to="/" className="flex gap-3 items-center">
-          <img src={logo} alt="logo" className="w-10 md:w-20" />
-          <img src={suru} alt="company name" className="w-14 md:w-32 lg:w-40" />
+          <img src={logo} alt="logo" className="w-7 md:w-12" />
+          <img src={suru} alt="company name" className="w-10 md:w-28" />
         </div>
       </header>
 
@@ -106,7 +102,7 @@ const VendorDetails = () => {
         )}
 
         {vendorDetails && (
-          <div className="flex flex-col gap-3 items-center w-[70%] bg-white p-5 rounded-md">
+          <div className="flex flex-col gap-3 items-center w-[100%] bg-white p-5 rounded-md">
             {/* account status */}
             <div className="flex justify-between w-full">
               <strong>Account Status:</strong>
@@ -128,17 +124,23 @@ const VendorDetails = () => {
             </div>
 
             {/* vendor name */}
-            <div className="flex justify-between w-full">
+            <div className="flex justify-between w-full bg-slate-100">
               <strong>Vendor Name:</strong>
               <p>{vendorDetails.companyName}</p>
             </div>
 
-            {/* vendor name */}
+            {/* vendor email */}
             <div className="flex justify-between w-full">
-              <strong className="">Vendor Address:</strong>
-              <p className="w-[50%]">{vendorDetails.companyAddress}</p>
+              <strong className="">Vendor Email:</strong>
+              <p className="">{vendorDetails.companyEmail}</p>
             </div>
 
+            {/* vendor name */}
+            <div className="flex justify-between w-full bg-slate-100">
+              <strong className="">Vendor Address:</strong>
+              <p className="">{vendorDetails.companyAddress}</p>
+            </div>
+          
             {/* vendor category */}
             <div className="flex justify-between w-full">
               <strong>Vendor Category:</strong>
@@ -146,9 +148,9 @@ const VendorDetails = () => {
             </div>
 
             {/* total order amount */}
-            <div className="flex justify-between w-full">
+            <div className="flex justify-between w-full bg-slate-100">
               <strong>Total Order Amount:</strong>
-              <p>N{vendorDetails.productSold}</p>
+              <p>₦{vendorDetails.productSold}</p>
             </div>
 
             {/* total Available Product */}
@@ -158,9 +160,9 @@ const VendorDetails = () => {
             </div>
 
             {/* Account Balance */}
-            <div className="flex justify-between w-full">
+            <div className="flex justify-between w-full bg-slate-100">
               <strong>Account Balance:</strong>
-              <p>N{vendorDetails.withdrawNairaBalance}</p>
+              <p>₦{vendorDetails.withdrawNairaBalance}</p>
             </div>
 
             {/* action buttons */}

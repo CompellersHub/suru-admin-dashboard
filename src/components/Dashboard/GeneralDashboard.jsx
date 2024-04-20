@@ -19,8 +19,8 @@ const GeneralDashboard = () => {
       {/* dashboard header */}
       <header className="flex items-center justify-between gap-5 bg-navbar-color p-3 md:px-10">
         <div to="/" className="flex gap-3 items-center">
-          <img src={logo} alt="logo" className="w-10 md:w-20" />
-          <img src={suru} alt="company name" className="w-14 md:w-32 lg:w-40" />
+          <img src={logo} alt="logo" className="w-7 md:w-12" />
+          <img src={suru} alt="company name" className="w-10 md:w-28" />
         </div>
       </header>
 
