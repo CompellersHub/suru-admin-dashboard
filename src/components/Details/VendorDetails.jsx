@@ -106,7 +106,7 @@ const VendorDetails = () => {
         )}
 
         {vendorDetails && (
-          <div className="flex flex-col gap-3 items-center w-[70%] bg-white p-5 rounded-md">
+          <div className="flex flex-col gap-3 items-center w-[100%] bg-white p-5 rounded-md">
             {/* account status */}
             <div className="flex justify-between w-full">
               <strong>Account Status:</strong>
@@ -148,7 +148,7 @@ const VendorDetails = () => {
             {/* total order amount */}
             <div className="flex justify-between w-full">
               <strong>Total Order Amount:</strong>
-              <p>N{vendorDetails.productSold}</p>
+              <p>₦{vendorDetails.productSold}</p>
             </div>
 
             {/* total Available Product */}
@@ -160,7 +160,7 @@ const VendorDetails = () => {
             {/* Account Balance */}
             <div className="flex justify-between w-full">
               <strong>Account Balance:</strong>
-              <p>N{vendorDetails.withdrawNairaBalance}</p>
+              <p>₦{vendorDetails.withdrawNairaBalance}</p>
             </div>
 
             {/* action buttons */}
