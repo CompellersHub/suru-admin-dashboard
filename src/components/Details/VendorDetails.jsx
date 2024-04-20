@@ -72,7 +72,7 @@ const VendorDetails = () => {
   };
 
   return (
-    <section className="bg-gray-200 min-h-[100vh]">
+    <section className="bg-gray-200 min-h-[100vh] font-sans">
       {/* dashboard header */}
       <header className="flex items-center justify-between gap-5 bg-navbar-color p-3 md:px-10">
         <div to="/" className="flex gap-3 items-center">
@@ -128,17 +128,23 @@ const VendorDetails = () => {
             </div>
 
             {/* vendor name */}
-            <div className="flex justify-between w-full">
+            <div className="flex justify-between w-full bg-slate-100">
               <strong>Vendor Name:</strong>
               <p>{vendorDetails.companyName}</p>
             </div>
 
-            {/* vendor name */}
+            {/* vendor email */}
             <div className="flex justify-between w-full">
-              <strong className="">Vendor Address:</strong>
-              <p className="w-[50%]">{vendorDetails.companyAddress}</p>
+              <strong className="">Vendor Email:</strong>
+              <p className="">{vendorDetails.companyEmail}</p>
             </div>
 
+            {/* vendor name */}
+            <div className="flex justify-between w-full bg-slate-100">
+              <strong className="">Vendor Address:</strong>
+              <p className="">{vendorDetails.companyAddress}</p>
+            </div>
+          
             {/* vendor category */}
             <div className="flex justify-between w-full">
               <strong>Vendor Category:</strong>
@@ -146,7 +152,7 @@ const VendorDetails = () => {
             </div>
 
             {/* total order amount */}
-            <div className="flex justify-between w-full">
+            <div className="flex justify-between w-full bg-slate-100">
               <strong>Total Order Amount:</strong>
               <p>₦{vendorDetails.productSold}</p>
             </div>
@@ -158,7 +164,7 @@ const VendorDetails = () => {
             </div>
 
             {/* Account Balance */}
-            <div className="flex justify-between w-full">
+            <div className="flex justify-between w-full bg-slate-100">
               <strong>Account Balance:</strong>
               <p>₦{vendorDetails.withdrawNairaBalance}</p>
             </div>
