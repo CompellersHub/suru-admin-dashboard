@@ -51,12 +51,23 @@ const SignIn = () => {
       });
 
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.error);
       }
+      toast.success("Login successfully");
+      dispatch(
+        authAction.login({
+          user: data.data,
+          userToken: data.accessToken,
+          type: "admin",
+        })
+      );
+      sessionStorage.setItem("userData", JSON.stringify(data));
 
-      if (data.data.super_admin || data.data.admin) {
+      setTimeout(() => {
+        navigate(redirectPath, { replace: true });
+      }, 1000);
+      /*  if (data.data.super_admin || data.data.admin) {
         toast.success("Login successfully");
         dispatch(
           authAction.login({
@@ -72,7 +83,7 @@ const SignIn = () => {
         }, 1000);
       } else {
         toast.error(`User is not an admin`);
-      }
+      } */
     } catch (err) {
       toast.error(`${err.message}`);
     } finally {
@@ -84,12 +95,12 @@ const SignIn = () => {
     <Fragment>
       <header className="flex items-center justify-between gap-5 bg-navbar-color p-4 md:px-10">
         <Link to="/" className="flex gap-3 items-center">
-          <img src={logo} alt="logo" className="w-10 md:w-20" />
-          <img src={suru} alt="company name" className="w-14 md:w-32 lg:w-40" />
+          <img src={logo} alt="logo" className="w-10 md:w-14" />
+          <img src={suru} alt="company name" className="w-14 md:w-24 lg:w-32" />
         </Link>
       </header>
 
-      <section className="flex flex-col gap-10 items-center justify-center min-h-[100vh] py-10 px-5">
+      <section className="flex flex-col gap-10 items-center justify-center min-h-[100vh] py-10 px-5 font-sans">
         <div className="flex flex-col gap-3 text-center">
           <h2 className="text-2xl md:text-4xl font-bold text-navbar-color">
             Sign in to Suru

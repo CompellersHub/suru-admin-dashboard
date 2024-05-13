@@ -65,7 +65,7 @@ function App() {
         }
       />
       <Route
-        path="upload/details/:category/:productId"
+        path="upload/details/:productId"
         element={
           <RequireAuth>
             <UploadDetailsPage />
