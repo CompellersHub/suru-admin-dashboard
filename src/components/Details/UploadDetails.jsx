@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import suru from "../../assets/suru.png";
 import logo from "../../assets/logo.png";
-import orange from "../../assets/fruit.png";
+// import orange from "../../assets/fruit.png";
 import { useNavigate } from "react-router-dom";
 import { IoMdArrowBack } from "react-icons/io";
 import { useParams } from "react-router-dom";
@@ -16,16 +16,13 @@ const UploadDetails = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth);
 
-  const { category, productId } = useParams();
+  const { productId } = useParams();
   useEffect(() => {
     getProductById();
   }, []);
 
   const getProductById = async () => {
-    const url =
-      category === "toprestaurant"
-        ? `${api.base}/restaurant/item/${productId}`
-        : `${api.base}/item/${category}/${productId}`;
+    const url = `${api.get_uploads}/${productId}`
 
     try {
       setLoading("getting");
@@ -48,11 +45,14 @@ const UploadDetails = () => {
       setLoading(null);
     }
   };
+  /*
+    Update upload endpoint
+  */
   const updateUpload = async (query) => {
     try {
       setLoading(query);
       const response = await fetch(
-        `${api.get_uploads}${category}/${query}/${productId}`,
+        `${api.get_product}/product/${query}/${productId}`,
         {
           method: "PATCH",
           headers: {
