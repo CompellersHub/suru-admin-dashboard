@@ -1,8 +1,8 @@
 const base = import.meta.env.VITE_BASE_URL;
+// signup: `${base}/api/signup`,
 
 export const api = {
   base: base,
-  signup: `${base}/api/signup`,
   signin: `${base}/superadmin/login`,
   verify_otp: `${base}/api/verify`,
   request_new_otp: `${base}/api/request`,
