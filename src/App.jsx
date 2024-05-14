@@ -49,7 +49,7 @@ function App() {
         }
       />
       <Route
-        path="product/details/:category/:productId"
+        path="product/details/:productId"
         element={
           <RequireAuth>
             <ProductDetailsPage />

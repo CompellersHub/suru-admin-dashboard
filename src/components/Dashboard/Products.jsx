@@ -13,13 +13,13 @@ const Products = () => {
   const [filterTerm, setFilterTerm] = useState("all");
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
-  const [category, setCategory] = useState("toprestaurant");
   const user = useSelector((state) => state.auth);
 
-  const getProduct = async (type) => {
+  const getProduct = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${api.get_product}${type}?status=accept`, {
+      const response = await fetch(
+      `${api.get_uploads}/?status=accept`, {
         headers: {
           authorization: `${user.userToken}`,
         },
@@ -32,7 +32,7 @@ const Products = () => {
       }
 
       // Update the state once with the new array
-      const sortedData = data.data.reverse();
+      const sortedData = data.baskets.reverse();
       setProduct(sortedData);
       setFilteredProduct(sortedData);
     } catch (err) {
@@ -44,8 +44,8 @@ const Products = () => {
 
   // useEffect to first get all the products
   useEffect(() => {
-    getProduct(category);
-  }, [category]);
+    getProduct();
+  }, []);
 
   // filter by stock level
   const filterByStock = (stock) => {
@@ -85,39 +85,9 @@ const Products = () => {
       {/* navs */}
       <div className="flex justify-between bg-white rounded-md py-3 px-5">
         <button
-          onClick={() => {
-            setOrderType("all");
-            setCategory("toprestaurant");
-          }}
-          className={
-            orderType === "all" ? "text-navbar-color font-bold" : "text-black"
-          }
+          className= "text-navbar-color font-bold"
         >
-          Top Restaurant
-        </button>
-        <button
-          onClick={() => {
-            setOrderType("available");
-            setCategory("topdiet");
-          }}
-          className={
-            orderType === "available"
-              ? "text-navbar-color font-bold"
-              : "text-black"
-          }
-        >
-          Top Diet
-        </button>
-        <button
-          onClick={() => {
-            setOrderType("out");
-            setCategory("topbasket");
-          }}
-          className={
-            orderType === "out" ? "text-navbar-color font-bold" : "text-black"
-          }
-        >
-          Top Basket
+          Product
         </button>
       </div>
 
@@ -189,14 +159,14 @@ const Products = () => {
                 <tr
                   key={item._id}
                   onClick={() =>
-                    navigate(`/product/details/${category}/${item._id}`)
+                    navigate(`/product/details/${item._id}`)
                   }
                   className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
                 >
                   <td className="w-[20%]">{item.name}</td>
                   <td className="w-[20%]">{item.creatorName}</td>
                   <td className="w-[20%]">{readableDate}</td>
-                  <td className="w-[20%]">{item.vendorType}</td>
+                  <td className="w-[20%]">{item.category}</td>
                   <td
                     className={`w-[20%] ${
                       item.stock < 20

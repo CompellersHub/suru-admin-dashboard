@@ -23,7 +23,7 @@ const Uploads = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        `${api.get_uploads}/?status=accept`,
+        `${api.get_uploads}/?status=pending`,
         {
           headers: {
             authorization: `${user.userToken}`,
