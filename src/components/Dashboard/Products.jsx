@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { CiSearch } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../hooks/api";
@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 
 const Products = () => {
   const navigate = useNavigate();
-  const [orderType, setOrderType] = useState("all");
   const [product, setProduct] = useState([]);
   const [filteredProduct, setFilteredProduct] = useState([]);
   const [filterTerm, setFilterTerm] = useState("all");
