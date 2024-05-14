@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import suru from "../../assets/suru.png";
 import logo from "../../assets/logo.png";
-import orange from "../../assets/fruit.png";
 import { useNavigate } from "react-router-dom";
 import { IoMdArrowBack } from "react-icons/io";
 import { useParams } from "react-router-dom";
@@ -16,16 +15,13 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth);
 
-  const { category, productId } = useParams();
+  const { productId } = useParams();
   useEffect(() => {
     getProductById();
   }, []);
 
   const getProductById = async () => {
-    const url =
-      category === "toprestaurant"
-        ? `${api.base}/restaurant/item/${productId}`
-        : `${api.base}/item/${category}/${productId}`;
+    const url = `${api.get_uploads}/${productId}`;
 
     try {
       setLoading(true);
@@ -85,7 +81,7 @@ const ProductDetails = () => {
         )}
 
         {productDetails && (
-          <div className="flex flex-col gap-3 items-center w-[70%] bg-white p-5 rounded-md">
+          <div className="flex flex-col gap-3 items-center w-full bg-white p-5 rounded-md">
             {/* account status */}
             <div className="flex justify-between w-full">
               <strong>In Stock:</strong>
@@ -97,6 +93,10 @@ const ProductDetails = () => {
               <strong>Product Name:</strong>
               <p>{productDetails.name}</p>
             </div>
+            <div className="flex justify-between w-full">
+              <strong className="">Description:</strong>
+              <p>{productDetails.description}</p>
+            </div>
 
             {/* vendor name */}
             <div className="flex justify-between w-full">
@@ -107,13 +107,17 @@ const ProductDetails = () => {
             {/* vendor category */}
             <div className="flex justify-between w-full">
               <strong>Product Category:</strong>
-              <p>{productDetails.vendorType}</p>
+              <p>{productDetails.category}</p>
+            </div>
+            <div className="flex justify-between w-full">
+              <strong className="">SubCategory:</strong>
+              <p>{productDetails.subCategory}</p>
             </div>
 
             {/* total order amount */}
             <div className="flex justify-between w-full">
               <strong>Product Price:</strong>
-              <p>N{productDetails.price}</p>
+              <p>&#8358;{productDetails.price}</p>
             </div>
           </div>
         )}
