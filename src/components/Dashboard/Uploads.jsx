@@ -23,7 +23,7 @@ const Uploads = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        `${api.get_uploads}/?status=accept`,
+        `${api.get_uploads}/?status=pending`,
         {
           headers: {
             authorization: `${user.userToken}`,
@@ -76,7 +76,7 @@ const Uploads = () => {
   return (
     <div className="flex flex-col gap-3 p-5">
       <h3 className="flex items-center gap-3 text-2xl font-bold text-gray-700">
-        Pending Uploads
+        Pending Product Uploads
         <span className="text-navbar-color text-base bg-green-100 font-bold rounded-md p-1">
           {uploads?.length} Uploads
         </span>
@@ -159,12 +159,12 @@ const Uploads = () => {
                   onClick={() =>
                     navigate(`/upload/details/${item._id}`)
                   }
-                  className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
+                  className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200 cursor-pointer hover:bg-slate-200"
                 >
                   <td className="w-[20%]">{item.name}</td>
                   <td className="w-[20%]">{item.creatorName}</td>
                   <td className="w-[20%]">{readableDate}</td>
-                  <td className="w-[20%]">{item.vendorType}</td>
+                  <td className="w-[20%]">{item.category}</td>
                   <td className="w-[20%]">{item.stock}</td>
                 </tr>
               );

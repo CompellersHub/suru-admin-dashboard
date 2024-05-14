@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import suru from "../../assets/suru.png";
 import logo from "../../assets/logo.png";
 // import orange from "../../assets/fruit.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { IoMdArrowBack } from "react-icons/io";
 import { useParams } from "react-router-dom";
 import { api } from "../../hooks/api";
@@ -83,15 +83,15 @@ const UploadDetails = () => {
   return (
     <section className="bg-gray-200 min-h-[100vh]">
       {/* dashboard header */}
-      <header className="flex items-center justify-between gap-5 bg-navbar-color p-3 md:px-10">
-        <div to="/" className="flex gap-3 items-center">
-          <img src={logo} alt="logo" className="w-10 md:w-20" />
-          <img src={suru} alt="company name" className="w-14 md:w-32 lg:w-40" />
-        </div>
+      <header className="flex items-center justify-between gap-5 bg-navbar-color p-4 md:px-10">
+        <Link to="/" className="flex gap-3 items-center">
+          <img src={logo} alt="logo" className="w-10 md:w-14" />
+          <img src={suru} alt="company name" className="w-14 md:w-24 lg:w-32" />
+        </Link>
       </header>
 
       {/* vendor Profile */}
-      <div className="flex flex-col items-center gap-2 w-[60%] mx-auto  p-5 mt-10 rounded-md text-lg">
+      <div className="flex flex-col items-center gap-2 w-[70%] mx-auto  p-5 rounded-md text-lg">
         <button onClick={() => navigate(-1)} className="self-start text-2xl">
           <IoMdArrowBack />
         </button>
@@ -109,7 +109,7 @@ const UploadDetails = () => {
         {/* product image */}
         {productDetails && (
           <img
-            className="w-40 h-40 rounded-md mt-10"
+            className="w-40 h-40 rounded-md mt-2"
             src={productDetails.imageUrl}
             alt="fortune"
           />
@@ -120,7 +120,7 @@ const UploadDetails = () => {
             {/* account status */}
             <div className="flex justify-between w-full">
               <strong>In Stock:</strong>
-              <p className="text-navbar-color">50</p>
+              <p className="text-navbar-color">{productDetails.stock}</p>
             </div>
 
             {/* vendor name */}
@@ -131,6 +131,10 @@ const UploadDetails = () => {
 
             {/* vendor name */}
             <div className="flex justify-between w-full">
+              <strong className="">Description:</strong>
+              <p>{productDetails.description}</p>
+            </div>
+            <div className="flex justify-between w-full">
               <strong className="">Vendor Name:</strong>
               <p>{productDetails.creatorName}</p>
             </div>
@@ -138,13 +142,18 @@ const UploadDetails = () => {
             {/* vendor category */}
             <div className="flex justify-between w-full">
               <strong>Category:</strong>
-              <p>{productDetails.vendorType}</p>
+              <p>{productDetails.category}</p>
+            </div>
+            {/* vendor category */}
+            <div className="flex justify-between w-full">
+              <strong>SubCategory:</strong>
+              <p>{productDetails.subCategory}</p>
             </div>
 
             {/* total order amount */}
             <div className="flex justify-between w-full">
               <strong>Product Price:</strong>
-              <p>N{productDetails.price}</p>
+              <p> &#8358;{productDetails.price}</p>
             </div>
 
             <div className="flex items-center justify-center gap-10">

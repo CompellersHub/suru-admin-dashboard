@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
@@ -49,7 +48,7 @@ function App() {
         }
       />
       <Route
-        path="product/details/:category/:productId"
+        path="product/details/:productId"
         element={
           <RequireAuth>
             <ProductDetailsPage />
