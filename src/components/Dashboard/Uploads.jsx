@@ -76,7 +76,7 @@ const Uploads = () => {
   return (
     <div className="flex flex-col gap-3 p-5">
       <h3 className="flex items-center gap-3 text-2xl font-bold text-gray-700">
-        Pending Uploads
+        Pending Product Uploads
         <span className="text-navbar-color text-base bg-green-100 font-bold rounded-md p-1">
           {uploads?.length} Uploads
         </span>
