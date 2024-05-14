@@ -161,7 +161,7 @@ const Products = () => {
                   onClick={() =>
                     navigate(`/product/details/${item._id}`)
                   }
-                  className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200"
+                  className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200 cursor-pointer hover:bg-slate-200"
                 >
                   <td className="w-[20%]">{item.name}</td>
                   <td className="w-[20%]">{item.creatorName}</td>
@@ -176,7 +176,7 @@ const Products = () => {
                         : "text-navbar-color"
                     }`}
                   >
-                    {item.stock < 20
+                    {item.stock < 5
                       ? "Low Stock"
                       : item.stock === 0
                       ? "Out of Stock"
