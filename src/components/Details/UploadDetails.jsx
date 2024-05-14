@@ -120,7 +120,7 @@ const UploadDetails = () => {
             {/* account status */}
             <div className="flex justify-between w-full">
               <strong>In Stock:</strong>
-              <p className="text-navbar-color">50</p>
+              <p className="text-navbar-color">{productDetails.stock}</p>
             </div>
 
             {/* vendor name */}
@@ -131,6 +131,10 @@ const UploadDetails = () => {
 
             {/* vendor name */}
             <div className="flex justify-between w-full">
+              <strong className="">Description:</strong>
+              <p>{productDetails.description}</p>
+            </div>
+            <div className="flex justify-between w-full">
               <strong className="">Vendor Name:</strong>
               <p>{productDetails.creatorName}</p>
             </div>
@@ -138,13 +142,18 @@ const UploadDetails = () => {
             {/* vendor category */}
             <div className="flex justify-between w-full">
               <strong>Category:</strong>
-              <p>{productDetails.vendorType}</p>
+              <p>{productDetails.category}</p>
+            </div>
+            {/* vendor category */}
+            <div className="flex justify-between w-full">
+              <strong>SubCategory:</strong>
+              <p>{productDetails.subCategory}</p>
             </div>
 
             {/* total order amount */}
             <div className="flex justify-between w-full">
               <strong>Product Price:</strong>
-              <p>N{productDetails.price}</p>
+              <p> &#8358;{productDetails.price}</p>
             </div>
 
             <div className="flex items-center justify-center gap-10">
