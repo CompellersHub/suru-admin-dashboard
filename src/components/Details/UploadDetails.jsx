@@ -33,7 +33,6 @@ const UploadDetails = () => {
       });
 
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.message);
       }
@@ -66,7 +65,7 @@ const UploadDetails = () => {
       if (!response.ok) {
         throw new Error(data.message);
       }
-
+      
       toast.success(`${data.status}`);
       setTimeout(() => {
         if (data.status === "Successful") {
@@ -136,7 +135,7 @@ const UploadDetails = () => {
             </div>
             <div className="flex justify-between w-full">
               <strong className="">Vendor Name:</strong>
-              <p>{productDetails.creatorName}</p>
+              <p>{productDetails.vendorId.companyName}</p>
             </div>
 
             {/* vendor category */}
