@@ -149,13 +149,11 @@ const SignIn = () => {
               )}
             </div>
           </div>
-
           {/* submit button */}
           <button className="bg-navbar-color p-4 rounded-full text-white font-semibold transition-all duration-200 border-navbar-color border hover:text-navbar-color hover:bg-white">
             {loading ? "Loading..." : "Login"}
           </button>
         </form>
-
         <ToastContainer position="top-right" />
       </section>
     </Fragment>
