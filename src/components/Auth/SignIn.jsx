@@ -52,7 +52,7 @@ const SignIn = () => {
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error);
+        throw new Error(data.message);
       }
       toast.success("Login successfully");
       dispatch(
