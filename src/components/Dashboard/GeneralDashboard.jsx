@@ -7,6 +7,7 @@ import Withdrawals from "./Withdrawals";
 import Orders from "./Orders";
 import Uploads from "./Uploads";
 import Products from "./Products";
+import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import { useSelector } from "react-redux";
@@ -17,11 +18,11 @@ const GeneralDashboard = () => {
   return (
     <section className="bg-gray-200 min-h-[100vh]">
       {/* dashboard header */}
-      <header className="flex items-center justify-between gap-5 bg-navbar-color p-3 md:px-10">
-        <div to="/" className="flex gap-3 items-center">
-          <img src={logo} alt="logo" className="w-7 md:w-12" />
-          <img src={suru} alt="company name" className="w-10 md:w-28" />
-        </div>
+      <header className="flex items-center justify-between gap-5 bg-navbar-color p-4 md:px-10">
+        <Link to="#" className="flex gap-3 items-center">
+          <img src={logo} alt="logo" className="w-10 md:w-14" />
+          <img src={suru} alt="company name" className="w-14 md:w-24 lg:w-32" />
+        </Link>
       </header>
 
       {/* dashboard main */}

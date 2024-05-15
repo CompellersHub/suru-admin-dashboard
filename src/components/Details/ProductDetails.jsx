@@ -101,7 +101,7 @@ const ProductDetails = () => {
             {/* vendor name */}
             <div className="flex justify-between w-full">
               <strong className="">Vendor Name:</strong>
-              <p>{productDetails.creatorName}</p>
+              <p>{productDetails.vendorId.companyName}</p>
             </div>
 
             {/* vendor category */}

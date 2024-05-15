@@ -52,7 +52,7 @@ const SignIn = () => {
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error);
+        throw new Error(data.message);
       }
       toast.success("Login successfully");
       dispatch(
@@ -149,13 +149,11 @@ const SignIn = () => {
               )}
             </div>
           </div>
-
           {/* submit button */}
           <button className="bg-navbar-color p-4 rounded-full text-white font-semibold transition-all duration-200 border-navbar-color border hover:text-navbar-color hover:bg-white">
             {loading ? "Loading..." : "Login"}
           </button>
         </form>
-
         <ToastContainer position="top-right" />
       </section>
     </Fragment>
