@@ -157,7 +157,7 @@ const Uploads = () => {
                 <tr
                   key={item._id}
                   onClick={() =>
-                    navigate(`/upload/details/${item._id}`)
+                    navigate(`/upload/details/${item.slug}`)
                   }
                   className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200 cursor-pointer hover:bg-slate-200"
                 >
