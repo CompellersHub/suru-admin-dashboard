@@ -18,7 +18,7 @@ const Products = () => {
     try {
       setLoading(true);
       const response = await fetch(
-      `${api.get_uploads}/?status=accept`, {
+      `${api.get_uploads}/`, {
         headers: {
           authorization: `${user.userToken}`,
         },
