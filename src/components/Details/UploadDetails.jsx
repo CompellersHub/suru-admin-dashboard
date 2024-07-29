@@ -47,11 +47,11 @@ const UploadDetails = () => {
   /*
     Update upload endpoint
   */
-  const updateUpload = async (query) => {
+  const updateUpload = async (query, id) => {
     try {
       setLoading(query);
       const response = await fetch(
-        `${api.get_product}/product/${query}/${productId}`,
+        `${api.get_product}/product/${query}/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -73,11 +73,13 @@ const UploadDetails = () => {
         }
       }, 1000);
     } catch (err) {
+      console.log(err, 'errrrrr')
       toast.error(`${err.message}`);
     } finally {
       setLoading(null);
     }
   };
+  console.log('productDetailsproductDetails', productDetails)
 
   return (
     <section className="bg-gray-200 min-h-[100vh]">
@@ -157,7 +159,7 @@ const UploadDetails = () => {
 
             <div className="flex items-center justify-center gap-10">
               <button
-                onClick={() => updateUpload("reject")}
+                onClick={() => updateUpload("reject", productDetails._id)}
                 className="bg-red-500 mt-5 text-white py-2 px-4 rounded-md hover:bg-white hover:text-red-500 border border-red-500 transition-all duration-200"
               >
                 {loading === "reject" ? "Upldating..." : "Reject"}
