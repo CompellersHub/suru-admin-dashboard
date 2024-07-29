@@ -47,11 +47,11 @@ const UploadDetails = () => {
   /*
     Update upload endpoint
   */
-  const updateUpload = async (query) => {
+  const updateUpload = async (query, id) => {
     try {
       setLoading(query);
       const response = await fetch(
-        `${api.get_product}/product/${query}/${productId}`,
+        `${api.get_product}/product/${query}/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -157,14 +157,14 @@ const UploadDetails = () => {
 
             <div className="flex items-center justify-center gap-10">
               <button
-                onClick={() => updateUpload("reject")}
+                onClick={() => updateUpload("reject", productDetails._id)}
                 className="bg-red-500 mt-5 text-white py-2 px-4 rounded-md hover:bg-white hover:text-red-500 border border-red-500 transition-all duration-200"
               >
                 {loading === "reject" ? "Upldating..." : "Reject"}
               </button>
 
               <button
-                onClick={() => updateUpload("accept")}
+                onClick={() => updateUpload("accept", productDetails._id)}
                 className="bg-navbar-color mt-5 text-white py-2 px-4 rounded-md hover:bg-white hover:text-navbar-color border border-navbar-color transition-all duration-200"
               >
                 {loading === "accept" ? "Updatting..." : "Approve"}
