@@ -71,6 +71,7 @@ const Products = () => {
       )
     );
   };
+  console.log('filteredProductfilteredProductfilteredProduct', filteredProduct)
 
   return (
     <div className="flex flex-col gap-3 p-5">
@@ -158,12 +159,12 @@ const Products = () => {
                 <tr
                   key={item._id}
                   onClick={() =>
-                    navigate(`/product/details/${item._id}`)
+                    navigate(`/product/details/${item.slug}`)
                   }
                   className="text-center mt-5 py-2 h-12 border-b-[1px] border-green-200 cursor-pointer hover:bg-slate-200"
                 >
                   <td className="w-[20%]">{item.name}</td>
-                  <td className="w-[20%]">{item.creatorName}</td>
+                  <td className="w-[20%]">{item.vendorId.companyName}</td>
                   <td className="w-[20%]">{readableDate}</td>
                   <td className="w-[20%]">{item.category}</td>
                   <td
