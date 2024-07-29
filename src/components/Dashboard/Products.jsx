@@ -71,7 +71,6 @@ const Products = () => {
       )
     );
   };
-  console.log('filteredProductfilteredProductfilteredProduct', filteredProduct)
 
   return (
     <div className="flex flex-col gap-3 p-5">

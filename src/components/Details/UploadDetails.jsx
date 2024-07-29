@@ -73,13 +73,11 @@ const UploadDetails = () => {
         }
       }, 1000);
     } catch (err) {
-      console.log(err, 'errrrrr')
       toast.error(`${err.message}`);
     } finally {
       setLoading(null);
     }
   };
-  console.log('productDetailsproductDetails', productDetails)
 
   return (
     <section className="bg-gray-200 min-h-[100vh]">
@@ -166,7 +164,7 @@ const UploadDetails = () => {
               </button>
 
               <button
-                onClick={() => updateUpload("accept")}
+                onClick={() => updateUpload("accept", productDetails._id)}
                 className="bg-navbar-color mt-5 text-white py-2 px-4 rounded-md hover:bg-white hover:text-navbar-color border border-navbar-color transition-all duration-200"
               >
                 {loading === "accept" ? "Updatting..." : "Approve"}
