@@ -1,86 +1,91 @@
-import "./App.css";
-import { Routes, Route } from "react-router-dom";
-import DashboardPage from "./pages/DashboardPage";
-import VendorDetailsPage from "./pages/Details/VendorDetailsPage";
-import ProductDetailsPage from "./pages/Details/ProductDetailsPage";
-import UploadDetailsPage from "./pages/Details/UploadDetailsPage";
-import WithdrawalDetailsPage from "./pages/Details/WithdrawalDetailsPage";
-import OrderDetailsPage from "./pages/Details/OrderDetailsPage";
-import SignInPage from "./pages/Auth/SignInPage";
-import "react-toastify/dist/ReactToastify.css";
-import { authAction } from "./store/auth-slice";
-import { useDispatch } from "react-redux";
-import RequireAuth from "./components/RequireAuth";
+import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import DashboardPage from './pages/DashboardPage'
+import VendorDetailsPage from './pages/Details/VendorDetailsPage'
+import ProductDetailsPage from './pages/Details/ProductDetailsPage'
+import UploadDetailsPage from './pages/Details/UploadDetailsPage'
+import WithdrawalDetailsPage from './pages/Details/WithdrawalDetailsPage'
+import OrderDetailsPage from './pages/Details/OrderDetailsPage'
+import SignInPage from './pages/Auth/SignInPage'
+import 'react-toastify/dist/ReactToastify.css'
+import { authAction } from './store/auth-slice'
+import { useDispatch } from 'react-redux'
+import RequireAuth from './components/RequireAuth'
+import { ToastContainer } from 'react-toastify'
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const userData = JSON.parse(sessionStorage.getItem("userData"));
+  const userData = JSON.parse(sessionStorage.getItem('userData'))
 
   if (userData) {
     dispatch(
       authAction.login({
         user: userData.data,
         userToken: userData.accessToken,
-        type: "admin",
       })
-    );
+    )
   }
 
   return (
-    <Routes>
-      <Route path="/" element={<SignInPage />} />
-      <Route path="*" element={<SignInPage />} />
-      <Route
-        path="admin/dashboard"
-        element={
-          <RequireAuth>
-            <DashboardPage />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="vendor/details/:vendorId"
-        element={
-          <RequireAuth>
-            <VendorDetailsPage />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="product/details/:productId"
-        element={
-          <RequireAuth>
-            <ProductDetailsPage />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="orders/details/:orderId"
-        element={
-          <RequireAuth>
-            <OrderDetailsPage />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="upload/details/:productId"
-        element={
-          <RequireAuth>
-            <UploadDetailsPage />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="withdrawal/details/:vendorId"
-        element={
-          <RequireAuth>
-            <WithdrawalDetailsPage />
-          </RequireAuth>
-        }
-      />
-    </Routes>
-  );
+    <>
+      <Router>
+        <ToastContainer />
+        <Routes>
+          <Route path='/' element={<SignInPage />} />
+          <Route path='*' element={<SignInPage />} />
+          <Route
+            path='admin/dashboard'
+            element={
+              <RequireAuth>
+                <DashboardPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path='vendor/details/:vendorId'
+            element={
+              <RequireAuth>
+                <VendorDetailsPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path='product/details/:productId'
+            element={
+              <RequireAuth>
+                <ProductDetailsPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path='orders/details/:orderId'
+            element={
+              <RequireAuth>
+                <OrderDetailsPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path='upload/details/:productId'
+            element={
+              <RequireAuth>
+                <UploadDetailsPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path='withdrawal/details/:vendorId'
+            element={
+              <RequireAuth>
+                <WithdrawalDetailsPage />
+              </RequireAuth>
+            }
+          />
+        </Routes>
+      </Router>
+    </>
+  )
 }
 
-export default App;
+export default App
