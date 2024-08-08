@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import API from '../services/AxiosInstance'
 
-export const useFetchProducts = () => {
+export const useFetchOrders = () => {
   return useMutation({
     mutationFn: () => {
       //   return API.get(`/items/product/v2`)
-      return API.get(`/items/product/?status=accept`)
+      return API.get(`/superadmin/order`)
     },
   })
 }

@@ -14,13 +14,14 @@ const Products = () => {
   const [filterTerm, setFilterTerm] = useState('all')
   const [modalOpen, setModalOpen] = useState(false)
   const [page, setPage] = useState(0)
-
-  const [singleProduct, setSingleProduct] = useState(null)
-
+  const [selectedProductId, setSelectedProductId] = useState(null)
   const { mutateAsync: fetctProducts, isPending } = useFetchProducts()
-
-  const { mutateAsync: fetctSingleProducts, isPending: singleLoading } =
-    useFetchSingleProducts()
+  const [loadingModal, setLoadingModal] = useState(false)
+  const {
+    data: singleProductData,
+    isFetching: singleLoading,
+    refetch,
+  } = useFetchSingleProducts(selectedProductId, { enabled: false })
 
   const getProduct = async () => {
     try {
@@ -34,7 +35,7 @@ const Products = () => {
       }
     } catch (error) {
       console.log(error)
-      toast.error(`${err.message}`)
+      toast.error(`${error?.message}`)
     }
   }
 
@@ -69,21 +70,31 @@ const Products = () => {
     )
   }
 
+  // useEffect to refetch single product data when selectedProductId changes
+  useEffect(() => {
+    if (selectedProductId) {
+      setLoadingModal(true)
+      refetch().finally(() => setLoadingModal(false))
+    }
+  }, [selectedProductId, refetch])
+
   const handleModalClose = () => {
+    setSelectedProductId(null)
     setModalOpen(false)
-    setSingleProduct(null)
   }
 
-  const handleMoreInfo = async (id) => {
-    try {
-      const response = await fetctSingleProducts(id)
-      setSingleProduct(response?.data?.message)
-
-      setModalOpen(true)
-    } catch (error) {
-      console.error('Failed to fetch order details:', error)
+  const handleMoreInfo = (id) => {
+    if (id) {
+      setSelectedProductId(id)
     }
   }
+
+  // Manage modal open state based on data availability
+  useEffect(() => {
+    if (!singleLoading && singleProductData) {
+      setModalOpen(true)
+    }
+  }, [singleLoading, singleProductData])
 
   return (
     <>
@@ -228,12 +239,13 @@ const Products = () => {
         </div>
       </div>
 
-      {modalOpen && (
+      {modalOpen && selectedProductId && !singleLoading && (
         <ProductDetailsModal
           isOpen={modalOpen}
           onClose={handleModalClose}
-          productDetails={singleProduct}
-          singleLoading={singleLoading}
+          productDetails={singleProductData}
+          // singleLoading={singleLoading}
+          singleLoading={loadingModal}
         />
       )}
     </>
