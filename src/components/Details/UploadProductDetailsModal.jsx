@@ -3,11 +3,11 @@
 // import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
-import { useDeleteProduct } from '../../hooks/productApi'
 import Modal from '../common/Modal'
 import { useQueryClient } from '@tanstack/react-query'
+import { useUpdateUpload } from '../../hooks/uploadApi'
 
-const ProductDetailsModal = ({
+const UploadProductDetailsModal = ({
   isOpen,
   onClose,
   productDetails,
@@ -15,14 +15,14 @@ const ProductDetailsModal = ({
 }) => {
   if (!productDetails) return null
 
-  const { mutateAsync: deleteProduct, isPending } = useDeleteProduct()
+  const { mutateAsync: updateProduct, isPending } = useUpdateUpload()
   const queryClient = useQueryClient()
-  const handleDelete = async (id) => {
+  const updateUpload = async (id, query) => {
     try {
-      const res = await deleteProduct(id)
+      const res = await updateProduct(id, query)
       if (res?.status) {
-        toast.success('Product deleted successfully')
-        queryClient.invalidateQueries({ queryKey: ['single_product'] })
+        toast.success('Product undated successfully')
+        queryClient.invalidateQueries({ queryKey: ['single_upload_product'] })
         onClose()
       }
     } catch (error) {
@@ -95,12 +95,20 @@ const ProductDetailsModal = ({
                   <strong>Product Price:</strong>
                   <p>&#8358;{productDetails?.price}</p>
                 </div>
-                <div className='flex justify-center w-full'>
+
+                <div className='flex items-center justify-center gap-10'>
                   <button
-                    className='px-4 py-2 bg-red-500 hover:bg-red-900 text-white rounded'
-                    onClick={() => handleDelete(productDetails?._id)}
+                    onClick={() => updateUpload('reject', productDetails._id)}
+                    className='bg-red-500 mt-5 text-white py-2 px-4 rounded-md hover:bg-white hover:text-red-500 border border-red-500 transition-all duration-200'
                   >
-                    {isPending ? 'Deleting...' : 'Delete Item'}
+                    {isPending === 'reject' ? 'Upldating...' : 'Reject'}
+                  </button>
+
+                  <button
+                    onClick={() => updateUpload('accept', productDetails._id)}
+                    className='bg-navbar-color mt-5 text-white py-2 px-4 rounded-md hover:bg-white hover:text-navbar-color border border-navbar-color transition-all duration-200'
+                  >
+                    {isPending === 'accept' ? 'Updatting...' : 'Approve'}
                   </button>
                 </div>
               </div>
@@ -112,4 +120,4 @@ const ProductDetailsModal = ({
   )
 }
 
-export default ProductDetailsModal
+export default UploadProductDetailsModal

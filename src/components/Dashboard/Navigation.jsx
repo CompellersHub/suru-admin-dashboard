@@ -42,7 +42,7 @@ const Navigation = () => {
           } items-center gap-2 text-xl`}
         >
           <MdOutlineDashboard />
-          <button>Dashboard</button>
+          <button>Vendors</button>
         </div>
       </div>
 

@@ -10,20 +10,20 @@ export const useFetchOrders = () => {
   })
 }
 
-export const useFetchSingleProducts = (id) => {
+export const useFetchSingleOrder = (id) => {
   return useQuery({
-    queryKey: ['single_product'],
+    queryKey: ['single_order'],
     queryFn: async () => {
-      const res = await API.get(`/items/product/${id}`)
-      return res?.data?.message
+      const res = await API.get(`/superadmin/order/${id}`)
+      return res?.data?.data
     },
   })
 }
 
-export const useDeleteProduct = () => {
+export const useConfirmOrder = () => {
   return useMutation({
     mutationFn: (id) => {
-      return API.delete(`/superadmin/product/${id}`)
+      return API.patch(`/superadmin/product/${id}`)
     },
   })
 }
