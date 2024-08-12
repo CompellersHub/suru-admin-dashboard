@@ -19,7 +19,7 @@ const UploadProductDetailsModal = ({
   const queryClient = useQueryClient()
   const updateUpload = async (id, query) => {
     try {
-      const res = await updateProduct(id, query)
+      const res = await updateProduct({ id, query })
       if (res?.status) {
         toast.success('Product undated successfully')
         queryClient.invalidateQueries({ queryKey: ['single_upload_product'] })
@@ -98,14 +98,14 @@ const UploadProductDetailsModal = ({
 
                 <div className='flex items-center justify-center gap-10'>
                   <button
-                    onClick={() => updateUpload('reject', productDetails._id)}
+                    onClick={() => updateUpload('reject', productDetails?._id)}
                     className='bg-red-500 mt-5 text-white py-2 px-4 rounded-md hover:bg-white hover:text-red-500 border border-red-500 transition-all duration-200'
                   >
                     {isPending === 'reject' ? 'Upldating...' : 'Reject'}
                   </button>
 
                   <button
-                    onClick={() => updateUpload('accept', productDetails._id)}
+                    onClick={() => updateUpload('accept', productDetails?._id)}
                     className='bg-navbar-color mt-5 text-white py-2 px-4 rounded-md hover:bg-white hover:text-navbar-color border border-navbar-color transition-all duration-200'
                   >
                     {isPending === 'accept' ? 'Updatting...' : 'Approve'}

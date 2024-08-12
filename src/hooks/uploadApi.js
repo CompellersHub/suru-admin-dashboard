@@ -21,8 +21,8 @@ export const useFetchSingleUploadProducts = (id) => {
 
 export const useUpdateUpload = () => {
   return useMutation({
-    mutationFn: (id, query) => {
-      return API.patch(`/superadmin/product/${query}/${id}`)
+    mutationFn: ({ id, query }) => {
+      return API.patch(`/superadmin/product/${id}/${query}`)
     },
   })
 }

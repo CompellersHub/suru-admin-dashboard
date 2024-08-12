@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { CiSearch } from 'react-icons/ci'
 import { toast } from 'react-toastify'
-import WithdrawalDetailsModal from '../Details/WithdrawalDetailsModal'
 import {
   useFetchSingleWithdrawal,
   useFetchWithdrawals,
 } from '../../hooks/withdrawalApi'
+import LogWithdrawalDetailsModal from '../Details/LogWithdrawalDetailsModal'
 
-const Withdrawals = () => {
+const LogWithdrawals = () => {
   const [orderType, setOrderType] = useState('all')
   const [withdrawalList, setWithdrawalList] = useState([])
   const [filteredWithdrawal, setFilteredWithdrawal] = useState([])
@@ -185,7 +185,7 @@ const Withdrawals = () => {
           {/* head */}
           <thead className='bg-green-100'>
             <tr className='text-navbar-color py-2 h-14'>
-              <th>Vendors Name</th>
+              <th>Logistic Name</th>
               <th>Withdrawal Amount</th>
               <th>Date of Request</th>
               <th>Bank Name</th>
@@ -264,7 +264,7 @@ const Withdrawals = () => {
       </div>
 
       {modalOpen && selectedProductId && !singleLoading && (
-        <WithdrawalDetailsModal
+        <LogWithdrawalDetailsModal
           isOpen={modalOpen}
           onClose={handleModalClose}
           productDetails={singleProductData}
@@ -276,4 +276,4 @@ const Withdrawals = () => {
   )
 }
 
-export default Withdrawals
+export default LogWithdrawals

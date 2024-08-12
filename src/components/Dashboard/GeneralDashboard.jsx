@@ -1,4 +1,3 @@
-import React from 'react'
 import suru from '../../assets/suru.png'
 import logo from '../../assets/logo.png'
 import Navigation from './Navigation'
@@ -11,6 +10,8 @@ import { Link } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 
 import { useSelector } from 'react-redux'
+import Logistics from './Logistics'
+import LogWithdrawals from './LogWithdrawals'
 
 const GeneralDashboard = () => {
   const activeNav = useSelector((state) => state.nav.nav)
@@ -40,8 +41,12 @@ const GeneralDashboard = () => {
             <Products />
           ) : activeNav === 'uploads' ? (
             <Uploads />
-          ) : (
+          ) : activeNav === 'withdrawals' ? (
             <Withdrawals />
+          ) : activeNav === 'logistics' ? (
+            <Logistics />
+          ) : (
+            <LogWithdrawals />
           )}
         </div>
       </div>

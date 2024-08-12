@@ -1,5 +1,3 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
 import { MdOutlineDashboard } from 'react-icons/md'
 import { FaClipboardList } from 'react-icons/fa'
 import { CiViewList, CiLogout } from 'react-icons/ci'
@@ -18,7 +16,7 @@ const Navigation = () => {
   }
 
   return (
-    <nav className='flex flex-col gap-4 bg-white w-[20%] py-10'>
+    <nav className='flex capitalize flex-col gap-4 bg-white w-[20%] py-10'>
       <div
         onClick={() => setActiveNav('dashboard')}
         className={`flex gap-10 ${
@@ -155,6 +153,62 @@ const Navigation = () => {
         >
           <IoCashOutline />
           <button>Withdrawals</button>
+        </div>
+      </div>
+
+      {/* Logistics */}
+      <div
+        onClick={() => setActiveNav('logistics')}
+        className={`flex gap-10 ${
+          activeNav === 'logistics'
+            ? 'bg-green-100'
+            : 'group transition-all duration-200 hover:bg-green-100'
+        }`}
+      >
+        <div
+          className={`h-14 w-[4px] ${
+            activeNav === 'logistics'
+              ? 'bg-navbar-color'
+              : 'bg-white group-hover:bg-navbar-color transition-all duration-200'
+          }`}
+        ></div>
+        <div
+          className={`flex ${
+            activeNav === 'logistics'
+              ? 'text-navbar-color'
+              : 'group-hover:text-navbar-color capitalize transition-all duration-200'
+          } items-center gap-2 text-xl`}
+        >
+          <IoCashOutline />
+          <button className='capitalize'>logistics</button>
+        </div>
+      </div>
+
+      {/* Logistics withdrawal */}
+      <div
+        onClick={() => setActiveNav('log-withdrawal')}
+        className={`flex gap-10 ${
+          activeNav === 'log-withdrawal'
+            ? 'bg-green-100'
+            : 'group transition-all duration-200 hover:bg-green-100'
+        }`}
+      >
+        <div
+          className={`h-14 w-[4px] ${
+            activeNav === 'log-withdrawal'
+              ? 'bg-navbar-color'
+              : 'bg-white group-hover:bg-navbar-color transition-all duration-200'
+          }`}
+        ></div>
+        <div
+          className={`flex ${
+            activeNav === 'log-withdrawal'
+              ? 'text-navbar-color'
+              : 'group-hover:text-navbar-color capitalize transition-all duration-200'
+          } items-center gap-2 text-xl`}
+        >
+          <IoCashOutline />
+          <button className='capitalize'>log withdrawal</button>
         </div>
       </div>
       <div className='flex items-center gap-3 text-xl mt-auto ml-10 text-[#EB5757]'>
