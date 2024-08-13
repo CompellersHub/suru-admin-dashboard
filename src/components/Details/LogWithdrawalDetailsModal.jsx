@@ -49,35 +49,13 @@ const LogWithdrawalDetailsModal = ({
             {productDetails && (
               <img
                 className='w-40 h-40 rounded-full'
-                src={productDetails?.vendorId.image}
+                src={productDetails?.vendorId?.image}
                 alt='fortune'
               />
             )}
 
             {productDetails && (
               <div className='flex flex-col gap-3 items-center w-[70%] bg-white p-5 rounded-md'>
-                {/* account status */}
-                <div className='flex justify-between w-full'>
-                  <strong>Account Status:</strong>
-                  <p
-                    className={`${
-                      productDetails?.vendorId.isVerified
-                        ? 'text-navbar-color'
-                        : 'text-red-400'
-                    }`}
-                  >
-                    {productDetails?.vendorId.isVerified
-                      ? 'Verified'
-                      : 'No Verified'}
-                  </p>
-                </div>
-
-                {/* vendor name */}
-                <div className='flex justify-between w-full'>
-                  <strong>Vendor Name:</strong>
-                  <p>{productDetails?.vendorId.companyName}</p>
-                </div>
-
                 {/* Account name */}
                 <div className='flex justify-between w-full'>
                   <strong>Account Name:</strong>
@@ -99,13 +77,13 @@ const LogWithdrawalDetailsModal = ({
                 {/* Withdrawal amount */}
                 <div className='flex justify-between w-full'>
                   <strong>Withrawal Amount:</strong>
-                  <p>N{productDetails?.withdrawalAmount}</p>
+                  <p>₦{productDetails?.amount}</p>
                 </div>
 
                 {/* total Available Product */}
                 <div className='flex justify-between w-full'>
                   <strong>Current Balance:</strong>
-                  <p>N{productDetails?.vendorId.nairaBalance}</p>
+                  <p>₦{productDetails?.vendorId?.nairaBalance}</p>
                 </div>
 
                 {/* total Available Product */}

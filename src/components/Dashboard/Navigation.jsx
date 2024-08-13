@@ -1,6 +1,6 @@
 import { MdOutlineDashboard } from 'react-icons/md'
 import { FaClipboardList } from 'react-icons/fa'
-import { CiViewList, CiLogout } from 'react-icons/ci'
+import { CiViewList, CiLogout, CiDeliveryTruck } from 'react-icons/ci'
 import { FaUpload } from 'react-icons/fa6'
 import { IoCashOutline } from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux'
@@ -179,7 +179,7 @@ const Navigation = () => {
               : 'group-hover:text-navbar-color capitalize transition-all duration-200'
           } items-center gap-2 text-xl`}
         >
-          <IoCashOutline />
+          <CiDeliveryTruck />
           <button className='capitalize'>logistics</button>
         </div>
       </div>

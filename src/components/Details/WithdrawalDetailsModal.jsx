@@ -49,7 +49,7 @@ const WithdrawalDetailsModal = ({
             {productDetails && (
               <img
                 className='w-40 h-40 rounded-full'
-                src={productDetails?.vendorId.image}
+                src={productDetails?.vendorId?.image}
                 alt='fortune'
               />
             )}
@@ -61,12 +61,12 @@ const WithdrawalDetailsModal = ({
                   <strong>Account Status:</strong>
                   <p
                     className={`${
-                      productDetails?.vendorId.isVerified
+                      productDetails?.vendorId?.isVerified
                         ? 'text-navbar-color'
                         : 'text-red-400'
                     }`}
                   >
-                    {productDetails?.vendorId.isVerified
+                    {productDetails?.vendorId?.isVerified
                       ? 'Verified'
                       : 'No Verified'}
                   </p>
@@ -75,7 +75,7 @@ const WithdrawalDetailsModal = ({
                 {/* vendor name */}
                 <div className='flex justify-between w-full'>
                   <strong>Vendor Name:</strong>
-                  <p>{productDetails?.vendorId.companyName}</p>
+                  <p>{productDetails?.vendorId?.companyName}</p>
                 </div>
 
                 {/* Account name */}
@@ -105,7 +105,7 @@ const WithdrawalDetailsModal = ({
                 {/* total Available Product */}
                 <div className='flex justify-between w-full'>
                   <strong>Current Balance:</strong>
-                  <p>N{productDetails?.vendorId.nairaBalance}</p>
+                  <p>N{productDetails?.vendorId?.nairaBalance}</p>
                 </div>
 
                 {/* total Available Product */}
