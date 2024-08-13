@@ -7,7 +7,6 @@ import Orders from './Orders'
 import Uploads from './Uploads'
 import Products from './Products'
 import { Link } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
 
 import { useSelector } from 'react-redux'
 import Logistics from './Logistics'
@@ -50,7 +49,6 @@ const GeneralDashboard = () => {
           )}
         </div>
       </div>
-      <ToastContainer position='top-right' />
     </section>
   )
 }
