@@ -1,19 +1,19 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import API from '../services/AxiosInstance'
 
-export const useFetchProducts = () => {
+export const useFetchUploadProducts = () => {
   return useQuery({
-    queryKey: ['get_products'],
+    queryKey: ['get_upload_products'],
     queryFn: async () => {
-      const res = await API.get(`/items/product/?status=accept`)
+      const res = await API.get(`/items/product/?status=pending`)
       return res?.data?.baskets
     },
   })
 }
 
-export const useFetchSingleProducts = (id) => {
+export const useFetchSingleUploadProducts = (id) => {
   return useQuery({
-    queryKey: ['single_product'],
+    queryKey: ['single_upload_product'],
     queryFn: async () => {
       const res = await API.get(`/items/product/${id}`)
       return res?.data?.message
@@ -22,10 +22,10 @@ export const useFetchSingleProducts = (id) => {
   })
 }
 
-export const useDeleteProduct = () => {
+export const useUpdateUpload = () => {
   return useMutation({
-    mutationFn: (id) => {
-      return API.delete(`/superadmin/product/${id}`)
+    mutationFn: ({ id, query }) => {
+      return API.patch(`/superadmin/product/${id}/${query}`)
     },
   })
 }

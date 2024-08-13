@@ -181,7 +181,6 @@ const OrderDetails = () => {
             </div>
           </div>
         )}
-        <ToastContainer position="top-right" />
       </section>
     </>
   );

@@ -1,27 +1,27 @@
 import { useEffect, useState } from 'react'
 import { CiSearch } from 'react-icons/ci'
-import WithdrawalDetailsModal from '../Details/WithdrawalDetailsModal'
 import {
-  useFetchSingleWithdrawal,
-  useFetchWithdrawals,
+  useFetchLogWithdrawals,
+  useFetchSingleLogWithdrawal,
 } from '../../hooks/withdrawalApi'
+import LogWithdrawalDetailsModal from '../Details/LogWithdrawalDetailsModal'
 
-const Withdrawals = () => {
+const LogWithdrawals = () => {
   const [orderType, setOrderType] = useState('all')
-
-  const { data: fetchWithdrawal, isPending } = useFetchWithdrawals()
+  const { data: fetchWithdrawal, isPending } = useFetchLogWithdrawals()
   const [filteredWithdrawal, setFilteredWithdrawal] = useState(fetchWithdrawal)
 
   const [modalOpen, setModalOpen] = useState(false)
 
   const [page, setPage] = useState(0)
+
   const [selectedProductId, setSelectedProductId] = useState(null)
   const [loadingModal, setLoadingModal] = useState(false)
   const {
     data: singleProductData,
     isFetching: singleLoading,
     refetch,
-  } = useFetchSingleWithdrawal(selectedProductId, { enabled: false })
+  } = useFetchSingleLogWithdrawal(selectedProductId, { enabled: false })
 
   useEffect(() => {
     setFilteredWithdrawal(fetchWithdrawal)
@@ -168,7 +168,7 @@ const Withdrawals = () => {
           {/* head */}
           <thead className='bg-green-100'>
             <tr className='text-navbar-color py-2 h-14'>
-              <th>Vendors Name</th>
+              <th>Logistic Name</th>
               <th>Withdrawal Amount</th>
               <th>Date of Request</th>
               <th>Bank Name</th>
@@ -247,10 +247,11 @@ const Withdrawals = () => {
       </div>
 
       {modalOpen && selectedProductId && !singleLoading && (
-        <WithdrawalDetailsModal
+        <LogWithdrawalDetailsModal
           isOpen={modalOpen}
           onClose={handleModalClose}
           productDetails={singleProductData}
+          // singleLoading={singleLoading}
           singleLoading={loadingModal}
         />
       )}
@@ -258,4 +259,4 @@ const Withdrawals = () => {
   )
 }
 
-export default Withdrawals
+export default LogWithdrawals
