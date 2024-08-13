@@ -13,10 +13,12 @@ const LogisticDetailsModal = ({
   singleLoading,
 }) => {
   if (!vendorDetails) return null
+  console.log(vendorDetails)
 
   const { mutateAsync: confirmVendor, isPending } = useApproveLogistic()
   const queryClient = useQueryClient()
   const approveVendor = async (id) => {
+    console.log(id, 'appro')
     try {
       const res = await confirmVendor(id)
       if (res?.status) {
@@ -152,7 +154,7 @@ const LogisticDetailsModal = ({
               )} */}
                   {vendorDetails?.isVerified === false && (
                     <button
-                      onClick={approveVendor}
+                      onClick={() => approveVendor(vendorDetails?._id)}
                       className='py-2 px-4 border border-navbar-color bg-navbar-color text-white rounded-md hover:bg-white hover:text-navbar-color transition-all duration-200'
                     >
                       {isPending === 'approving' ? 'Approving...' : 'Approve'}

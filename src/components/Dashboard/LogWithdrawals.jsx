@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { CiSearch } from 'react-icons/ci'
 import {
-  useFetchSingleWithdrawal,
-  useFetchWithdrawals,
+  useFetchLogWithdrawals,
+  useFetchSingleLogWithdrawal,
 } from '../../hooks/withdrawalApi'
 import LogWithdrawalDetailsModal from '../Details/LogWithdrawalDetailsModal'
 
 const LogWithdrawals = () => {
   const [orderType, setOrderType] = useState('all')
-  const { data: fetchWithdrawal, isPending } = useFetchWithdrawals()
+  const { data: fetchWithdrawal, isPending } = useFetchLogWithdrawals()
   const [filteredWithdrawal, setFilteredWithdrawal] = useState(fetchWithdrawal)
 
   const [modalOpen, setModalOpen] = useState(false)
@@ -21,7 +21,7 @@ const LogWithdrawals = () => {
     data: singleProductData,
     isFetching: singleLoading,
     refetch,
-  } = useFetchSingleWithdrawal(selectedProductId, { enabled: false })
+  } = useFetchSingleLogWithdrawal(selectedProductId, { enabled: false })
 
   useEffect(() => {
     setFilteredWithdrawal(fetchWithdrawal)

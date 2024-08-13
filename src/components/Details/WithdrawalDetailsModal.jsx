@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import Modal from '../common/Modal'
 import { useQueryClient } from '@tanstack/react-query'
-import { useUpdateWithdrawal } from '../../hooks/withdrawalApi'
+import { useUpdateLogWithdrawal } from '../../hooks/withdrawalApi'
 
 const WithdrawalDetailsModal = ({
   isOpen,
@@ -16,14 +16,14 @@ const WithdrawalDetailsModal = ({
   if (!productDetails) return null
   console.log(productDetails)
 
-  const { mutateAsync: approved, isPending } = useUpdateWithdrawal()
+  const { mutateAsync: approved, isPending } = useUpdateLogWithdrawal()
   const queryClient = useQueryClient()
   const approveWithdrawal = async (id) => {
     try {
       const res = await approved(id)
       if (res?.status) {
         toast.success('Product deleted successfully')
-        queryClient.invalidateQueries({ queryKey: ['get_withdrawals'] })
+        queryClient.invalidateQueries({ queryKey: ['get_log_withdrawals'] })
         onClose()
       }
     } catch (error) {
