@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { CiSearch } from 'react-icons/ci'
-import { toast } from 'react-toastify'
 import WithdrawalDetailsModal from '../Details/WithdrawalDetailsModal'
 import {
   useFetchSingleWithdrawal,
@@ -9,15 +8,14 @@ import {
 
 const Withdrawals = () => {
   const [orderType, setOrderType] = useState('all')
-  const [withdrawalList, setWithdrawalList] = useState([])
-  const [filteredWithdrawal, setFilteredWithdrawal] = useState([])
+
+  const { data: fetchWithdrawal, isPending } = useFetchWithdrawals()
+  const [filteredWithdrawal, setFilteredWithdrawal] = useState(fetchWithdrawal)
 
   const [modalOpen, setModalOpen] = useState(false)
 
   const [page, setPage] = useState(0)
-
   const [selectedProductId, setSelectedProductId] = useState(null)
-  const { mutateAsync: fetchWithdrawal, isPending } = useFetchWithdrawals()
   const [loadingModal, setLoadingModal] = useState(false)
   const {
     data: singleProductData,
@@ -26,38 +24,23 @@ const Withdrawals = () => {
   } = useFetchSingleWithdrawal(selectedProductId, { enabled: false })
 
   useEffect(() => {
-    getWithdrawalList()
-  }, [])
-
-  const getWithdrawalList = async () => {
-    try {
-      const response = await fetchWithdrawal()
-
-      if (response?.status) {
-        // Update the state once with the new array
-
-        setWithdrawalList(response?.data.data)
-        setFilteredWithdrawal(response?.data.data)
-      }
-    } catch (err) {
-      toast.error(`${err.message}`)
-    }
-  }
+    setFilteredWithdrawal(fetchWithdrawal)
+  }, [fetchWithdrawal])
 
   const filterByStatus = (stock) => {
     if (stock === 'approved') {
       setFilteredWithdrawal(
-        withdrawalList.filter((item) => item.status === 'approved')
+        fetchWithdrawal?.filter((item) => item.status === 'approved')
       )
     } else if (stock === 'pending') {
       setFilteredWithdrawal(
-        withdrawalList.filter((item) => item.status === 'pending')
+        fetchWithdrawal?.filter((item) => item.status === 'pending')
       )
     } else if (stock === 'all') {
-      setFilteredWithdrawal(withdrawalList)
+      setFilteredWithdrawal(fetchWithdrawal)
     } else {
       setFilteredWithdrawal(
-        withdrawalList.filter((item) => item.status === 'rejected')
+        fetchWithdrawal?.filter((item) => item.status === 'rejected')
       )
     }
 
@@ -68,7 +51,7 @@ const Withdrawals = () => {
   const searchFilter = (event) => {
     const value = event.target.value
     setFilteredWithdrawal(
-      withdrawalList.filter(
+      fetchWithdrawal?.filter(
         (item) =>
           item.bankHolderName &&
           item.bankHolderName.toLowerCase().includes(value.toLowerCase())
@@ -107,7 +90,7 @@ const Withdrawals = () => {
         <h3 className='flex items-center gap-3 text-2xl font-bold text-gray-700'>
           Withdrawals
           <span className='text-navbar-color text-base bg-green-100 font-bold rounded-md p-1'>
-            {withdrawalList?.length} withdrawals
+            {fetchWithdrawal?.length} withdrawals
           </span>
         </h3>
 
@@ -252,7 +235,7 @@ const Withdrawals = () => {
           </button>
           <button
             onClick={() => {
-              if (page + 10 < withdrawalList?.length) {
+              if (page + 10 < fetchWithdrawal?.length) {
                 setPage(page + 10)
               }
             }}
@@ -268,7 +251,6 @@ const Withdrawals = () => {
           isOpen={modalOpen}
           onClose={handleModalClose}
           productDetails={singleProductData}
-          // singleLoading={singleLoading}
           singleLoading={loadingModal}
         />
       )}

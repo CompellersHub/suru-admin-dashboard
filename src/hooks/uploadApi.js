@@ -2,9 +2,11 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import API from '../services/AxiosInstance'
 
 export const useFetchUploadProducts = () => {
-  return useMutation({
-    mutationFn: () => {
-      return API.get(`/items/product/?status=pending`)
+  return useQuery({
+    queryKey: ['get_upload_products'],
+    queryFn: async () => {
+      const res = await API.get(`/items/product/?status=pending`)
+      return res?.data?.baskets
     },
   })
 }
@@ -16,6 +18,7 @@ export const useFetchSingleUploadProducts = (id) => {
       const res = await API.get(`/items/product/${id}`)
       return res?.data?.message
     },
+    enabled: !!id,
   })
 }
 

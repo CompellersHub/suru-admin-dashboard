@@ -2,10 +2,11 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import API from '../services/AxiosInstance'
 
 export const useFetchProducts = () => {
-  return useMutation({
-    mutationFn: () => {
-      //   return API.get(`/items/product/v2`)
-      return API.get(`/items/product/?status=accept`)
+  return useQuery({
+    queryKey: ['get_products'],
+    queryFn: async () => {
+      const res = await API.get(`/items/product/?status=accept`)
+      return res?.data?.baskets
     },
   })
 }
@@ -17,6 +18,7 @@ export const useFetchSingleProducts = (id) => {
       const res = await API.get(`/items/product/${id}`)
       return res?.data?.message
     },
+    enabled: !!id,
   })
 }
 

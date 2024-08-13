@@ -1,18 +1,15 @@
 import { useState, useEffect } from 'react'
 import { CiSearch } from 'react-icons/ci'
-// import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import { useFetchOrders, useFetchSingleOrder } from '../../hooks/ordersApi'
 import OrdersDetailsModal from '../Details/OrdersDetailsModal'
 
 const Orders = () => {
   const [orderType, setOrderType] = useState('all')
   const [modalOpen, setModalOpen] = useState(false)
-  const [orderList, setOrderList] = useState([])
+  const { data: fetchOrders, isPending } = useFetchOrders()
   const [orderId, setOrderId] = useState(null)
   const [orderCount, setOrderCount] = useState(0)
-  const [filteredOrder, setFilteredOrder] = useState([])
-  const { mutateAsync: fetchOrders, isPending } = useFetchOrders()
+  const [filteredOrder, setFilteredOrder] = useState(fetchOrders?.data)
   const [loadingModal, setLoadingModal] = useState(false)
 
   const {
@@ -24,30 +21,18 @@ const Orders = () => {
   const [page, setPage] = useState(0)
 
   useEffect(() => {
-    getOrderList()
-  }, [])
-
-  const getOrderList = async () => {
-    try {
-      const response = await fetchOrders()
-      
-      if (response.status) {
-        setOrderList(response?.data?.data)
-        setFilteredOrder(response?.data?.data)
-        setOrderCount(response?.data?.count)
-      }
-    } catch (err) {
-      toast.error(`${err.message}`)
-      console.error(`${err.message}`)
-    }
-  }
+    setOrderCount(fetchOrders?.count)
+    setFilteredOrder(fetchOrders?.data)
+  }, [fetchOrders])
 
   const filterByStatus = (stock) => {
     if (stock === 'completed') {
-      setFilteredOrder(orderList?.filter((item) => item.status === 'completed'))
+      setFilteredOrder(
+        fetchOrders?.data?.filter((item) => item.status === 'completed')
+      )
     } else if (stock === 'shipped') {
       setFilteredOrder(
-        orderList.filter(
+        fetchOrders?.data?.filter(
           (item) =>
             item?.status === 'shipped' ||
             item?.status === 'ongoing' ||
@@ -55,9 +40,11 @@ const Orders = () => {
         )
       )
     } else if (stock === 'all') {
-      setFilteredOrder(orderList)
+      setFilteredOrder(fetchOrders?.data)
     } else {
-      setFilteredOrder(orderList?.filter((item) => item.status === 'cancelled'))
+      setFilteredOrder(
+        fetchOrders?.data?.filter((item) => item.status === 'cancelled')
+      )
     }
 
     // Reset page to 0 when filter changes
@@ -67,7 +54,7 @@ const Orders = () => {
   const searchFilter = (event) => {
     const value = event.target.value
     setFilteredOrder(
-      orderList.filter((item) =>
+      fetchOrders?.data?.filter((item) =>
         item.userId.name.toLowerCase().includes(value.toLowerCase())
       )
     )
@@ -206,7 +193,6 @@ const Orders = () => {
                   <tr
                     key={item?._id}
                     onClick={() => handleMoreInfo(item?._id)}
-                   
                     className='text-center cursor-pointer mt-5 py-2 h-12 border-b-[1px] border-green-200'
                   >
                     <td>{item?._id}</td>
@@ -242,7 +228,7 @@ const Orders = () => {
           </button>
           <button
             onClick={() => {
-              if (page + 10 < orderList?.length) {
+              if (page + 10 < fetchOrders?.data?.length) {
                 setPage(page + 10)
               }
             }}

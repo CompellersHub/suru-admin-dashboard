@@ -2,13 +2,14 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import API from '../services/AxiosInstance'
 
 export const useFetchVendors = () => {
-  return useMutation({
-    mutationFn: () => {
-      return API.get(`/superadmin/vendor`)
+  return useQuery({
+    queryKey: ['get_vendors'],
+    queryFn: async () => {
+      const res = await API.get(`/superadmin/vendor/`)
+      return res?.data?.data
     },
   })
 }
-
 export const useFetchSingleVendor = (id) => {
   return useQuery({
     queryKey: ['single_vendor'],
@@ -16,6 +17,7 @@ export const useFetchSingleVendor = (id) => {
       const res = await API.get(`/superadmin/vendor/${id}`)
       return res?.data?.data
     },
+    enabled: !!id,
   })
 }
 

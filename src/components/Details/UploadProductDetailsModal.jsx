@@ -22,7 +22,7 @@ const UploadProductDetailsModal = ({
       const res = await updateProduct({ id, query })
       if (res?.status) {
         toast.success('Product undated successfully')
-        queryClient.invalidateQueries({ queryKey: ['single_upload_product'] })
+        queryClient.invalidateQueries({ queryKey: ['get_upload_products'] })
         onClose()
       }
     } catch (error) {

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { CiSearch } from 'react-icons/ci'
-import { toast } from 'react-toastify'
 import {
   useFetchSingleUploadProducts,
   useFetchUploadProducts,
@@ -8,15 +7,13 @@ import {
 import UploadProductDetailsModal from '../Details/UploadProductDetailsModal'
 
 const Uploads = () => {
-  const [uploads, setUploads] = useState([])
-  const [filteredUploads, setFilteredUploads] = useState([])
+  const [selectedProductId, setSelectedProductId] = useState(null)
+  const { data: fetctProducts, isPending } = useFetchUploadProducts()
+  const [filteredUploads, setFilteredUploads] = useState(fetctProducts)
   const [filterTerm, setFilterTerm] = useState('all')
   const [page, setPage] = useState(0)
   //  const [category, setCategory] = useState("toprestaurant");
   const [modalOpen, setModalOpen] = useState(false)
-
-  const [selectedProductId, setSelectedProductId] = useState(null)
-  const { mutateAsync: fetctProducts, isPending } = useFetchUploadProducts()
   const [loadingModal, setLoadingModal] = useState(false)
   const {
     data: singleProductData,
@@ -25,37 +22,21 @@ const Uploads = () => {
   } = useFetchSingleUploadProducts(selectedProductId, { enabled: false })
 
   useEffect(() => {
-    getUploadedItem()
-  }, [])
-
-  const getUploadedItem = async () => {
-    try {
-      const response = await fetctProducts()
-
-      if (response?.status) {
-        // Update the state once with the new array
-        const sortedData = response?.data?.baskets
-        setUploads(sortedData)
-        setFilteredUploads(sortedData)
-      }
-    } catch (err) {
-      console.error(err)
-      toast.error(`${err.message}`)
-    }
-  }
+    setFilteredUploads(fetctProducts)
+  }, [fetctProducts])
 
   // filter by stock level
   const filterByStock = (stock) => {
     if (stock === 'low') {
-      setFilteredUploads(uploads.filter((item) => item.stock <= 20))
+      setFilteredUploads(fetctProducts?.filter((item) => item.stock <= 20))
     }
     // else if (stock === "out") {
     //   setFilteredUploads(uploads.filter((item) => item.stock === 0));
     // }
     else if (stock === 'all') {
-      setFilteredUploads(uploads)
+      setFilteredUploads(fetctProducts)
     } else {
-      setFilteredUploads(uploads.filter((item) => item.stock > 20))
+      setFilteredUploads(fetctProducts?.filter((item) => item.stock > 20))
     }
 
     // Reset page to 0 when filter changes
@@ -66,7 +47,7 @@ const Uploads = () => {
   const searchFilter = (event) => {
     const value = event.target.value
     setFilteredUploads(
-      uploads?.filter((item) =>
+      fetctProducts?.filter((item) =>
         item.name.toLowerCase().includes(value.toLowerCase())
       )
     )
@@ -103,7 +84,7 @@ const Uploads = () => {
         <h3 className='flex items-center gap-3 text-2xl font-bold text-gray-700'>
           Pending Product Uploads
           <span className='text-navbar-color text-base bg-green-100 font-bold rounded-md p-1'>
-            {uploads?.length} Uploads
+            {fetctProducts?.length} Uploads
           </span>
         </h3>
 
@@ -214,10 +195,10 @@ const Uploads = () => {
           </button>
           <button
             onClick={() => {
-              if (page + 10 < uploads?.length) {
+              if (page + 10 < fetctProducts?.length) {
                 setPage(page + 10)
               } else {
-                console.log(uploads?.length, 'no')
+                console.log(fetctProducts?.length, 'no')
               }
             }}
             className='py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200'
@@ -232,7 +213,6 @@ const Uploads = () => {
           isOpen={modalOpen}
           onClose={handleModalClose}
           productDetails={singleProductData}
-          // singleLoading={singleLoading}
           singleLoading={loadingModal}
         />
       )}

@@ -2,10 +2,11 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import API from '../services/AxiosInstance'
 
 export const useFetchOrders = () => {
-  return useMutation({
-    mutationFn: () => {
-      //   return API.get(`/items/product/v2`)
-      return API.get(`/superadmin/order`)
+  return useQuery({
+    queryKey: ['get_orders'],
+    queryFn: async () => {
+      const res = await API.get(`/superadmin/order/`)
+      return res?.data
     },
   })
 }
@@ -17,6 +18,7 @@ export const useFetchSingleOrder = (id) => {
       const res = await API.get(`/superadmin/order/${id}`)
       return res?.data?.data
     },
+    enabled: !!id,
   })
 }
 

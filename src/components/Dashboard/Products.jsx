@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { CiSearch } from 'react-icons/ci'
-import { toast } from 'react-toastify'
 import {
   useFetchProducts,
   useFetchSingleProducts,
@@ -8,14 +7,13 @@ import {
 import ProductDetailsModal from '../Details/ProductDetailsModal'
 
 const Products = () => {
-  const [product, setProduct] = useState([])
-  const [filteredProduct, setFilteredProduct] = useState([])
+  const [selectedProductId, setSelectedProductId] = useState(null)
+  const { data: fetctProducts, isPending } = useFetchProducts()
+  const [filteredProduct, setFilteredProduct] = useState(fetctProducts)
 
   const [filterTerm, setFilterTerm] = useState('all')
   const [modalOpen, setModalOpen] = useState(false)
   const [page, setPage] = useState(0)
-  const [selectedProductId, setSelectedProductId] = useState(null)
-  const { mutateAsync: fetctProducts, isPending } = useFetchProducts()
   const [loadingModal, setLoadingModal] = useState(false)
   const {
     data: singleProductData,
@@ -23,37 +21,21 @@ const Products = () => {
     refetch,
   } = useFetchSingleProducts(selectedProductId, { enabled: false })
 
-  const getProduct = async () => {
-    try {
-      const res = await fetctProducts()
-
-      if (res?.status) {
-        // Update the state once with the new array
-        const sortedData = res?.data?.baskets?.reverse()
-        setProduct(sortedData)
-        setFilteredProduct(sortedData)
-      }
-    } catch (error) {
-      console.log(error)
-      toast.error(`${error?.message}`)
-    }
-  }
-
   // useEffect to first get all the products
   useEffect(() => {
-    getProduct()
-  }, [])
+    setFilteredProduct(fetctProducts?.reverse())
+  }, [fetctProducts])
 
   // filter by stock level
   const filterByStock = (stock) => {
     if (stock === 'low') {
-      setFilteredProduct(product.filter((item) => item.stock <= 20))
+      setFilteredProduct(fetctProducts?.filter((item) => item.stock <= 20))
     } else if (stock === 'out') {
-      setFilteredProduct(product.filter((item) => item.stock === 0))
+      setFilteredProduct(fetctProducts?.filter((item) => item.stock === 0))
     } else if (stock === 'all') {
-      setFilteredProduct(product)
+      setFilteredProduct(fetctProducts)
     } else {
-      setFilteredProduct(product.filter((item) => item.stock > 20))
+      setFilteredProduct(fetctProducts?.filter((item) => item.stock > 20))
     }
 
     // Reset page to 0 when filter changes
@@ -64,7 +46,7 @@ const Products = () => {
   const searchFilter = (event) => {
     const value = event.target.value
     setFilteredProduct(
-      product.filter((item) =>
+      fetctProducts.filter((item) =>
         item.name.toLowerCase().includes(value.toLowerCase())
       )
     )
@@ -226,10 +208,10 @@ const Products = () => {
           </button>
           <button
             onClick={() => {
-              if (page + 10 < product?.length) {
+              if (page + 10 < fetctProducts?.length) {
                 setPage(page + 10)
               } else {
-                console.log(product?.length, 'no')
+                console.log(fetctProducts?.length, 'no')
               }
             }}
             className='py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200'
@@ -244,7 +226,6 @@ const Products = () => {
           isOpen={modalOpen}
           onClose={handleModalClose}
           productDetails={singleProductData}
-          // singleLoading={singleLoading}
           singleLoading={loadingModal}
         />
       )}

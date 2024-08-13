@@ -23,7 +23,7 @@ const LogWithdrawalDetailsModal = ({
       const res = await approved(id)
       if (res?.status) {
         toast.success('Product deleted successfully')
-        queryClient.invalidateQueries({ queryKey: ['single_withdrawal'] })
+        queryClient.invalidateQueries({ queryKey: ['get_withdrawals'] })
         onClose()
       }
     } catch (error) {

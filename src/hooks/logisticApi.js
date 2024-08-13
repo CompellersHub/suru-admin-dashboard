@@ -17,6 +17,7 @@ export const useFetchSingleLogistic = (id) => {
       const res = await API.get(`/superadmin/logistic/${id}`)
       return res?.data?.data
     },
+    enabled: !!id,
   })
 }
 

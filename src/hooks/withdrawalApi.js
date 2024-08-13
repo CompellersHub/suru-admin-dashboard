@@ -2,9 +2,11 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import API from '../services/AxiosInstance'
 
 export const useFetchWithdrawals = () => {
-  return useMutation({
-    mutationFn: () => {
-      return API.get(`/superadmin/vendor/withdraw/list`)
+  return useQuery({
+    queryKey: ['get_withdrawals'],
+    queryFn: async () => {
+      const res = await API.get(`/superadmin/vendor/withdraw/list`)
+      return res?.data?.data
     },
   })
 }
@@ -16,6 +18,7 @@ export const useFetchSingleWithdrawal = (id) => {
       const res = await API.get(`/superadmin/vendor/withdraw/${id}`)
       return res?.data?.data
     },
+    enabled: !!id,
   })
 }
 
