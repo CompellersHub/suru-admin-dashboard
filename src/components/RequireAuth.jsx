@@ -1,16 +1,18 @@
-import React from "react";
-import { useLocation, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+/* eslint-disable react/prop-types */
+import { useLocation, Navigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import LayoutDashboard from './Dashboard/LayoutDashboard'
 
 const RequireAuth = ({ children }) => {
-  const userToken = useSelector((state) => state.auth.userToken);
-  const location = useLocation();
+  const userToken = useSelector((state) => state.auth.userToken)
+  const location = useLocation()
 
   if (!userToken) {
-    return <Navigate to="/" state={{ path: location.pathname }} />;
+    console.log('No user token, redirecting to login.')
+    return <Navigate to='/' state={{ from: location.pathname }} />
   }
 
-  return children;
-};
+  return <LayoutDashboard>{children}</LayoutDashboard>
+}
 
-export default RequireAuth;
+export default RequireAuth

@@ -1,14 +1,13 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { BiHide } from 'react-icons/bi'
 import { FaRegEye } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import suru from '../../assets/suru.png'
 import logo from '../../assets/logo.png'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { authAction } from '../../store/auth-slice'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { api } from '../../hooks/api'
 import { useLoginUser } from '../../hooks/auth'
 
 const SignIn = () => {
@@ -21,13 +20,13 @@ const SignIn = () => {
   const user = useSelector((state) => state.auth.userToken)
   const { mutateAsync: handleLogin, isPending } = useLoginUser()
 
-  const redirectPath = location.state?.path || '/admin/dashboard'
+  const redirectPath = location.state?.path || '/vendors'
 
   useEffect(() => {
     if (user) {
       navigate(redirectPath, { replace: true })
     }
-  }, [user, redirectPath])
+  }, [user, redirectPath, navigate])
 
   const setVeiw = () => {
     setViewPassword(true)
