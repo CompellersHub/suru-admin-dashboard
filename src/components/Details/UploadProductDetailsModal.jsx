@@ -21,7 +21,7 @@ const UploadProductDetailsModal = ({
     try {
       const res = await updateProduct({ id, query })
       if (res?.status) {
-        toast.success('Product undated successfully')
+        toast.success(res?.message)
         queryClient.invalidateQueries({ queryKey: ['get_upload_products'] })
         onClose()
       }

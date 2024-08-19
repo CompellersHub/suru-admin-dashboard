@@ -11,7 +11,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
 
   return (
     <div
-      className='fixed top-4 inset-0 z-10 overflow-y-auto'
+      className='fixed top-4 inset-0 z-30 overflow-y-auto'
       id='modal-overlay'
       onClick={handleOverlayClick}
     >

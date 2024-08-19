@@ -16,7 +16,7 @@ const OrdersDetailsModal = ({ isOpen, onClose, orderItem, singleLoading }) => {
     try {
       const res = await confirmOrder(id)
       if (res?.status) {
-        toast.success('Order confirmed successfully')
+        toast.success(res?.message)
         queryClient.invalidateQueries({ queryKey: ['get_orders'] })
         onClose()
       }

@@ -22,7 +22,7 @@ const LogisticDetailsModal = ({
     try {
       const res = await confirmVendor(id)
       if (res?.status) {
-        toast.success('Vendor confirmed successfully')
+        toast.success(res?.message)
         queryClient.invalidateQueries({ queryKey: ['get_logistic'] })
         onClose()
       }

@@ -21,7 +21,7 @@ const ProductDetailsModal = ({
     try {
       const res = await deleteProduct(id)
       if (res?.status) {
-        toast.success('Product deleted successfully')
+        toast.success(res?.message)
         queryClient.invalidateQueries({ queryKey: ['get_products'] })
         onClose()
       }

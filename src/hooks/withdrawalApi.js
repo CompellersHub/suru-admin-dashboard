@@ -25,7 +25,7 @@ export const useFetchSingleWithdrawal = (id) => {
 export const useUpdateWithdrawal = () => {
   return useMutation({
     mutationFn: (id) => {
-      return API.patch(`/superadmin/transaction/vendor/${id}`)
+      return API.patch(`/superadmin/vendor/withdraw/${id}`)
     },
   })
 }
@@ -55,7 +55,7 @@ export const useFetchSingleLogWithdrawal = (id) => {
 export const useUpdateLogWithdrawal = () => {
   return useMutation({
     mutationFn: (id) => {
-      return API.patch(`/superadmin/transaction/logistic/${id}`)
+      return API.patch(`/superadmin/logistic/withdraw/${id}`)
     },
   })
 }

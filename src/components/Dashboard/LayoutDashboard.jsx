@@ -34,7 +34,7 @@ const LayoutDashboard = ({ children }) => {
       <div className='flex min-h-[87vh]'>
         {/* Dashboard nav */}
         <div
-          className={`fixed z-50 top-0 left-0 h-full bg-white transform transition-transform duration-300 md:relative md:transform-none ${
+          className={`fixed z-20 top-0 left-0 h-full bg-white transform transition-transform duration-300 md:relative md:transform-none ${
             isNavOpen ? 'translate-x-0' : '-translate-x-full'
           } md:translate-x-0 px-2 w-2/3 md:w-[20%]`}
         >
