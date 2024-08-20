@@ -12,9 +12,7 @@ const LogWithdrawals = () => {
   const [filteredWithdrawal, setFilteredWithdrawal] = useState(fetchWithdrawal)
 
   const [modalOpen, setModalOpen] = useState(false)
-
   const [page, setPage] = useState(0)
-
   const [selectedProductId, setSelectedProductId] = useState(null)
   const [loadingModal, setLoadingModal] = useState(false)
   const {
@@ -27,34 +25,36 @@ const LogWithdrawals = () => {
     setFilteredWithdrawal(fetchWithdrawal)
   }, [fetchWithdrawal])
 
-  const filterByStatus = (stock) => {
-    if (stock === 'approved') {
-      setFilteredWithdrawal(
-        fetchWithdrawal?.filter((item) => item.status === 'approved')
-      )
-    } else if (stock === 'pending') {
-      setFilteredWithdrawal(
-        fetchWithdrawal?.filter((item) => item.status === 'pending')
-      )
-    } else if (stock === 'all') {
-      setFilteredWithdrawal(fetchWithdrawal)
-    } else {
-      setFilteredWithdrawal(
-        fetchWithdrawal?.filter((item) => item.status === 'rejected')
-      )
+  const filterByStatus = (status) => {
+    let filteredList
+    switch (status) {
+      case 'approved':
+        filteredList = fetchWithdrawal?.filter(
+          (item) => item.status === 'approved'
+        )
+        break
+      case 'pending':
+        filteredList = fetchWithdrawal?.filter(
+          (item) => item.status === 'pending'
+        )
+        break
+      case 'rejected':
+        filteredList = fetchWithdrawal?.filter(
+          (item) => item.status === 'rejected'
+        )
+        break
+      default:
+        filteredList = fetchWithdrawal
     }
-
-    // Reset page to 0 when filter changes
-    setPage(0)
+    setFilteredWithdrawal(filteredList)
+    setPage(0) // Reset page to 0 when filter changes
   }
 
   const searchFilter = (event) => {
-    const value = event.target.value
+    const value = event.target.value.toLowerCase()
     setFilteredWithdrawal(
-      fetchWithdrawal?.filter(
-        (item) =>
-          item.bankHolderName &&
-          item.bankHolderName.toLowerCase().includes(value.toLowerCase())
+      fetchWithdrawal?.filter((item) =>
+        item.bankHolderName?.toLowerCase().includes(value)
       )
     )
   }
@@ -88,14 +88,14 @@ const LogWithdrawals = () => {
     <>
       <div className='flex flex-col gap-3 p-5'>
         <h3 className='flex items-center gap-3 text-2xl font-bold text-gray-700'>
-          Withdrawals
+          Logistic Withdrawals
           <span className='text-navbar-color text-base bg-green-100 font-bold rounded-md p-1'>
             {fetchWithdrawal?.length} withdrawals
           </span>
         </h3>
 
-        {/* navs */}
-        <div className='flex justify-between bg-white rounded-md py-3 px-5'>
+        {/* Navigation buttons */}
+        <div className='grid grid-cols-2 md:flex flex-wrap justify-between bg-white rounded-md py-3 px-5'>
           <button
             onClick={() => {
               setOrderType('all')
@@ -148,9 +148,9 @@ const LogWithdrawals = () => {
           </button>
         </div>
 
-        <form className='flex gap-5 bg-white rounded-md py-3 px-5 text-navbar-color'>
-          {/* search input */}
-          <div className='w-[50%] relative'>
+        {/* Search input */}
+        <form className='flex flex-col md:flex-row gap-5 bg-white rounded-md py-3 px-5 text-navbar-color'>
+          <div className='w-full md:w-[50%] relative'>
             <input
               onChange={searchFilter}
               className='p-[10px] px-10 border-[1px] rounded-md border-green-300 w-full placeholder:text-navbar-color'
@@ -163,73 +163,73 @@ const LogWithdrawals = () => {
           </div>
         </form>
 
-        {/* table */}
-        <table className='rounded-md overflow-hidden'>
-          {/* head */}
-          <thead className='bg-green-100'>
-            <tr className='text-navbar-color py-2 h-14'>
-              <th>Logistic Name</th>
-              <th>Withdrawal Amount</th>
-              <th>Date of Request</th>
-              <th>Bank Name</th>
-              <th>Status</th>
-            </tr>
-          </thead>
+        {/* Table */}
+        <div className='overflow-x-auto'>
+          <table className='rounded-md overflow-hidden w-full'>
+            {/* Table Head */}
+            <thead className='bg-green-100'>
+              <tr className='text-navbar-color py-2 h-14'>
+                <th className='p-2 text-left'>Logistic Name</th>
+                <th className='p-2 text-left'>Withdrawal Amount</th>
+                <th className='p-2 text-left'>Date of Request</th>
+                <th className='p-2 text-left'>Bank Name</th>
+                <th className='p-2 text-left'>Status</th>
+              </tr>
+            </thead>
 
-          {/* body */}
-          <tbody className='mt-5 bg-white text-[#3A3A3A]'>
-            {filteredWithdrawal?.slice(page, page + 10).map((item) => {
-              const options = {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-              }
+            {/* Table Body */}
+            <tbody className='mt-5 bg-white text-[#3A3A3A]'>
+              {filteredWithdrawal?.slice(page, page + 10).map((item) => {
+                const options = {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                }
+                const dateObject = new Date(item?.createdAt)
+                const readableDate = dateObject.toLocaleString('en-US', options)
 
-              const dateObject = new Date(item?.createdAt)
-              const readableDate = dateObject.toLocaleString('en-US', options)
-
-              return (
-                <tr
-                  onClick={() => handleMoreInfo(item?._id)}
-                  key={item._id}
-                  className='text-center cursor-pointer h-12 border-b-[1px] border-green-200'
-                >
-                  <td className='w-[20%]'>{item?.bankHolderName}</td>
-                  <td className='w-[20%]'>N{item?.withdrawalAmount}</td>
-                  <td className='w-[20%]'>{readableDate}</td>
-                  <td className='w-[20%]'>{item?.bankName}</td>
-                  <td
-                    className={`w-[20%] ${
-                      item?.status === 'pending'
-                        ? 'bg-orange-500'
-                        : 'bg-navbar-color'
-                    } text-white`}
+                return (
+                  <tr
+                    onClick={() => handleMoreInfo(item?._id)}
+                    key={item._id}
+                    className='text-center cursor-pointer h-12 border-b-[1px] border-green-200 hover:bg-gray-100'
                   >
-                    {item?.status}
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+                    <td className='w-[20%] p-2'>{item?.bankHolderName}</td>
+                    <td className='w-[20%] p-2'>₦{item?.withdrawalAmount}</td>
+                    <td className='w-[20%] p-2'>{readableDate}</td>
+                    <td className='w-[20%] p-2'>{item?.bankName}</td>
+                    <td
+                      className={`w-[20%] p-2 ${
+                        item?.status === 'pending'
+                          ? 'bg-orange-500'
+                          : 'bg-navbar-color'
+                      } text-white`}
+                    >
+                      {item?.status}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
 
         {!isPending && filteredWithdrawal?.length === 0 && (
           <p className='text-center'>No Order available yet!</p>
         )}
 
-        {/* loading state */}
+        {/* Loading state */}
         {isPending && <p className='text-center'>Loading...</p>}
 
-        <div className='flex justify-center gap-20 bg-white rounded-md py-3 px-5 text-navbar-color'>
+        {/* Pagination */}
+        <div className='flex justify-center gap-10 bg-white rounded-md py-3 px-5 text-navbar-color'>
           <button
             onClick={() => {
-              if (page === 0) {
-                return
-              } else {
+              if (page > 0) {
                 setPage(page - 10)
               }
             }}
-            className='py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200'
+            className='py-2 px-4 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200'
           >
             Previous
           </button>
@@ -239,7 +239,7 @@ const LogWithdrawals = () => {
                 setPage(page + 10)
               }
             }}
-            className='py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200'
+            className='py-2 px-4 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200'
           >
             Next
           </button>
@@ -251,7 +251,6 @@ const LogWithdrawals = () => {
           isOpen={modalOpen}
           onClose={handleModalClose}
           productDetails={singleProductData}
-          // singleLoading={singleLoading}
           singleLoading={loadingModal}
         />
       )}

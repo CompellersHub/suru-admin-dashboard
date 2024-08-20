@@ -21,13 +21,12 @@ const ProductDetailsModal = ({
     try {
       const res = await deleteProduct(id)
       if (res?.status) {
-        toast.success('Product deleted successfully')
+        toast.success(res?.message)
         queryClient.invalidateQueries({ queryKey: ['get_products'] })
         onClose()
       }
     } catch (error) {
-      console.log(error)
-      toast.error(error)
+      toast.error(error?.response?.data?.message)
     }
   }
 
@@ -93,7 +92,7 @@ const ProductDetailsModal = ({
                 {/* total order amount */}
                 <div className='flex justify-between w-full'>
                   <strong>Product Price:</strong>
-                  <p>&#8358;{productDetails?.price}</p>
+                  <p>₦{productDetails?.price}</p>
                 </div>
                 <div className='flex justify-center w-full'>
                   <button

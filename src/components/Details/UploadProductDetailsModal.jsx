@@ -21,13 +21,12 @@ const UploadProductDetailsModal = ({
     try {
       const res = await updateProduct({ id, query })
       if (res?.status) {
-        toast.success('Product undated successfully')
+        toast.success(res?.message)
         queryClient.invalidateQueries({ queryKey: ['get_upload_products'] })
         onClose()
       }
     } catch (error) {
-      console.log(error)
-      toast.error(error)
+      toast.error(error?.response?.data?.message)
     }
   }
 
@@ -93,7 +92,7 @@ const UploadProductDetailsModal = ({
                 {/* total order amount */}
                 <div className='flex justify-between w-full'>
                   <strong>Product Price:</strong>
-                  <p>&#8358;{productDetails?.price}</p>
+                  <p>₦{productDetails?.price}</p>
                 </div>
 
                 <div className='flex items-center justify-center gap-10'>

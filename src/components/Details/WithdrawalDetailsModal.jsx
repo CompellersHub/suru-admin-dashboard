@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import Modal from '../common/Modal'
 import { useQueryClient } from '@tanstack/react-query'
-import { useUpdateLogWithdrawal } from '../../hooks/withdrawalApi'
+import { useUpdateWithdrawal } from '../../hooks/withdrawalApi'
 
 const WithdrawalDetailsModal = ({
   isOpen,
@@ -14,21 +14,19 @@ const WithdrawalDetailsModal = ({
   singleLoading,
 }) => {
   if (!productDetails) return null
-  console.log(productDetails)
 
-  const { mutateAsync: approved, isPending } = useUpdateLogWithdrawal()
+  const { mutateAsync: approved, isPending } = useUpdateWithdrawal()
   const queryClient = useQueryClient()
   const approveWithdrawal = async (id) => {
     try {
       const res = await approved(id)
       if (res?.status) {
-        toast.success('Product deleted successfully')
-        queryClient.invalidateQueries({ queryKey: ['get_log_withdrawals'] })
+        toast.success(res?.message)
+        queryClient.invalidateQueries({ queryKey: ['get_withdrawals'] })
         onClose()
       }
     } catch (error) {
-      console.log(error)
-      toast.error(error)
+      toast.error(error?.response?.data?.message)
     }
   }
 
@@ -99,13 +97,13 @@ const WithdrawalDetailsModal = ({
                 {/* Withdrawal amount */}
                 <div className='flex justify-between w-full'>
                   <strong>Withrawal Amount:</strong>
-                  <p>N{productDetails?.withdrawalAmount}</p>
+                  <p>₦{productDetails?.withdrawalAmount}</p>
                 </div>
 
                 {/* total Available Product */}
                 <div className='flex justify-between w-full'>
                   <strong>Current Balance:</strong>
-                  <p>N{productDetails?.vendorId?.nairaBalance}</p>
+                  <p>₦{productDetails?.vendorId?.nairaBalance}</p>
                 </div>
 
                 {/* total Available Product */}
@@ -123,7 +121,7 @@ const WithdrawalDetailsModal = ({
                 </div>
 
                 <button
-                  onClick={approveWithdrawal}
+                  onClick={() => approveWithdrawal(productDetails?._id)}
                   className='bg-navbar-color mt-5 text-white hover:text-navbar-color hover:bg-white py-2 px-5 rounded-md border border-navbar-color transition-all duration-200'
                 >
                   {isPending ? 'Please wait...' : 'Approve'}

@@ -11,6 +11,7 @@ const Orders = () => {
   const [orderCount, setOrderCount] = useState(0)
   const [filteredOrder, setFilteredOrder] = useState(fetchOrders?.data)
   const [loadingModal, setLoadingModal] = useState(false)
+  const [page, setPage] = useState(0)
 
   const {
     data: singleOrderData,
@@ -18,44 +19,40 @@ const Orders = () => {
     refetch,
   } = useFetchSingleOrder(orderId, { enabled: false })
 
-  const [page, setPage] = useState(0)
-
   useEffect(() => {
     setOrderCount(fetchOrders?.count)
     setFilteredOrder(fetchOrders?.data)
   }, [fetchOrders])
 
-  const filterByStatus = (stock) => {
-    if (stock === 'completed') {
-      setFilteredOrder(
-        fetchOrders?.data?.filter((item) => item.status === 'completed')
+  const filterByStatus = (status) => {
+    let filteredList
+    if (status === 'completed') {
+      filteredList = fetchOrders?.data?.filter(
+        (item) => item.status === 'completed'
       )
-    } else if (stock === 'shipped') {
-      setFilteredOrder(
-        fetchOrders?.data?.filter(
-          (item) =>
-            item?.status === 'shipped' ||
-            item?.status === 'ongoing' ||
-            item?.status === 'delivered'
-        )
+    } else if (status === 'shipped') {
+      filteredList = fetchOrders?.data?.filter(
+        (item) =>
+          item?.status === 'shipped' ||
+          item?.status === 'ongoing' ||
+          item?.status === 'delivered'
       )
-    } else if (stock === 'all') {
-      setFilteredOrder(fetchOrders?.data)
+    } else if (status === 'all') {
+      filteredList = fetchOrders?.data
     } else {
-      setFilteredOrder(
-        fetchOrders?.data?.filter((item) => item.status === 'cancelled')
+      filteredList = fetchOrders?.data?.filter(
+        (item) => item.status === 'cancelled'
       )
     }
-
-    // Reset page to 0 when filter changes
-    setPage(0)
+    setFilteredOrder(filteredList)
+    setPage(0) // Reset page to 0 when filter changes
   }
 
   const searchFilter = (event) => {
-    const value = event.target.value
+    const value = event.target.value.toLowerCase()
     setFilteredOrder(
       fetchOrders?.data?.filter((item) =>
-        item.userId.name.toLowerCase().includes(value.toLowerCase())
+        item.userId.name.toLowerCase().includes(value)
       )
     )
   }
@@ -94,8 +91,8 @@ const Orders = () => {
           </span>
         </h3>
 
-        {/* navs */}
-        <div className='flex justify-between bg-white rounded-md py-3 px-5'>
+        {/* Navigation buttons */}
+        <div className='flex flex-wrap justify-between bg-white rounded-md py-3 px-5'>
           <button
             onClick={() => {
               setOrderType('all')
@@ -148,9 +145,9 @@ const Orders = () => {
           </button>
         </div>
 
-        <form className='flex gap-5 bg-white rounded-md py-3 px-5 text-navbar-color'>
-          {/* search input */}
-          <div className='w-[50%] relative'>
+        <form className='flex flex-col md:flex-row gap-5 bg-white rounded-md py-3 px-5 text-navbar-color'>
+          {/* Search input */}
+          <div className='w-full md:w-[50%] relative'>
             <input
               onChange={searchFilter}
               className='p-[10px] px-10 border-[1px] rounded-md border-green-300 w-full placeholder:text-navbar-color'
@@ -163,66 +160,69 @@ const Orders = () => {
           </div>
         </form>
 
-        {/* table */}
-        <table className='rounded-md overflow-hidden'>
-          {/* head */}
-          <thead className='bg-green-100'>
-            <tr className='text-navbar-color py-2 h-14'>
-              <th>Order ID</th>
-              <th>Client Name</th>
-              <th>Date Ordered</th>
-              <th>Bill</th>
-              <th>Order Status</th>
-            </tr>
-          </thead>
+        {/* Table */}
+        <div className='overflow-x-auto'>
+          <table className='rounded-md overflow-hidden w-full'>
+            {/* Head */}
+            <thead className='bg-green-100'>
+              <tr className='text-navbar-color py-2 h-14'>
+                <th className='p-2 text-left'>Order ID</th>
+                <th className='p-2 text-left'>Client Name</th>
+                <th className='p-2 text-left'>Date Ordered</th>
+                <th className='p-2 text-left'>Bill</th>
+                <th className='p-2 text-left'>Order Status</th>
+              </tr>
+            </thead>
 
-          {/* body */}
-          <tbody className='mt-5 bg-white text-[#3A3A3A]'>
-            {filteredOrder &&
-              filteredOrder?.slice(page, page + 10).map((item) => {
-                const options = {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                }
+            {/* Body */}
+            <tbody className='mt-5 bg-white text-[#3A3A3A]'>
+              {filteredOrder &&
+                filteredOrder?.slice(page, page + 10).map((item) => {
+                  const options = {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  }
 
-                const dateObject = new Date(item?.createdAt)
-                const readableDate = dateObject.toLocaleString('en-US', options)
+                  const dateObject = new Date(item?.createdAt)
+                  const readableDate = dateObject.toLocaleString(
+                    'en-US',
+                    options
+                  )
 
-                return (
-                  <tr
-                    key={item?._id}
-                    onClick={() => handleMoreInfo(item?._id)}
-                    className='text-center cursor-pointer mt-5 py-2 h-12 border-b-[1px] border-green-200'
-                  >
-                    <td>{item?._id}</td>
-                    <td>{item?.userId?.name}</td>
-                    <td>{readableDate}</td>
-                    <td>N{item?.bill}</td>
-                    <td>{item?.status}</td>
-                  </tr>
-                )
-              })}
-          </tbody>
-        </table>
+                  return (
+                    <tr
+                      key={item?._id}
+                      onClick={() => handleMoreInfo(item?._id)}
+                      className='text-center cursor-pointer mt-5 py-2 h-12 border-b-[1px] border-green-200 hover:bg-slate-200'
+                    >
+                      <td className='p-2'>{item?._id}</td>
+                      <td className='p-2'>{item?.userId?.name}</td>
+                      <td className='p-2'>{readableDate}</td>
+                      <td className='p-2'>₦{item?.bill}</td>
+                      <td className='p-2'>{item?.status}</td>
+                    </tr>
+                  )
+                })}
+            </tbody>
+          </table>
+        </div>
 
         {!isPending && filteredOrder?.length === 0 && (
-          <p className='text-center'>No Order available yet!</p>
+          <p className='text-center'>No orders available yet!</p>
         )}
 
-        {/* loading state */}
+        {/* Loading state */}
         {isPending && <p className='text-center'>Loading...</p>}
 
-        <div className='flex justify-center gap-20 bg-white rounded-md py-3 px-5 text-navbar-color'>
+        <div className='flex justify-center gap-10 bg-white rounded-md py-3 px-5 text-navbar-color'>
           <button
             onClick={() => {
-              if (page === 0) {
-                return
-              } else {
+              if (page > 0) {
                 setPage(page - 10)
               }
             }}
-            className='py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200'
+            className='py-2 px-4 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200'
           >
             Previous
           </button>
@@ -232,7 +232,7 @@ const Orders = () => {
                 setPage(page + 10)
               }
             }}
-            className='py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200'
+            className='py-2 px-4 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200'
           >
             Next
           </button>

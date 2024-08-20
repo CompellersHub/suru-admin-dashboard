@@ -13,22 +13,19 @@ const LogisticDetailsModal = ({
   singleLoading,
 }) => {
   if (!vendorDetails) return null
-  console.log(vendorDetails)
 
   const { mutateAsync: confirmVendor, isPending } = useApproveLogistic()
   const queryClient = useQueryClient()
   const approveVendor = async (id) => {
-    console.log(id, 'appro')
     try {
       const res = await confirmVendor(id)
       if (res?.status) {
-        toast.success('Vendor confirmed successfully')
+        toast.success(res?.message)
         queryClient.invalidateQueries({ queryKey: ['get_logistic'] })
         onClose()
       }
     } catch (error) {
-      console.log(error)
-      toast.error(error)
+      toast.error(error?.response?.data?.message)
     }
   }
 

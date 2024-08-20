@@ -21,13 +21,12 @@ const VendorDetailsModal = ({
     try {
       const res = await confirmVendor(id)
       if (res?.status) {
-        toast.success('Vendor confirmed successfully')
+        toast.success(res?.message)
         queryClient.invalidateQueries({ queryKey: ['get_vendors'] })
         onClose()
       }
     } catch (error) {
-      console.log(error)
-      toast.error(error)
+      toast.error(error?.response?.data?.message)
     }
   }
 

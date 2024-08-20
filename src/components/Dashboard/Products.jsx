@@ -8,8 +8,8 @@ import ProductDetailsModal from '../Details/ProductDetailsModal'
 
 const Products = () => {
   const [selectedProductId, setSelectedProductId] = useState(null)
-  const { data: fetctProducts, isPending } = useFetchProducts()
-  const [filteredProduct, setFilteredProduct] = useState(fetctProducts)
+  const { data: fetchProducts, isPending } = useFetchProducts()
+  const [filteredProduct, setFilteredProduct] = useState(fetchProducts)
 
   const [filterTerm, setFilterTerm] = useState('all')
   const [modalOpen, setModalOpen] = useState(false)
@@ -23,32 +23,34 @@ const Products = () => {
 
   // useEffect to first get all the products
   useEffect(() => {
-    setFilteredProduct(fetctProducts?.reverse())
-  }, [fetctProducts])
+    setFilteredProduct(fetchProducts?.reverse())
+  }, [fetchProducts])
 
   // filter by stock level
   const filterByStock = (stock) => {
-    if (stock === 'low') {
-      setFilteredProduct(fetctProducts?.filter((item) => item.stock <= 20))
-    } else if (stock === 'out') {
-      setFilteredProduct(fetctProducts?.filter((item) => item.stock === 0))
-    } else if (stock === 'all') {
-      setFilteredProduct(fetctProducts)
-    } else {
-      setFilteredProduct(fetctProducts?.filter((item) => item.stock > 20))
+    let filteredList
+    switch (stock) {
+      case 'low':
+        filteredList = fetchProducts?.filter((item) => item.stock <= 20)
+        break
+      case 'out':
+        filteredList = fetchProducts?.filter((item) => item.stock === 0)
+        break
+      case 'all':
+        filteredList = fetchProducts
+        break
+      default:
+        filteredList = fetchProducts?.filter((item) => item.stock > 20)
     }
-
-    // Reset page to 0 when filter changes
-    setPage(0)
+    setFilteredProduct(filteredList)
+    setPage(0) // Reset page to 0 when filter changes
   }
 
   // search for product by name
   const searchFilter = (event) => {
-    const value = event.target.value
+    const value = event.target.value.toLowerCase()
     setFilteredProduct(
-      fetctProducts.filter((item) =>
-        item.name.toLowerCase().includes(value.toLowerCase())
-      )
+      fetchProducts.filter((item) => item.name.toLowerCase().includes(value))
     )
   }
 
@@ -93,9 +95,9 @@ const Products = () => {
           <button className='text-navbar-color font-bold'>Product</button>
         </div>
 
-        <form className='flex gap-5 bg-white rounded-md py-3 px-5 text-navbar-color'>
+        <form className='flex flex-col md:flex-row gap-5 bg-white rounded-md py-3 px-5 text-navbar-color'>
           {/* search input */}
-          <div className='w-[50%] relative'>
+          <div className='w-full md:w-[50%] relative'>
             <input
               className='p-[10px] px-10 border-[1px] rounded-md border-green-300 w-full placeholder:text-navbar-color'
               type='text'
@@ -108,113 +110,116 @@ const Products = () => {
           </div>
 
           {/* search filter */}
-          <select
-            className='border-[1px] border-navbar-color rounded-md'
-            value={filterTerm}
-            onChange={(e) => {
-              setFilterTerm(e.target.value)
-            }}
-          >
-            <option value='all'>All</option>
-            <option value='available'>Available</option>
-            <option value='low'>low stock</option>
-            <option value='out'>out of stock</option>
-          </select>
+          <div className='flex flex-col md:flex-row gap-2 w-full md:w-auto'>
+            <select
+              className='border-[1px] border-navbar-color rounded-md'
+              value={filterTerm}
+              onChange={(e) => setFilterTerm(e.target.value)}
+            >
+              <option value='all'>All</option>
+              <option value='available'>Available</option>
+              <option value='low'>Low stock</option>
+              <option value='out'>Out of stock</option>
+            </select>
 
-          <button
-            type='button'
-            onClick={() => filterByStock(filterTerm)}
-            className='py-[10px] border-[1px] border-navbar-color px-5 rounded-md bg-navbar-color text-white'
-          >
-            Filter
-          </button>
+            <button
+              type='button'
+              onClick={() => filterByStock(filterTerm)}
+              className='py-[10px] border-[1px] border-navbar-color px-5 rounded-md bg-navbar-color text-white'
+            >
+              Filter
+            </button>
+          </div>
         </form>
 
         {/* table */}
-        <table className='rounded-md overflow-hidden'>
-          {/* head */}
-          <thead className='bg-green-100'>
-            <tr className='text-navbar-color py-2 h-14'>
-              <th>Product Name</th>
-              <th>Vendor Name</th>
-              <th>Date Added</th>
-              <th>Category</th>
-              <th>Status</th>
-            </tr>
-          </thead>
+        <div className='overflow-x-auto'>
+          <table className='rounded-md overflow-hidden w-full'>
+            {/* head */}
+            <thead className='bg-green-100'>
+              <tr className='text-navbar-color py-2 h-14'>
+                <th className='p-2 text-left'>Product Name</th>
+                <th className='p-2 text-left'>Vendor Name</th>
+                <th className='p-2 text-left'>Date Added</th>
+                <th className='p-2 text-left'>Category</th>
+                <th className='p-2 text-left'>Status</th>
+              </tr>
+            </thead>
 
-          {/* body */}
-          <tbody className='mt-5 bg-white text-[#3A3A3A]'>
-            {!isPending &&
-              filteredProduct &&
-              filteredProduct?.slice(page, page + 10).map((item) => {
-                const options = {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                }
+            {/* body */}
+            <tbody className='mt-5 bg-white text-[#3A3A3A]'>
+              {!isPending &&
+                filteredProduct &&
+                filteredProduct?.slice(page, page + 10).map((item) => {
+                  const options = {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  }
 
-                const dateObject = new Date(item.createdAt)
-                const readableDate = dateObject.toLocaleString('en-US', options)
+                  const dateObject = new Date(item.createdAt)
+                  const readableDate = dateObject.toLocaleString(
+                    'en-US',
+                    options
+                  )
 
-                return (
-                  <tr
-                    key={item._id}
-                    // onClick={() => navigate(`/product/details/${item.slug}`)}
-                    onClick={() => handleMoreInfo(item?.slug)}
-                    className='text-center mt-5 py-2 h-12 border-b-[1px] border-green-200 cursor-pointer hover:bg-slate-200'
-                  >
-                    <td className='w-[20%]'>{item.name}</td>
-                    <td className='w-[20%]'>{item.vendorId.companyName}</td>
-                    <td className='w-[20%]'>{readableDate}</td>
-                    <td className='w-[20%]'>{item.category}</td>
-                    <td
-                      className={`w-[20%] ${
-                        item.stock < 20
-                          ? 'text-orange-400'
-                          : item.stock === 0
-                          ? 'text-red-500'
-                          : 'text-navbar-color'
-                      }`}
+                  return (
+                    <tr
+                      key={item._id}
+                      onClick={() => handleMoreInfo(item?.slug)}
+                      className='text-center mt-5 py-2 h-12 border-b-[1px] border-green-200 cursor-pointer hover:bg-slate-200'
                     >
-                      {item.stock < 5
-                        ? 'Low Stock'
-                        : item.stock === 0
-                        ? 'Out of Stock'
-                        : 'Available'}
-                    </td>
-                  </tr>
-                )
-              })}
-          </tbody>
-        </table>
+                      <td className='w-[20%] p-2 text-left'>{item.name}</td>
+                      <td className='w-[20%] p-2 text-left'>
+                        {item.vendorId.companyName}
+                      </td>
+                      <td className='w-[20%] p-2 text-left'>{readableDate}</td>
+                      <td className='w-[20%] p-2 text-left'>{item.category}</td>
+                      <td
+                        className={`w-[20%] p-2 ${
+                          item.stock < 20
+                            ? 'text-orange-400'
+                            : item.stock === 0
+                            ? 'text-red-500'
+                            : 'text-navbar-color'
+                        }`}
+                      >
+                        {item.stock < 5
+                          ? 'Low Stock'
+                          : item.stock === 0
+                          ? 'Out of Stock'
+                          : 'Available'}
+                      </td>
+                    </tr>
+                  )
+                })}
+            </tbody>
+          </table>
+        </div>
+
         {!isPending && filteredProduct && filteredProduct?.length === 0 && (
           <p className='text-center'>No product available yet!</p>
         )}
         {isPending && <p className='text-center'>Loading...</p>}
 
-        <div className='flex justify-center gap-20 bg-white rounded-md py-3 px-5 text-navbar-color'>
+        <div className='flex justify-center gap-10 bg-white rounded-md py-3 px-5 text-navbar-color'>
           <button
             onClick={() => {
-              if (page === 0) {
-                return
-              } else {
+              if (page > 0) {
                 setPage(page - 10)
               }
             }}
-            className='py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200'
+            className='py-2 px-4 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200'
           >
             Previous
           </button>
           <button
             onClick={() => {
-              if (page + 10 < fetctProducts?.length) {
+              if (page + 10 < fetchProducts?.length) {
                 setPage(page + 10)
-              } else {
-                console.log(fetctProducts?.length, 'no')
               }
             }}
-            className='py-2 w-36 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200'
+            className='py-2 px-4 border-navbar-color border rounded-md hover:bg-navbar-color hover:text-white transition-all duration-200'
           >
             Next
           </button>

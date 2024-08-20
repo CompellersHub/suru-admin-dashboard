@@ -1,57 +1,113 @@
+/* eslint-disable react/prop-types */
+import { useState } from 'react'
 import { MdOutlineDashboard } from 'react-icons/md'
 import { FaClipboardList } from 'react-icons/fa'
 import { CiViewList, CiLogout, CiDeliveryTruck } from 'react-icons/ci'
-import { FaUpload } from 'react-icons/fa6'
-import { IoCashOutline } from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux'
 import { navAction } from '../../store/nav-slice'
 import { authAction } from '../../store/auth-slice'
+import { NavLink } from 'react-router-dom'
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 
-const Navigation = () => {
+const Navigation = ({ toggleNav }) => {
   const activeNav = useSelector((state) => state.nav.nav)
   const dispatch = useDispatch()
 
-  const setActiveNav = (nav) => {
-    dispatch(navAction.setNav({ nav: nav }))
+  const [dropdowns, setDropdowns] = useState({
+    products: false,
+    logistics: false,
+    vendors: false,
+  })
+
+  const toggleDropdown = (menu) => {
+    setDropdowns({
+      products: menu === 'products' ? !dropdowns.products : false,
+      logistics: menu === 'logistics' ? !dropdowns.logistics : false,
+      vendors: menu === 'vendors' ? !dropdowns.vendors : false,
+    })
+  }
+
+  const handleLogout = () => {
+    sessionStorage.clear()
+    dispatch(authAction.logout())
+    if (toggleNav) toggleNav() // Close the menu after logout
+  }
+
+  const handleNavClick = (nav) => {
+    dispatch(navAction.setNav({ nav }))
+    if (toggleNav) toggleNav() // Close the menu after navigating
   }
 
   return (
-    <nav className='flex capitalize flex-col gap-4 bg-white w-[20%] py-10'>
-      <div
-        onClick={() => setActiveNav('dashboard')}
-        className={`flex gap-10 ${
-          activeNav === 'dashboard'
-            ? 'bg-green-100'
-            : 'group transition-all duration-200 hover:bg-green-100'
-        }`}
-      >
+    <nav className='flex capitalize flex-col min-h-screen  gap-4 bg-white w-full md:w-auto py-10'>
+      {/* Vendors with Dropdown */}
+      <div className='flex flex-col'>
         <div
-          className={`h-14 w-[4px] ${
-            activeNav === 'dashboard'
-              ? 'bg-navbar-color'
-              : 'bg-white group-hover:bg-navbar-color transition-all duration-200'
+          onClick={() => toggleDropdown('vendors')}
+          className={`flex gap-10  ${
+            activeNav === 'vendors' || dropdowns.vendors
+              ? 'bg-green-100'
+              : 'group transition-all duration-200 hover:bg-green-100'
           }`}
-        ></div>
-        <div
-          className={`flex ${
-            activeNav === 'dashboard'
-              ? 'text-navbar-color'
-              : 'group-hover:text-navbar-color transition-all duration-200'
-          } items-center gap-2 text-xl`}
         >
-          <MdOutlineDashboard />
-          <button>Vendors</button>
+          <div
+            className={`h-14 w-[4px] ${
+              activeNav === 'vendors' || dropdowns.vendors
+                ? 'bg-navbar-color'
+                : 'bg-white group-hover:bg-navbar-color transition-all duration-200'
+            }`}
+          ></div>
+          <div className='flex items-center justify-between gap-2 text-xl w-full'>
+            <div className='flex items-center gap-2'>
+              <MdOutlineDashboard />
+              <span>Vendors</span>
+            </div>
+            {dropdowns.vendors ? <IoIosArrowUp /> : <IoIosArrowDown />}
+          </div>
         </div>
+        {dropdowns.vendors && (
+          <div className='flex flex-col ml-10 gap-2'>
+            <NavLink
+              to='/vendors'
+              className={({ isActive }) =>
+                `${
+                  isActive
+                    ? 'text-navbar-color'
+                    : 'group-hover:text-navbar-color transition-all duration-200'
+                }`
+              }
+              onClick={() => handleNavClick('vendors')}
+            >
+              Vendor List
+            </NavLink>
+            <NavLink
+              to='/withdrawal'
+              className={({ isActive }) =>
+                `${
+                  isActive
+                    ? 'text-navbar-color'
+                    : 'group-hover:text-navbar-color transition-all duration-200'
+                }`
+              }
+              onClick={() => handleNavClick('withdrawal')}
+            >
+              Withdrawal
+            </NavLink>
+          </div>
+        )}
       </div>
 
-      {/* orders */}
-      <div
-        onClick={() => setActiveNav('orders')}
-        className={`flex gap-10 ${
-          activeNav === 'orders'
-            ? 'bg-green-100'
-            : 'group transition-all duration-200 hover:bg-green-100'
-        }`}
+      {/* Orders */}
+      <NavLink
+        to='/orders'
+        className={({ isActive }) =>
+          `flex gap-10 ${
+            isActive
+              ? 'bg-green-100 text-navbar-color'
+              : 'group transition-all duration-200 hover:bg-green-100'
+          }`
+        }
+        onClick={() => handleNavClick('orders')}
       >
         <div
           className={`h-14 w-[4px] ${
@@ -60,167 +116,130 @@ const Navigation = () => {
               : 'bg-white group-hover:bg-navbar-color transition-all duration-200'
           }`}
         ></div>
-        <div
-          className={`flex ${
-            activeNav === 'orders'
-              ? 'text-navbar-color'
-              : 'group-hover:text-navbar-color transition-all duration-200'
-          } items-center gap-2 text-xl`}
-        >
+        <div className='flex items-center gap-2 text-xl'>
           <FaClipboardList />
-          <button>Orders</button>
+          <span>Orders</span>
         </div>
+      </NavLink>
+
+      {/* Products with Dropdown */}
+      <div className='flex flex-col'>
+        <div
+          onClick={() => toggleDropdown('products')}
+          className={`flex gap-10 ${
+            activeNav === 'products' || dropdowns.products
+              ? 'bg-green-100'
+              : 'group transition-all duration-200 hover:bg-green-100'
+          }`}
+        >
+          <div
+            className={`h-14 w-[4px] ${
+              activeNav === 'products' || dropdowns.products
+                ? 'bg-navbar-color'
+                : 'bg-white group-hover:bg-navbar-color transition-all duration-200'
+            }`}
+          ></div>
+          <div className='flex items-center justify-between gap-2 text-xl w-full'>
+            <div className='flex items-center gap-2'>
+              <CiViewList />
+              <span>Products</span>
+            </div>
+            {dropdowns.products ? <IoIosArrowUp /> : <IoIosArrowDown />}
+          </div>
+        </div>
+        {dropdowns.products && (
+          <div className='flex flex-col ml-10 gap-2'>
+            <NavLink
+              to='/products'
+              className={({ isActive }) =>
+                `${
+                  isActive
+                    ? 'text-navbar-color'
+                    : 'group-hover:text-navbar-color transition-all duration-200'
+                }`
+              }
+              onClick={() => handleNavClick('product-list')}
+            >
+              Live Product
+            </NavLink>
+            <NavLink
+              to='/upload'
+              className={({ isActive }) =>
+                `${
+                  isActive
+                    ? 'text-navbar-color'
+                    : 'group-hover:text-navbar-color transition-all duration-200'
+                }`
+              }
+              onClick={() => handleNavClick('product-upload')}
+            >
+              Pending Product
+            </NavLink>
+          </div>
+        )}
       </div>
 
-      {/* products */}
-      <div
-        onClick={() => setActiveNav('products')}
-        className={`flex gap-10 ${
-          activeNav === 'products'
-            ? 'bg-green-100'
-            : 'group transition-all duration-200 hover:bg-green-100'
-        }`}
-      >
+      {/* Logistics with Dropdown */}
+      <div className='flex flex-col'>
         <div
-          className={`h-14 w-[4px] ${
-            activeNav === 'products'
-              ? 'bg-navbar-color'
-              : 'bg-white group-hover:bg-navbar-color transition-all duration-200'
+          onClick={() => toggleDropdown('logistics')}
+          className={`flex gap-10 ${
+            activeNav === 'logistics' || dropdowns.logistics
+              ? 'bg-green-100'
+              : 'group transition-all duration-200 hover:bg-green-100'
           }`}
-        ></div>
-        <div
-          className={`flex ${
-            activeNav === 'products'
-              ? 'text-navbar-color'
-              : 'group-hover:text-navbar-color transition-all duration-200'
-          } items-center gap-2 text-xl`}
         >
-          <CiViewList />
-          <button>Products</button>
+          <div
+            className={`h-14 w-[4px] ${
+              activeNav === 'logistics' || dropdowns.logistics
+                ? 'bg-navbar-color'
+                : 'bg-white group-hover:bg-navbar-color transition-all duration-200'
+            }`}
+          ></div>
+          <div className='flex items-center justify-between gap-2 text-xl w-full'>
+            <div className='flex items-center gap-2'>
+              <CiDeliveryTruck />
+              <span>Logistics</span>
+            </div>
+            {dropdowns.logistics ? <IoIosArrowUp /> : <IoIosArrowDown />}
+          </div>
         </div>
+        {dropdowns.logistics && (
+          <div className='flex flex-col ml-10 gap-2'>
+            <NavLink
+              to='/logistics-overview'
+              className={({ isActive }) =>
+                `${
+                  isActive
+                    ? 'text-navbar-color'
+                    : 'group-hover:text-navbar-color transition-all duration-200'
+                }`
+              }
+              onClick={() => handleNavClick('logistics-overview')}
+            >
+              Logistics List
+            </NavLink>
+            <NavLink
+              to='/log-withdrawal'
+              className={({ isActive }) =>
+                `${
+                  isActive
+                    ? 'text-navbar-color'
+                    : 'group-hover:text-navbar-color transition-all duration-200'
+                }`
+              }
+              onClick={() => handleNavClick('log-withdrawal')}
+            >
+              Logistics Withdrawal
+            </NavLink>
+          </div>
+        )}
       </div>
 
-      {/* product upload */}
-      <div
-        onClick={() => setActiveNav('uploads')}
-        className={`flex gap-10 ${
-          activeNav === 'uploads'
-            ? 'bg-green-100'
-            : 'group transition-all duration-200 hover:bg-green-100'
-        }`}
-      >
-        <div
-          className={`h-14 w-[4px] ${
-            activeNav === 'uploads'
-              ? 'bg-navbar-color'
-              : 'bg-white group-hover:bg-navbar-color transition-all duration-200'
-          }`}
-        ></div>
-        <div
-          className={`flex ${
-            activeNav === 'uploads'
-              ? 'text-navbar-color'
-              : 'group-hover:text-navbar-color transition-all duration-200'
-          } items-center gap-2 text-xl`}
-        >
-          <FaUpload />
-          <button>Uploads</button>
-        </div>
-      </div>
-
-      {/* Withdrawals */}
-      <div
-        onClick={() => setActiveNav('withdrawals')}
-        className={`flex gap-10 ${
-          activeNav === 'withdrawals'
-            ? 'bg-green-100'
-            : 'group transition-all duration-200 hover:bg-green-100'
-        }`}
-      >
-        <div
-          className={`h-14 w-[4px] ${
-            activeNav === 'withdrawals'
-              ? 'bg-navbar-color'
-              : 'bg-white group-hover:bg-navbar-color transition-all duration-200'
-          }`}
-        ></div>
-        <div
-          className={`flex ${
-            activeNav === 'withdrawals'
-              ? 'text-navbar-color'
-              : 'group-hover:text-navbar-color transition-all duration-200'
-          } items-center gap-2 text-xl`}
-        >
-          <IoCashOutline />
-          <button>Withdrawals</button>
-        </div>
-      </div>
-
-      {/* Logistics */}
-      <div
-        onClick={() => setActiveNav('logistics')}
-        className={`flex gap-10 ${
-          activeNav === 'logistics'
-            ? 'bg-green-100'
-            : 'group transition-all duration-200 hover:bg-green-100'
-        }`}
-      >
-        <div
-          className={`h-14 w-[4px] ${
-            activeNav === 'logistics'
-              ? 'bg-navbar-color'
-              : 'bg-white group-hover:bg-navbar-color transition-all duration-200'
-          }`}
-        ></div>
-        <div
-          className={`flex ${
-            activeNav === 'logistics'
-              ? 'text-navbar-color'
-              : 'group-hover:text-navbar-color capitalize transition-all duration-200'
-          } items-center gap-2 text-xl`}
-        >
-          <CiDeliveryTruck />
-          <button className='capitalize'>logistics</button>
-        </div>
-      </div>
-
-      {/* Logistics withdrawal */}
-      <div
-        onClick={() => setActiveNav('log-withdrawal')}
-        className={`flex gap-10 ${
-          activeNav === 'log-withdrawal'
-            ? 'bg-green-100'
-            : 'group transition-all duration-200 hover:bg-green-100'
-        }`}
-      >
-        <div
-          className={`h-14 w-[4px] ${
-            activeNav === 'log-withdrawal'
-              ? 'bg-navbar-color'
-              : 'bg-white group-hover:bg-navbar-color transition-all duration-200'
-          }`}
-        ></div>
-        <div
-          className={`flex ${
-            activeNav === 'log-withdrawal'
-              ? 'text-navbar-color'
-              : 'group-hover:text-navbar-color capitalize transition-all duration-200'
-          } items-center gap-2 text-xl`}
-        >
-          <IoCashOutline />
-          <button className='capitalize'>log withdrawal</button>
-        </div>
-      </div>
+      {/* Logout */}
       <div className='flex items-center gap-3 text-xl mt-auto ml-10 text-[#EB5757]'>
         <CiLogout />
-        <button
-          onClick={() => {
-            sessionStorage.clear()
-            dispatch(authAction.logout())
-          }}
-        >
-          Logout
-        </button>
+        <button onClick={handleLogout}>Logout</button>
       </div>
     </nav>
   )
