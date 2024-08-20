@@ -195,7 +195,7 @@ const LogWithdrawals = () => {
                     className='text-center cursor-pointer h-12 border-b-[1px] border-green-200 hover:bg-gray-100'
                   >
                     <td className='w-[20%] p-2'>{item?.bankHolderName}</td>
-                    <td className='w-[20%] p-2'>N{item?.withdrawalAmount}</td>
+                    <td className='w-[20%] p-2'>₦{item?.withdrawalAmount}</td>
                     <td className='w-[20%] p-2'>{readableDate}</td>
                     <td className='w-[20%] p-2'>{item?.bankName}</td>
                     <td

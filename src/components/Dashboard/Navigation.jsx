@@ -160,7 +160,7 @@ const Navigation = ({ toggleNav }) => {
               }
               onClick={() => handleNavClick('product-list')}
             >
-              Product List
+              Live Product
             </NavLink>
             <NavLink
               to='/upload'
@@ -173,7 +173,7 @@ const Navigation = ({ toggleNav }) => {
               }
               onClick={() => handleNavClick('product-upload')}
             >
-              Upload Product
+              Pending Product
             </NavLink>
           </div>
         )}
@@ -217,7 +217,7 @@ const Navigation = ({ toggleNav }) => {
               }
               onClick={() => handleNavClick('logistics-overview')}
             >
-              Overview
+              Logistics List
             </NavLink>
             <NavLink
               to='/log-withdrawal'
@@ -230,7 +230,7 @@ const Navigation = ({ toggleNav }) => {
               }
               onClick={() => handleNavClick('log-withdrawal')}
             >
-              Log Withdrawal
+              Logistics Withdrawal
             </NavLink>
           </div>
         )}

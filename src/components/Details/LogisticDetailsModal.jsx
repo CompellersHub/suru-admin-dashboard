@@ -13,12 +13,10 @@ const LogisticDetailsModal = ({
   singleLoading,
 }) => {
   if (!vendorDetails) return null
-  console.log(vendorDetails)
 
   const { mutateAsync: confirmVendor, isPending } = useApproveLogistic()
   const queryClient = useQueryClient()
   const approveVendor = async (id) => {
-    console.log(id, 'appro')
     try {
       const res = await confirmVendor(id)
       if (res?.status) {

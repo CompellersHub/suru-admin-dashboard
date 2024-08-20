@@ -93,7 +93,7 @@ const ProductDetailsModal = ({
                 {/* total order amount */}
                 <div className='flex justify-between w-full'>
                   <strong>Product Price:</strong>
-                  <p>&#8358;{productDetails?.price}</p>
+                  <p>₦{productDetails?.price}</p>
                 </div>
                 <div className='flex justify-center w-full'>
                   <button

@@ -14,7 +14,6 @@ const LogWithdrawalDetailsModal = ({
   singleLoading,
 }) => {
   if (!productDetails) return null
-  console.log(productDetails)
 
   const { mutateAsync: approved, isPending } = useUpdateLogWithdrawal()
   const queryClient = useQueryClient()

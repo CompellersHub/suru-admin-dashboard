@@ -199,7 +199,7 @@ const Orders = () => {
                       <td className='p-2'>{item?._id}</td>
                       <td className='p-2'>{item?.userId?.name}</td>
                       <td className='p-2'>{readableDate}</td>
-                      <td className='p-2'>N{item?.bill}</td>
+                      <td className='p-2'>₦{item?.bill}</td>
                       <td className='p-2'>{item?.status}</td>
                     </tr>
                   )

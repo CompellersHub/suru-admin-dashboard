@@ -14,7 +14,6 @@ const WithdrawalDetailsModal = ({
   singleLoading,
 }) => {
   if (!productDetails) return null
-  console.log(productDetails)
 
   const { mutateAsync: approved, isPending } = useUpdateWithdrawal()
   const queryClient = useQueryClient()
@@ -99,13 +98,13 @@ const WithdrawalDetailsModal = ({
                 {/* Withdrawal amount */}
                 <div className='flex justify-between w-full'>
                   <strong>Withrawal Amount:</strong>
-                  <p>N{productDetails?.withdrawalAmount}</p>
+                  <p>₦{productDetails?.withdrawalAmount}</p>
                 </div>
 
                 {/* total Available Product */}
                 <div className='flex justify-between w-full'>
                   <strong>Current Balance:</strong>
-                  <p>N{productDetails?.vendorId?.nairaBalance}</p>
+                  <p>₦{productDetails?.vendorId?.nairaBalance}</p>
                 </div>
 
                 {/* total Available Product */}
