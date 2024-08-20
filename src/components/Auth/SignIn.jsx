@@ -61,7 +61,7 @@ const SignIn = () => {
         navigate(redirectPath, { replace: true })
       }, 1000)
     } catch (err) {
-      toast.error(`${err.message}`)
+      toast.error(`${err?.response?.data?.message}`)
     }
   }
 
