@@ -7,6 +7,8 @@ import Modal from '../common/Modal'
 import { useQueryClient } from '@tanstack/react-query'
 import { useUpdateUpload } from '../../hooks/uploadApi'
 import { useDeleteProduct } from '../../hooks/productApi'
+import DeleteConfirmationModal from '../common/DeleteConfirmationModal'
+import { useState } from 'react'
 
 const UploadProductDetailsModal = ({
   isOpen,
@@ -15,6 +17,7 @@ const UploadProductDetailsModal = ({
   singleLoading,
 }) => {
   if (!productDetails) return null
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   const { mutateAsync: updateProduct, isPending } = useUpdateUpload()
   const { mutateAsync: deleteProduct, isPending: isLoading } =
@@ -44,6 +47,8 @@ const UploadProductDetailsModal = ({
       }
     } catch (error) {
       toast.error(error?.response?.data?.message)
+    } finally {
+      setConfirmOpen(false)
     }
   }
 
@@ -128,7 +133,8 @@ const UploadProductDetailsModal = ({
                   </button>
                   <button
                     className='px-4 py-2 bg-red-500 hover:bg-red-900 text-white rounded'
-                    onClick={() => handleDelete(productDetails?._id)}
+                    // onClick={() => handleDelete(productDetails?._id)}
+                    onClick={() => setConfirmOpen(true)}
                   >
                     {isLoading ? 'Deleting...' : 'Delete Item'}
                   </button>
@@ -138,6 +144,13 @@ const UploadProductDetailsModal = ({
           </div>
         </Modal>
       )}
+
+      <DeleteConfirmationModal
+        isOpen={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={handleDelete}
+        isPending={isPending}
+      />
     </>
   )
 }
