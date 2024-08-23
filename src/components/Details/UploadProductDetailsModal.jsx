@@ -6,6 +6,9 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import Modal from '../common/Modal'
 import { useQueryClient } from '@tanstack/react-query'
 import { useUpdateUpload } from '../../hooks/uploadApi'
+import { useDeleteProduct } from '../../hooks/productApi'
+import DeleteConfirmationModal from '../common/DeleteConfirmationModal'
+import { useState } from 'react'
 
 const UploadProductDetailsModal = ({
   isOpen,
@@ -14,8 +17,12 @@ const UploadProductDetailsModal = ({
   singleLoading,
 }) => {
   if (!productDetails) return null
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   const { mutateAsync: updateProduct, isPending } = useUpdateUpload()
+  const { mutateAsync: deleteProduct, isPending: isLoading } =
+    useDeleteProduct()
+
   const queryClient = useQueryClient()
   const updateUpload = async (id, query) => {
     try {
@@ -27,6 +34,21 @@ const UploadProductDetailsModal = ({
       }
     } catch (error) {
       toast.error(error?.response?.data?.message)
+    }
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await deleteProduct(id)
+      if (res?.status) {
+        toast.success(res?.message)
+        queryClient.invalidateQueries({ queryKey: ['get_upload_products'] })
+        onClose()
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message)
+    } finally {
+      setConfirmOpen(false)
     }
   }
 
@@ -98,16 +120,23 @@ const UploadProductDetailsModal = ({
                 <div className='flex items-center justify-center gap-10'>
                   <button
                     onClick={() => updateUpload('reject', productDetails?._id)}
-                    className='bg-red-500 mt-5 text-white py-2 px-4 rounded-md hover:bg-white hover:text-red-500 border border-red-500 transition-all duration-200'
+                    className='bg-red-500  text-white py-2 px-4 rounded-md hover:bg-white hover:text-red-500 border border-red-500 transition-all duration-200'
                   >
                     {isPending === 'reject' ? 'Upldating...' : 'Reject'}
                   </button>
 
                   <button
                     onClick={() => updateUpload('accept', productDetails?._id)}
-                    className='bg-navbar-color mt-5 text-white py-2 px-4 rounded-md hover:bg-white hover:text-navbar-color border border-navbar-color transition-all duration-200'
+                    className='bg-navbar-color  text-white py-2 px-4 rounded-md hover:bg-white hover:text-navbar-color border border-navbar-color transition-all duration-200'
                   >
                     {isPending === 'accept' ? 'Updatting...' : 'Approve'}
+                  </button>
+                  <button
+                    className='px-4 py-2 bg-red-500 hover:bg-red-900 text-white rounded'
+                    // onClick={() => handleDelete(productDetails?._id)}
+                    onClick={() => setConfirmOpen(true)}
+                  >
+                    {isLoading ? 'Deleting...' : 'Delete Item'}
                   </button>
                 </div>
               </div>
@@ -115,6 +144,13 @@ const UploadProductDetailsModal = ({
           </div>
         </Modal>
       )}
+
+      <DeleteConfirmationModal
+        isOpen={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={handleDelete}
+        isPending={isPending}
+      />
     </>
   )
 }

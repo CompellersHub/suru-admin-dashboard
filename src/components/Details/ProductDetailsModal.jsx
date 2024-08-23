@@ -6,6 +6,8 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { useDeleteProduct } from '../../hooks/productApi'
 import Modal from '../common/Modal'
 import { useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import DeleteConfirmationModal from '../common/DeleteConfirmationModal'
 
 const ProductDetailsModal = ({
   isOpen,
@@ -14,6 +16,7 @@ const ProductDetailsModal = ({
   singleLoading,
 }) => {
   if (!productDetails) return null
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   const { mutateAsync: deleteProduct, isPending } = useDeleteProduct()
   const queryClient = useQueryClient()
@@ -27,6 +30,8 @@ const ProductDetailsModal = ({
       }
     } catch (error) {
       toast.error(error?.response?.data?.message)
+    } finally {
+      setConfirmOpen(false)
     }
   }
 
@@ -97,7 +102,8 @@ const ProductDetailsModal = ({
                 <div className='flex justify-center w-full'>
                   <button
                     className='px-4 py-2 bg-red-500 hover:bg-red-900 text-white rounded'
-                    onClick={() => handleDelete(productDetails?._id)}
+                    // onClick={() => handleDelete(productDetails?._id)}
+                    onClick={() => setConfirmOpen(true)}
                   >
                     {isPending ? 'Deleting...' : 'Delete Item'}
                   </button>
@@ -107,6 +113,13 @@ const ProductDetailsModal = ({
           </div>
         </Modal>
       )}
+
+      <DeleteConfirmationModal
+        isOpen={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={handleDelete}
+        isPending={isPending}
+      />
     </>
   )
 }
