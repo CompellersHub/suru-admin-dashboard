@@ -29,3 +29,12 @@ export const useUpdateUpload = () => {
     },
   })
 }
+
+export const useEditUploadProduct = () => {
+  return useMutation({
+    mutationFn: ({ id, ...data }) => {
+      console.log(data, 'mutation')
+      return API.patch(`/superadmin/product/${id}`, data)
+    },
+  })
+}
