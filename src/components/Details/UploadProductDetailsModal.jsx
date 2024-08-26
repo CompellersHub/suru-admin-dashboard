@@ -111,11 +111,13 @@ const UploadProductDetailsModal = ({
               <div className='flex flex-col'>
                 <strong>Description:</strong>
                 {isEditing ? (
-                  <ReactQuill
-                    value={editedDescription}
-                    onChange={setEditedDescription}
-                    className='w-full z-30 shadow-md bg-white'
-                  />
+                  <div className='h-48'>
+                    <ReactQuill
+                      value={editedDescription}
+                      onChange={setEditedDescription}
+                      className='w-full z-30 h-full shadow-md bg-white'
+                    />
+                  </div>
                 ) : (
                   <p
                     dangerouslySetInnerHTML={{
@@ -125,7 +127,11 @@ const UploadProductDetailsModal = ({
                   ></p>
                 )}
 
-                <div className='flex justify-end mt-3'>
+                <div
+                  className={`${
+                    isEditing ? 'mt-16' : 'mt-2'
+                  } flex justify-end `}
+                >
                   {!isEditing ? (
                     <button
                       onClick={() => setIsEditing(true)}
