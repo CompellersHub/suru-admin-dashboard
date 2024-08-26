@@ -3,11 +3,13 @@
 // import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
-import { useDeleteProduct } from '../../hooks/productApi'
+import { useDeleteProduct, useEditProduct } from '../../hooks/productApi'
 import Modal from '../common/Modal'
 import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import DeleteConfirmationModal from '../common/DeleteConfirmationModal'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 const ProductDetailsModal = ({
   isOpen,
@@ -17,8 +19,13 @@ const ProductDetailsModal = ({
 }) => {
   if (!productDetails) return null
   const [confirmOpen, setConfirmOpen] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editedDescription, setEditedDescription] = useState(
+    productDetails?.description || ''
+  )
 
   const { mutateAsync: deleteProduct, isPending } = useDeleteProduct()
+  const { mutateAsync: updateEdit, isPending: isSaving } = useEditProduct()
   const queryClient = useQueryClient()
   const handleDelete = async (id) => {
     try {
@@ -32,6 +39,24 @@ const ProductDetailsModal = ({
       toast.error(error?.response?.data?.message)
     } finally {
       setConfirmOpen(false)
+    }
+  }
+
+  const handleSave = async () => {
+    
+    try {
+      const res = await updateEdit({
+        id: productDetails._id,
+        description: editedDescription,
+      })
+      if (res?.status) {
+        toast.success('Product updated successfully')
+        queryClient.invalidateQueries({ queryKey: ['get_upload_products'] })
+        setIsEditing(false)
+        onClose()
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message)
     }
   }
 
@@ -69,13 +94,48 @@ const ProductDetailsModal = ({
                   <strong>Product Name:</strong>
                   <p>{productDetails?.name}</p>
                 </div>
-                <div className='flex justify-between w-full'>
-                  <strong className=''>Description:</strong>
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: productDetails?.description,
-                    }}
-                  ></p>
+                <div className='flex flex-col'>
+                  <strong>Description:</strong>
+                  {isEditing ? (
+                    <ReactQuill
+                      value={editedDescription}
+                      onChange={setEditedDescription}
+                      className='w-full z-30 shadow-md bg-white'
+                    />
+                  ) : (
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: productDetails?.description,
+                      }}
+                      className=' p-3 '
+                    ></p>
+                  )}
+
+                  <div className='flex justify-end mt-3'>
+                    {!isEditing ? (
+                      <button
+                        onClick={() => setIsEditing(true)}
+                        className='bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-white hover:text-blue-500 border border-blue-500 transition-all duration-200'
+                      >
+                        Edit
+                      </button>
+                    ) : (
+                      <div className='space-x-3'>
+                        <button
+                          onClick={handleSave}
+                          className='bg-green-500 text-white py-2 px-4 rounded-md hover:bg-white hover:text-green-500 border border-green-500 transition-all duration-200'
+                        >
+                          {isSaving ? 'Updating...' : ' Save'}
+                        </button>
+                        <button
+                          onClick={() => setIsEditing(false)}
+                          className='bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-white hover:text-green-500 border  transition-all duration-200'
+                        >
+                          Cancle
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* vendor name */}
