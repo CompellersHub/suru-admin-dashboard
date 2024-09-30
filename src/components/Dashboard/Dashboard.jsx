@@ -210,12 +210,14 @@ const Dashboard = () => {
                       ? 'Active'
                       : 'Not Verified'}
                   </td>
-                  <td
-                    onClick={() => deleteVendorHandler(item?._id)}
-                    className={`p-2 text-red-500 cursor-pointer`}
-                  >
-                    <BiTrash size={25} />
-                  </td>
+                  {item?.totalProducts > 0 && (
+                    <td
+                      onClick={() => deleteVendorHandler(item?._id)}
+                      className={`p-2 text-red-500 cursor-pointer`}
+                    >
+                      <BiTrash size={25} />
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
