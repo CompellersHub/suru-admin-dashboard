@@ -1,11 +1,22 @@
 import { useState, useEffect } from 'react'
 import { CiSearch } from 'react-icons/ci'
 import { useSelector } from 'react-redux'
-import { useFetchSingleVendor, useFetchVendors } from '../../hooks/vendorsApi'
+import {
+  useDeleteVendor,
+  useFetchSingleVendor,
+  useFetchVendors,
+} from '../../hooks/vendorsApi'
 import VendorDetailsModal from '../Details/VendorDetailsModal'
+import { BiTrash } from 'react-icons/bi'
+import Swal from 'sweetalert2'
+import { toast } from 'react-toastify'
 
 const Dashboard = () => {
-  const { data: fetchVendors, isPending } = useFetchVendors()
+  const {
+    data: fetchVendors,
+    isPending,
+    refetch: refetchVendors,
+  } = useFetchVendors()
   const [page, setPage] = useState(0)
   const [filteredVendors, setFilteredVendors] = useState(fetchVendors)
   const [selectVendorId, setSelectVendorId] = useState(null)
@@ -18,6 +29,8 @@ const Dashboard = () => {
   } = useFetchSingleVendor(selectVendorId)
   const [loadingModal, setLoadingModal] = useState(false)
   const user = useSelector((state) => state.auth)
+
+  const { mutateAsync: deleteVendor } = useDeleteVendor()
 
   // Fetch vendor list on mount
   useEffect(() => {
@@ -72,6 +85,34 @@ const Dashboard = () => {
     }
   }, [singleLoading, singleVendorData])
 
+  const deleteVendorHandler = async (vendorId) => {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Are you sure?',
+      text: 'Once you Delet, you will not have access to this vendor anymore.',
+      showCancelButton: true,
+      confirmButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: 'gray',
+      reverseButtons: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await deleteVendor(vendorId)
+          if (response?.status) {
+            toast.success('Vendor deleted successfully')
+            refetchVendors()
+          }
+        } catch (error) {
+          toast.error(
+            error?.response?.data?.message || 'Failed to delete vendor'
+          )
+        }
+      }
+    })
+  }
+
   return (
     <>
       <div className='flex flex-col gap-3 p-5'>
@@ -120,13 +161,14 @@ const Dashboard = () => {
         <div className='overflow-x-auto'>
           <table className='rounded-md overflow-hidden w-full'>
             {/* Head */}
-            <thead className='bg-green-100'>
+            <thead className='bg-green-100 w-full'>
               <tr className='text-navbar-color py-2 h-14'>
                 <th className='p-2 text-left'>Vendor Name</th>
                 <th className='p-2 text-left'>Total Available Products</th>
                 <th className='p-2 text-left'>Total Order Amount</th>
                 <th className='p-2 text-left'>Category</th>
                 <th className='p-2 text-left'>Vendor Status</th>
+                <th className='p-2  text-green-100 text-left'>Action </th>
               </tr>
             </thead>
 
@@ -135,13 +177,24 @@ const Dashboard = () => {
               {filteredVendors?.slice(page, page + 10).map((item) => (
                 <tr
                   key={item?._id}
-                  onClick={() => handleMoreInfo(item?._id)}
+                  // onClick={() => handleMoreInfo(item?._id)}
                   className='text-center cursor-pointer mt-5 py-2 h-12 border-b-[1px] border-green-200 hover:bg-slate-100'
                 >
-                  <td className='p-2 text-left'>{item?.companyName}</td>
-                  <td className='p-2'>{item?.totalProducts}</td>
-                  <td className='p-2'>₦{item?.nairaBalance}</td>
-                  <td className='p-2'>{item?.category}</td>
+                  <td
+                    onClick={() => handleMoreInfo(item?._id)}
+                    className='p-2 text-left'
+                  >
+                    {item?.companyName}
+                  </td>
+                  <td onClick={() => handleMoreInfo(item?._id)} className='p-2'>
+                    {item?.totalProducts}
+                  </td>
+                  <td onClick={() => handleMoreInfo(item?._id)} className='p-2'>
+                    ₦{item?.nairaBalance}
+                  </td>
+                  <td onClick={() => handleMoreInfo(item?._id)} className='p-2'>
+                    {item?.category}
+                  </td>
                   <td
                     className={`p-2 ${
                       item?.isSuspended
@@ -156,6 +209,12 @@ const Dashboard = () => {
                       : item?.isVerified
                       ? 'Active'
                       : 'Not Verified'}
+                  </td>
+                  <td
+                    onClick={() => deleteVendorHandler(item?._id)}
+                    className={`p-2 text-red-500 cursor-pointer`}
+                  >
+                    <BiTrash size={25} />
                   </td>
                 </tr>
               ))}

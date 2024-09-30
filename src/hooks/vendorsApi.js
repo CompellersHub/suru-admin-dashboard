@@ -28,3 +28,11 @@ export const useApproveVendor = () => {
     },
   })
 }
+
+export const useDeleteVendor = () => {
+  return useMutation({
+    mutationFn: (id) => {
+      return API.delete(`/superadmin/vendor/${id}`)
+    },
+  })
+}
