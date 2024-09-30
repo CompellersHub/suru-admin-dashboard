@@ -210,7 +210,7 @@ const Dashboard = () => {
                       ? 'Active'
                       : 'Not Verified'}
                   </td>
-                  {item?.totalProducts > 0 && (
+                  {item?.totalProducts < 1 && (
                     <td
                       onClick={() => deleteVendorHandler(item?._id)}
                       className={`p-2 text-red-500 cursor-pointer`}
