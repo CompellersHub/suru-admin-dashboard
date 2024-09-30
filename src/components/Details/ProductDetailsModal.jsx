@@ -148,6 +148,14 @@ const ProductDetailsModal = ({
                   <strong className=''>Vendor Name:</strong>
                   <p>{productDetails?.vendorId?.companyName}</p>
                 </div>
+                <div className='flex justify-between w-full'>
+                  <strong className=''>Vendor Email:</strong>
+                  <p>{productDetails?.vendorId?.companyEmail}</p>
+                </div>
+                <div className='flex justify-between w-full'>
+                  <strong className=''>Vendor Phone:</strong>
+                  <p>{productDetails?.vendorId?.phone}</p>
+                </div>
 
                 {/* vendor category */}
                 <div className='flex justify-between w-full'>
