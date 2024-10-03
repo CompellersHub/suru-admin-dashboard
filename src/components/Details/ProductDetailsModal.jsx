@@ -190,7 +190,7 @@ const ProductDetailsModal = ({
       <DeleteConfirmationModal
         isOpen={confirmOpen}
         onClose={() => setConfirmOpen(false)}
-        onConfirm={handleDelete}
+        onConfirm={() => handleDelete(productDetails._id)}
         isPending={isPending}
       />
     </>
