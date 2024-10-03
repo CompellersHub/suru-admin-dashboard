@@ -11,6 +11,6 @@
 
 /* Apply font-mono globally */
 body {
-  @apply font-mono;
+  @apply font-sans;
   margin: 0;
 }
