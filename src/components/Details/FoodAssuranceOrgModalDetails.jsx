@@ -33,7 +33,7 @@ const FoodAssuranceOrgModalDetails = ({
                 {/* Head */}
                 <thead className='bg-green-100'>
                   <tr className='text-navbar-color py-2 h-14'>
-                    <th className='p-2 text-center'>Order ID</th>
+                    <th className='p-2 text-center'>Order Slug</th>
                     <th className='p-2 text-center'>Members Name</th>
                     <th className='p-2 text-center'>Members Email</th>
                     <th className='p-2 text-center'>Product Name</th>
@@ -49,19 +49,19 @@ const FoodAssuranceOrgModalDetails = ({
                   {allOrders.length > 0 &&
                     allOrders.slice(page, page + itemsPerPage).map((order) => (
                       <tr
-                        key={order._id}
+                        key={order?.slug}
                         className='text-center cursor-pointer mt-5 py-2 h-12 border-b-[1px] border-green-200 hover:bg-slate-200'
                       >
-                        <td className='p-2'>{order._id}</td>
-                        <td className='p-2'>{order.userId.name}</td>
-                        <td className='p-2'>{order.userId.email}</td>
-                        <td className='p-2'>{order.items.name}</td>
+                        <td className='p-2'>{order?.slug}</td>
+                        <td className='p-2'>{order?.userId?.name}</td>
+                        <td className='p-2'>{order?.userId?.email}</td>
+                        <td className='p-2'>{order?.items?.name}</td>
                         <td className='p-2'>
-                          ₦{order.items.price.toLocaleString()}
+                          ₦{order?.items?.price.toLocaleString()}
                         </td>
-                        <td className='p-2'>{order.items.quantity}</td>
-                        <td className='p-2'>₦{order.bill.toLocaleString()}</td>
-                        <td className='p-2'>{order.status}</td>
+                        <td className='p-2'>{order?.items?.quantity}</td>
+                        <td className='p-2'>₦{order?.bill.toLocaleString()}</td>
+                        <td className='p-2'>{order?.status}</td>
                       </tr>
                     ))}
                 </tbody>
