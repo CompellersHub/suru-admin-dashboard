@@ -138,6 +138,7 @@ const FoodAssuranceOrgSingle = () => {
                 <th className='p-2 text-center'>Members Name</th>
                 <th className='p-2 text-center'>Members Email</th>
                 <th className='p-2 text-center'>Plan Limit</th>
+                <th className='p-2 text-center'>Expected Pay</th>
               </tr>
             </thead>
 
@@ -157,6 +158,7 @@ const FoodAssuranceOrgSingle = () => {
                       <td className='p-2'>
                         ₦{item?.planLimit?.toLocaleString()}
                       </td>
+                      <td className='p-2'>{item?.expectedPay}</td>
                     </tr>
                   )
                 })}
@@ -209,6 +211,7 @@ const FoodAssuranceOrgSingle = () => {
                   <th className='p-2 text-center'>Members Name</th>
                   <th className='p-2 text-center'>Members Email</th>
                   <th className='p-2 text-center'>Plan Limit</th>
+                  <th className='p-2 text-center'>Expected Pay</th>
                 </tr>
               </thead>
 
@@ -228,6 +231,7 @@ const FoodAssuranceOrgSingle = () => {
                         <td className='p-2'>
                           ₦{item?.planLimit?.toLocaleString()}
                         </td>
+                        <td className='p-2'>{item?.expectedPay}</td>
                       </tr>
                     )
                   })}
