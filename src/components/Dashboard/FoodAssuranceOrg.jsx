@@ -86,7 +86,12 @@ const FoodAssuranceOrg = () => {
                     <tr
                       key={item?._id}
                       // onClick={() => handleMoreInfo(item?._id)}
-                      onClick={() => naviagte(`/food-assurance/${item?._id}`)}
+                      // onClick={() => naviagte(`/food-assurance/${item?._id}`)}
+                      onClick={() =>
+                        naviagte(`/food-assurance/${item?._id}`, {
+                          state: { companyName: item?.name },
+                        })
+                      }
                       className='text-center cursor-pointer mt-5 py-2 h-12 border-b-[1px] border-green-200 hover:bg-slate-200'
                     >
                       <td className='p-2'>{item?.uniqueCode}</td>

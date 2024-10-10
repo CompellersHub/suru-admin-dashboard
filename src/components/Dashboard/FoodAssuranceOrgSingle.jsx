@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react'
 import { CiSearch } from 'react-icons/ci'
 import { useFetchSingleOrganization } from '../../hooks/companiesApi'
 import FoodAssuranceOrgModalDetails from '../Details/FoodAssuranceOrgModalDetails'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
 const FoodAssuranceOrgSingle = () => {
   const [modalOpen, setModalOpen] = useState(false)
 
   const { id } = useParams()
+  const location = useLocation()
+
+  // Extract company name from state
+  const companyName = location.state?.companyName || 'Unknown Company'
 
   const [orgId, setOrgId] = useState(id)
   const {
@@ -91,7 +95,7 @@ const FoodAssuranceOrgSingle = () => {
     <>
       <div className='flex flex-col gap-3 p-5'>
         <h3 className='flex items-center gap-3 text-2xl font-bold text-gray-700'>
-          Food Assurance
+          {companyName}
           <span className='text-navbar-color text-base bg-green-100 font-bold rounded-md p-1'>
             {orderCount} Members
           </span>
