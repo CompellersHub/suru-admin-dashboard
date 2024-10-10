@@ -17,6 +17,8 @@ import Uploads from './components/Dashboard/Uploads'
 import Withdrawals from './components/Dashboard/Withdrawals'
 import Logistics from './components/Dashboard/Logistics'
 import LogWithdrawals from './components/Dashboard/LogWithdrawals'
+import FoodAssuranceOrg from './components/Dashboard/FoodAssuranceOrg'
+import FoodAssuranceOrgSingle from './components/Dashboard/FoodAssuranceOrgSingle'
 
 function App() {
   const dispatch = useDispatch()
@@ -59,6 +61,22 @@ function App() {
           element={
             <RequireAuth>
               <Orders />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path='/food-assurance'
+          element={
+            <RequireAuth>
+              <FoodAssuranceOrg />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path='/food-assurance/:id'
+          element={
+            <RequireAuth>
+              <FoodAssuranceOrgSingle />
             </RequireAuth>
           }
         />

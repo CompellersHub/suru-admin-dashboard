@@ -236,6 +236,31 @@ const Navigation = ({ toggleNav }) => {
         )}
       </div>
 
+      {/* food-assurance */}
+      <NavLink
+        to='/food-assurance'
+        className={({ isActive }) =>
+          `flex gap-10 ${
+            isActive
+              ? 'bg-green-100 text-navbar-color'
+              : 'group transition-all duration-200 hover:bg-green-100'
+          }`
+        }
+        onClick={() => handleNavClick('food-assurance')}
+      >
+        <div
+          className={`h-14 w-[4px] ${
+            activeNav === 'food-assurance'
+              ? 'bg-navbar-color'
+              : 'bg-white group-hover:bg-navbar-color transition-all duration-200'
+          }`}
+        ></div>
+        <div className='flex items-center gap-2 text-xl'>
+          <FaClipboardList />
+          <span>Food Assurance</span>
+        </div>
+      </NavLink>
+
       {/* Logout */}
       <div className='flex items-center gap-3 text-xl mt-auto ml-10 text-[#EB5757]'>
         <CiLogout />
