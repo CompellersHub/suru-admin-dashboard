@@ -120,15 +120,17 @@ const FoodAssuranceOrgSingle = () => {
 
         {/* Table */}
         <div className='overflow-x-auto'>
-          <h3 className='flex items-center capitalize gap-3 text-2xl font-bold text-gray-700'>
-            bill
-            <span className='text-white text-base px-4 py-2 bg-green-700 font-bold rounded-md p-1'>
-              ₦{''} {singleOrgData?.bills.toLocaleString()}
-            </span>
-          </h3>
-          <h3 className='flex items-center gap-3 text-2xl font-bold text-gray-700'>
-            Active Members
-          </h3>
+          <div className='flex gap-2 items-center flex-wrap py-2'>
+            <h3 className='flex items-center gap-3 text-2xl font-bold text-gray-700'>
+              Active Members
+            </h3>
+            <h3 className='flex items-center capitalize gap-3 text-2xl font-bold text-gray-700'>
+              bill
+              <span className='text-white text-base px-4 py-2 bg-green-700 font-bold rounded-md p-1'>
+                ₦{''} {singleOrgData?.bills.toLocaleString()}
+              </span>
+            </h3>
+          </div>
           <table className='rounded-md overflow-hidden w-full'>
             {/* Head */}
             <thead className='bg-green-100'>
@@ -207,7 +209,6 @@ const FoodAssuranceOrgSingle = () => {
                   <th className='p-2 text-center'>Members Name</th>
                   <th className='p-2 text-center'>Members Email</th>
                   <th className='p-2 text-center'>Plan Limit</th>
-                  <th className='p-2 text-center'>Members ID</th>
                 </tr>
               </thead>
 
@@ -224,8 +225,9 @@ const FoodAssuranceOrgSingle = () => {
                       >
                         <td className='p-2'>{item?.name}</td>
                         <td className='p-2'>{item?.email}</td>
-                        <td className='p-2'>₦{item?.planLimit}</td>
-                        <td className='p-2'>{item?._id}</td>
+                        <td className='p-2'>
+                          ₦{item?.planLimit?.toLocaleString()}
+                        </td>
                       </tr>
                     )
                   })}

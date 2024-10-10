@@ -33,7 +33,7 @@ const FoodAssuranceOrgModalDetails = ({
                 {/* Head */}
                 <thead className='bg-green-100'>
                   <tr className='text-navbar-color py-2 h-14'>
-                    <th className='p-2 text-center'>Order Slug</th>
+                    <th className='p-2 text-center'>Order ID</th>
                     <th className='p-2 text-center'>Members Name</th>
                     <th className='p-2 text-center'>Members Email</th>
                     <th className='p-2 text-center'>Product Name</th>
