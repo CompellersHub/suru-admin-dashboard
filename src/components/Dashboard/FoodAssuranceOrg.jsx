@@ -1,25 +1,15 @@
 import { useState, useEffect } from 'react'
 import { CiSearch } from 'react-icons/ci'
-import {
-  useFetchOrganization,
-  useFetchSingleOrganization,
-} from '../../hooks/companiesApi'
-import FoodAssuranceOrgModalDetails from '../Details/FoodAssuranceOrgModalDetails'
+import { useFetchOrganization } from '../../hooks/companiesApi'
+import { useNavigate } from 'react-router-dom'
 
 const FoodAssuranceOrg = () => {
-  const [modalOpen, setModalOpen] = useState(false)
   const { data: fetchOrders, isPending } = useFetchOrganization()
-  const [orgId, setOrgId] = useState(null)
   const [orderCount, setOrderCount] = useState(0)
   const [filteredOrg, setFilteredOrg] = useState(fetchOrders)
-  const [loadingModal, setLoadingModal] = useState(false)
   const [page, setPage] = useState(0)
 
-  const {
-    data: singleOrgData,
-    isFetching: singleLoading,
-    refetch,
-  } = useFetchSingleOrganization(orgId, { enabled: false })
+  const naviagte = useNavigate()
 
   useEffect(() => {
     setOrderCount(fetchOrders?.length)
@@ -36,30 +26,6 @@ const FoodAssuranceOrg = () => {
       )
     )
   }
-
-  useEffect(() => {
-    if (orgId) {
-      setLoadingModal(true)
-      refetch().finally(() => setLoadingModal(false))
-    }
-  }, [orgId, refetch])
-
-  const handleModalClose = () => {
-    setOrgId(null)
-    setModalOpen(false)
-  }
-
-  const handleMoreInfo = (id) => {
-    if (id) {
-      setOrgId(id)
-    }
-  }
-
-  useEffect(() => {
-    if (!singleLoading && singleOrgData) {
-      setModalOpen(true)
-    }
-  }, [singleLoading, singleOrgData])
 
   return (
     <>
@@ -92,7 +58,7 @@ const FoodAssuranceOrg = () => {
             {/* Head */}
             <thead className='bg-green-100'>
               <tr className='text-navbar-color py-2 h-14'>
-                <th className='p-2 text-center'>Comapny ID</th>
+                <th className='p-2 text-center'>Comapny Code</th>
                 <th className='p-2 text-center'>Comapny Name</th>
                 <th className='p-2 text-center'>Comapny Email</th>
                 <th className='p-2 text-center'>No of Member</th>
@@ -119,10 +85,11 @@ const FoodAssuranceOrg = () => {
                   return (
                     <tr
                       key={item?._id}
-                      onClick={() => handleMoreInfo(item?._id)}
+                      // onClick={() => handleMoreInfo(item?._id)}
+                      onClick={() => naviagte(`/food-assurance/${item?._id}`)}
                       className='text-center cursor-pointer mt-5 py-2 h-12 border-b-[1px] border-green-200 hover:bg-slate-200'
                     >
-                      <td className='p-2'>{item?._id}</td>
+                      <td className='p-2'>{item?.uniqueCode}</td>
                       <td className='p-2'>{item?.name}</td>
                       <td className='p-2'>{item?.email}</td>
                       <td className='p-2'>{item?.members?.length}</td>
@@ -164,15 +131,6 @@ const FoodAssuranceOrg = () => {
           </button>
         </div>
       </div>
-
-      {modalOpen && orgId && !singleLoading && (
-        <FoodAssuranceOrgModalDetails
-          isOpen={modalOpen}
-          onClose={handleModalClose}
-          organizationMember={singleOrgData?.members}
-          singleLoading={loadingModal}
-        />
-      )}
     </>
   )
 }

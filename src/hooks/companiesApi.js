@@ -15,7 +15,7 @@ export const useFetchSingleOrganization = (id) => {
     queryKey: ['single_organization'],
     queryFn: async () => {
       const res = await API.get(`/superadmin/organisation/${id}`)
-      return res?.data?.data
+      return res?.data
     },
     enabled: !!id,
   })
