@@ -25,7 +25,7 @@ const FoodAssuranceOrgModalDetails = ({
   return (
     <>
       <div className='flex flex-col gap-3 p-5'>
-        <Modal isOpen={isOpen} onClose={onClose} title='Organization Details'>
+        <Modal isOpen={isOpen} onClose={onClose} title='Member Orders'>
           {/* Table */}
           <div className='overflow-x-auto'>
             {allOrders.length > 0 ? (
@@ -68,7 +68,7 @@ const FoodAssuranceOrgModalDetails = ({
               </table>
             ) : (
               <p className='flex text-center justify-center items-center gap-3 text-2xl font-bold text-gray-700'>
-                No details available
+                No Order available
               </p>
             )}
           </div>

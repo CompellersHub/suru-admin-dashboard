@@ -30,10 +30,13 @@ const FoodAssuranceOrg = () => {
   return (
     <>
       <div className='flex flex-col gap-3 p-5'>
-        <h3 className='flex items-center gap-3 text-2xl font-bold text-gray-700'>
-          Food Assurance
-          <span className='text-navbar-color text-base bg-green-100 font-bold rounded-md p-1'>
-            {orderCount} Organization
+        <h3 className='flex items-center gap-3 uppercase text-2xl font-bold text-gray-700'>
+          Food Assurance Registered Organizations
+        </h3>
+        <h3 className='flex items-center capitalize gap-3 text-2xl font-bold text-gray-700'>
+          Total Registered organization
+          <span className='text-navbar-color text-base px-3 bg-green-100 font-bold rounded-md p-1'>
+            {orderCount}
           </span>
         </h3>
 
@@ -58,9 +61,9 @@ const FoodAssuranceOrg = () => {
             {/* Head */}
             <thead className='bg-green-100'>
               <tr className='text-navbar-color py-2 h-14'>
-                <th className='p-2 text-center'>Comapny Code</th>
-                <th className='p-2 text-center'>Comapny Name</th>
-                <th className='p-2 text-center'>Comapny Email</th>
+                <th className='p-2 text-center'>Company Code</th>
+                <th className='p-2 text-center'>Company Name</th>
+                <th className='p-2 text-center'>Company Email</th>
                 <th className='p-2 text-center'>No of Member</th>
                 <th className='p-2 text-center'>Date Created</th>
               </tr>
@@ -86,7 +89,12 @@ const FoodAssuranceOrg = () => {
                     <tr
                       key={item?._id}
                       // onClick={() => handleMoreInfo(item?._id)}
-                      onClick={() => naviagte(`/food-assurance/${item?._id}`)}
+                      // onClick={() => naviagte(`/food-assurance/${item?._id}`)}
+                      onClick={() =>
+                        naviagte(`/food-assurance/${item?._id}`, {
+                          state: { companyName: item?.name },
+                        })
+                      }
                       className='text-center cursor-pointer mt-5 py-2 h-12 border-b-[1px] border-green-200 hover:bg-slate-200'
                     >
                       <td className='p-2'>{item?.uniqueCode}</td>
