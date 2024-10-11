@@ -68,7 +68,7 @@ const FoodAssuranceOrgModalDetails = ({
               </table>
             ) : (
               <p className='flex text-center justify-center items-center gap-3 text-2xl font-bold text-gray-700'>
-                No details available
+                No Order available
               </p>
             )}
           </div>

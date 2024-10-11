@@ -97,16 +97,32 @@ const FoodAssuranceOrgSingle = () => {
         <h3 className='flex items-center gap-3 text-2xl font-bold text-gray-700'>
           {companyName}
         </h3>
-        <h3 className='flex items-center gap-3 text-2xl font-bold text-gray-700'>
-          <span className='text-navbar-color text-base bg-green-100 font-bold rounded-md p-1'>
-            {orderCount} Members
-          </span>
-          <span className='text-white text-base bg-green-500 font-bold rounded-md p-1'>
-            {membersReq?.length} Membership Request Recieved
-          </span>
-          <span className='text-white text-base bg-green-700 font-bold rounded-md p-1'>
-            {membersReqSent?.length} Membership Request sent
-          </span>
+        <h3 className='flex justify-between items-center flex-wrap gap-3 text-2xl font-bold text-gray-700'>
+          <div className='flex gap-2 items-center'>
+            <span className='text-navbar-color text-base bg-green-100 font-bold rounded-md p-1'>
+              Members
+            </span>
+            <span className='text-navbar-color text-base bg-green-100 font-bold rounded-md p-1'>
+              {orderCount}
+            </span>
+          </div>
+          <div className='flex gap-2 items-center'>
+            <span className='text-navbar-color text-base bg-green-100 font-bold rounded-md p-1'>
+              Membership Request Recieved
+            </span>
+            <span className='text-navbar-color text-base bg-green-100 font-bold rounded-md p-1'>
+              {membersReq?.length}
+            </span>
+          </div>
+          <div className='flex gap-2 items-center'>
+            {' '}
+            <span className='text-navbar-color text-base bg-green-100 font-bold rounded-md p-1'>
+              Membership Request sent
+            </span>
+            <span className='text-navbar-color text-base bg-green-100 font-bold rounded-md p-1'>
+              {membersReqSent?.length}
+            </span>
+          </div>
         </h3>
 
         <form className='flex flex-col md:flex-row gap-5 bg-white rounded-md py-3 px-5 text-navbar-color'>
@@ -126,13 +142,13 @@ const FoodAssuranceOrgSingle = () => {
 
         {/* Table */}
         <div className='overflow-x-auto'>
-          <div className='flex gap-2 items-center flex-wrap py-2'>
+          <div className='flex gap-2 items-center justify-between flex-wrap py-2'>
             <h3 className='flex items-center gap-3 text-2xl font-bold text-gray-700'>
               Active Members
             </h3>
             <h3 className='flex items-center capitalize gap-3 text-2xl font-bold text-gray-700'>
               bill
-              <span className='text-white text-base px-4 py-2 bg-green-700 font-bold rounded-md p-1'>
+              <span className='text-navbar-color text-base px-4 py-2 bg-green-100 font-bold rounded-md p-1'>
                 ₦{''} {singleOrgData?.bills.toLocaleString()}
               </span>
             </h3>
