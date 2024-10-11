@@ -31,10 +31,13 @@ const FoodAssuranceOrg = () => {
     <>
       <div className='flex flex-col gap-3 p-5'>
         <h3 className='flex items-center gap-3 text-2xl font-bold text-gray-700'>
-          Food Assurance
-          <span className='text-navbar-color text-base bg-green-100 font-bold rounded-md p-1'>
-            {orderCount} Organization
+          Food Assurance Registered Organizations
+        </h3>
+        <h3 className='flex items-center gap-3 text-2xl font-bold text-gray-700'>
+          <span className='text-navbar-color text-base px-3 bg-green-100 font-bold rounded-md p-1'>
+            {orderCount}
           </span>
+          Total Registered organization
         </h3>
 
         <form className='flex flex-col md:flex-row gap-5 bg-white rounded-md py-3 px-5 text-navbar-color'>
