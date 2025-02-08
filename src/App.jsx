@@ -3,27 +3,28 @@ import {
   Routes,
   Route,
   Navigate,
-} from 'react-router-dom'
-import SignInPage from './pages/Auth/SignInPage'
-import 'react-toastify/dist/ReactToastify.css'
-import { authAction } from './store/auth-slice'
-import { useDispatch } from 'react-redux'
-import RequireAuth from './components/RequireAuth'
-import { ToastContainer } from 'react-toastify'
-import Dashboard from './components/Dashboard/Dashboard'
-import Products from './components/Dashboard/Products'
-import Orders from './components/Dashboard/Orders'
-import Uploads from './components/Dashboard/Uploads'
-import Withdrawals from './components/Dashboard/Withdrawals'
-import Logistics from './components/Dashboard/Logistics'
-import LogWithdrawals from './components/Dashboard/LogWithdrawals'
-import FoodAssuranceOrg from './components/Dashboard/FoodAssuranceOrg'
-import FoodAssuranceOrgSingle from './components/Dashboard/FoodAssuranceOrgSingle'
+} from "react-router-dom";
+import SignInPage from "./pages/Auth/SignInPage";
+import "react-toastify/dist/ReactToastify.css";
+import { authAction } from "./store/auth-slice";
+import { useDispatch } from "react-redux";
+import RequireAuth from "./components/RequireAuth";
+import { ToastContainer } from "react-toastify";
+import Dashboard from "./components/Dashboard/Dashboard";
+import Products from "./components/Dashboard/Products";
+import Orders from "./components/Dashboard/Orders";
+import Uploads from "./components/Dashboard/Uploads";
+import Withdrawals from "./components/Dashboard/Withdrawals";
+import Logistics from "./components/Dashboard/Logistics";
+import LogWithdrawals from "./components/Dashboard/LogWithdrawals";
+import FoodAssuranceOrg from "./components/Dashboard/FoodAssuranceOrg";
+import FoodAssuranceOrgSingle from "./components/Dashboard/FoodAssuranceOrgSingle";
+import CommissionWithdrawalRequests from "./components/Dashboard/CommissionWithdrawalRequests";
 
 function App() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const userData = JSON.parse(sessionStorage.getItem('userData'))
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
 
   if (userData) {
     dispatch(
@@ -31,17 +32,17 @@ function App() {
         user: userData.data,
         userToken: userData.accessToken,
       })
-    )
+    );
   }
 
   return (
     <Router>
       <ToastContainer />
       <Routes>
-        <Route path='/' element={<SignInPage />} />
-        <Route path='*' element={<Navigate to='/' />} />
+        <Route path="/" element={<SignInPage />} />
+        <Route path="*" element={<Navigate to="/" />} />
         <Route
-          path='/vendors'
+          path="/vendors"
           element={
             <RequireAuth>
               <Dashboard />
@@ -49,7 +50,7 @@ function App() {
           }
         />
         <Route
-          path='/products'
+          path="/products"
           element={
             <RequireAuth>
               <Products />
@@ -57,7 +58,7 @@ function App() {
           }
         />
         <Route
-          path='/orders'
+          path="/orders"
           element={
             <RequireAuth>
               <Orders />
@@ -65,7 +66,7 @@ function App() {
           }
         />
         <Route
-          path='/food-assurance'
+          path="/food-assurance"
           element={
             <RequireAuth>
               <FoodAssuranceOrg />
@@ -73,7 +74,7 @@ function App() {
           }
         />
         <Route
-          path='/food-assurance/:id'
+          path="/food-assurance/:id"
           element={
             <RequireAuth>
               <FoodAssuranceOrgSingle />
@@ -81,7 +82,7 @@ function App() {
           }
         />
         <Route
-          path='/upload'
+          path="/upload"
           element={
             <RequireAuth>
               <Uploads />
@@ -89,7 +90,7 @@ function App() {
           }
         />
         <Route
-          path='/withdrawal'
+          path="/withdrawal"
           element={
             <RequireAuth>
               <Withdrawals />
@@ -97,7 +98,15 @@ function App() {
           }
         />
         <Route
-          path='/logistics-overview'
+          path="/withdrawal-requests"
+          element={
+            <RequireAuth>
+              <CommissionWithdrawalRequests />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/logistics-overview"
           element={
             <RequireAuth>
               <Logistics />
@@ -105,7 +114,7 @@ function App() {
           }
         />
         <Route
-          path='/log-withdrawal'
+          path="/log-withdrawal"
           element={
             <RequireAuth>
               <LogWithdrawals />
@@ -114,7 +123,7 @@ function App() {
         />
       </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
