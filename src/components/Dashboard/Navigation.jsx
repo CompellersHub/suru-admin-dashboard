@@ -19,6 +19,7 @@ const Navigation = ({ toggleNav }) => {
     logistics: false,
     vendors: false,
     withdrawals: false,
+    foodAssurance: false,
   });
 
   const toggleDropdown = (menu) => {
@@ -40,7 +41,7 @@ const Navigation = ({ toggleNav }) => {
   };
 
   return (
-    <nav className="flex flex-col h-[120vh] capitalize w-64 bg-white  py-5 px-4 transition-all duration-300">
+    <nav className="flex flex-col h-[120vh] capitalize w-64 bg-white py-5 px-4 transition-all duration-300">
       {/* Sidebar Header */}
       <div className="text-2xl font-semibold text-gray-800 mb-5 px-2">
         Dashboard
@@ -172,38 +173,55 @@ const Navigation = ({ toggleNav }) => {
             </div>
           )}
         </div>
-      </div>
-      {/* withdrawls */}
 
-      <div className="group">
-        <div
-          className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ${
-            activeNav === "withdrawals" || dropdowns.withdrawals
-              ? "bg-green-100 text-green-700"
-              : "hover:bg-gray-100"
-          }`}
-          onClick={() => toggleDropdown("withdrawals")}
-        >
-          {/* withdrawls */}
-          <div className="flex items-center gap-3">
-            <LuUserSquare />
-            <span>Users</span>
-          </div>
-          {dropdowns.withdrawals ? <IoIosArrowUp /> : <IoIosArrowDown />}
+        {/* Food Assurance */}
+        <div className="group">
+          <NavLink
+            to="/food-assurance"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 hover:bg-gray-100"
+            onClick={() => handleNavClick("food-assurance")}
+          >
+            <MdOutlineDashboard />
+            <span>Food Assurance</span>
+          </NavLink>
         </div>
 
-        {dropdowns.withdrawals && (
-          <div className="pl-10 mt-2 space-y-1 transition-all duration-300">
-            <NavLink
-              to="/withdrawal-requests"
-              className="block py-2 text-gray-700 hover:text-green-700"
-              onClick={() => handleNavClick("withdrawal-requests")}
-            >
-              All Requests Request
-            </NavLink>
-            {/*  */}
+        {/* Users (Withdrawals + Commission Requests) */}
+        <div className="group">
+          <div
+            className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ${
+              activeNav === "withdrawals" || dropdowns.withdrawals
+                ? "bg-green-100 text-green-700"
+                : "hover:bg-gray-100"
+            }`}
+            onClick={() => toggleDropdown("withdrawals")}
+          >
+            <div className="flex items-center gap-3">
+              <LuUserSquare />
+              <span>Users</span>
+            </div>
+            {dropdowns.withdrawals ? <IoIosArrowUp /> : <IoIosArrowDown />}
           </div>
-        )}
+
+          {dropdowns.withdrawals && (
+            <div className="pl-10 mt-2 space-y-1 transition-all duration-300">
+              <NavLink
+                to="/withdrawal-requests"
+                className="block py-2 text-gray-700 hover:text-green-700"
+                onClick={() => handleNavClick("withdrawal-requests")}
+              >
+                Withdrawal Requests
+              </NavLink>
+              <NavLink
+                to="/commission-withdrawal-requests"
+                className="block py-2 text-gray-700 hover:text-green-700"
+                onClick={() => handleNavClick("commission-withdrawal")}
+              >
+                Commission Withdrawals
+              </NavLink>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Logout */}
