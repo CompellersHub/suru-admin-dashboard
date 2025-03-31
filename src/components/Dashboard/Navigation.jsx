@@ -8,6 +8,7 @@ import { navAction } from "../../store/nav-slice";
 import { authAction } from "../../store/auth-slice";
 import { NavLink } from "react-router-dom";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { LuUserSquare } from "react-icons/lu";
 
 const Navigation = ({ toggleNav }) => {
   const activeNav = useSelector((state) => state.nav.nav);
@@ -18,310 +19,220 @@ const Navigation = ({ toggleNav }) => {
     logistics: false,
     vendors: false,
     withdrawals: false,
+    foodAssurance: false,
   });
 
   const toggleDropdown = (menu) => {
-    setDropdowns({
-      products: menu === "products" ? !dropdowns.products : false,
-      logistics: menu === "logistics" ? !dropdowns.logistics : false,
-      vendors: menu === "vendors" ? !dropdowns.vendors : false,
-      withdrawals: menu === "withdrawals" ? !dropdowns.withdrawals : false,
-    });
+    setDropdowns((prev) => ({
+      ...prev,
+      [menu]: !prev[menu],
+    }));
   };
 
   const handleLogout = () => {
     sessionStorage.clear();
     dispatch(authAction.logout());
-    if (toggleNav) toggleNav(); // Close the menu after logout
+    if (toggleNav) toggleNav();
   };
 
   const handleNavClick = (nav) => {
     dispatch(navAction.setNav({ nav }));
-    if (toggleNav) toggleNav(); // Close the menu after navigating
+    if (toggleNav) toggleNav();
   };
 
   return (
-    <nav className="flex capitalize flex-col min-h-screen gap-4 bg-white w-full md:w-auto py-10">
-      {/* Vendors with Dropdown */}
-      <div className="flex flex-col">
-        <div
-          onClick={() => toggleDropdown("vendors")}
-          className={`flex gap-10  ${
-            activeNav === "vendors" || dropdowns.vendors
-              ? "bg-green-100"
-              : "group transition-all duration-200 hover:bg-green-100"
-          }`}
-        >
+    <nav className="flex flex-col h-[120vh] capitalize w-64 bg-white py-5 px-4 transition-all duration-300">
+      {/* Sidebar Header */}
+      <div className="text-2xl font-semibold text-gray-800 mb-5 px-2">
+        Dashboard
+      </div>
+
+      {/* Sidebar Menu */}
+      <div className="space-y-2">
+        {/* Vendors */}
+        <div className="group">
           <div
-            className={`h-14 w-[4px] ${
+            className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ${
               activeNav === "vendors" || dropdowns.vendors
-                ? "bg-navbar-color"
-                : "bg-white group-hover:bg-navbar-color transition-all duration-200"
+                ? "bg-green-100 text-green-700"
+                : "hover:bg-gray-100"
             }`}
-          ></div>
-          <div className="flex items-center justify-between gap-2 text-xl w-full">
-            <div className="flex items-center gap-2">
+            onClick={() => toggleDropdown("vendors")}
+          >
+            <div className="flex items-center gap-3">
               <MdOutlineDashboard />
               <span>Vendors</span>
             </div>
             {dropdowns.vendors ? <IoIosArrowUp /> : <IoIosArrowDown />}
           </div>
-        </div>
-        {dropdowns.vendors && (
-          <div className="flex flex-col ml-10 gap-2">
-            <NavLink
-              to="/vendors"
-              className={({ isActive }) =>
-                `${
-                  isActive
-                    ? "text-navbar-color"
-                    : "group-hover:text-navbar-color transition-all duration-200"
-                }`
-              }
-              onClick={() => handleNavClick("vendors")}
-            >
-              Vendor List
-            </NavLink>
-            <NavLink
-              to="/withdrawal"
-              className={({ isActive }) =>
-                `${
-                  isActive
-                    ? "text-navbar-color"
-                    : "group-hover:text-navbar-color transition-all duration-200"
-                }`
-              }
-              onClick={() => handleNavClick("withdrawal")}
-            >
-              Withdrawal
-            </NavLink>
-          </div>
-        )}
-      </div>
 
-      {/* Orders */}
-      <NavLink
-        to="/orders"
-        className={({ isActive }) =>
-          `flex gap-10 ${
-            isActive
-              ? "bg-green-100 text-navbar-color"
-              : "group transition-all duration-200 hover:bg-green-100"
-          }`
-        }
-        onClick={() => handleNavClick("orders")}
-      >
-        <div
-          className={`h-14 w-[4px] ${
+          {dropdowns.vendors && (
+            <div className="pl-10 mt-2 space-y-1 transition-all duration-300">
+              <NavLink
+                to="/vendors"
+                className="block py-2 text-gray-700 hover:text-green-700"
+                onClick={() => handleNavClick("vendors")}
+              >
+                Vendor List
+              </NavLink>
+              <NavLink
+                to="/withdrawal"
+                className="block py-2 text-gray-700 hover:text-green-700"
+                onClick={() => handleNavClick("withdrawal")}
+              >
+                Withdrawal
+              </NavLink>
+            </div>
+          )}
+        </div>
+
+        {/* Orders */}
+        <NavLink
+          to="/orders"
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 ${
             activeNav === "orders"
-              ? "bg-navbar-color"
-              : "bg-white group-hover:bg-navbar-color transition-all duration-200"
+              ? "bg-green-100 text-green-700"
+              : "hover:bg-gray-100"
           }`}
-        ></div>
-        <div className="flex items-center gap-2 text-xl">
+          onClick={() => handleNavClick("orders")}
+        >
           <FaClipboardList />
           <span>Orders</span>
-        </div>
-      </NavLink>
+        </NavLink>
 
-      {/* Products with Dropdown */}
-      <div className="flex flex-col">
-        <div
-          onClick={() => toggleDropdown("products")}
-          className={`flex gap-10 ${
-            activeNav === "products" || dropdowns.products
-              ? "bg-green-100"
-              : "group transition-all duration-200 hover:bg-green-100"
-          }`}
-        >
+        {/* Products */}
+        <div className="group">
           <div
-            className={`h-14 w-[4px] ${
+            className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ${
               activeNav === "products" || dropdowns.products
-                ? "bg-navbar-color"
-                : "bg-white group-hover:bg-navbar-color transition-all duration-200"
+                ? "bg-green-100 text-green-700"
+                : "hover:bg-gray-100"
             }`}
-          ></div>
-          <div className="flex items-center justify-between gap-2 text-xl w-full">
-            <div className="flex items-center gap-2">
+            onClick={() => toggleDropdown("products")}
+          >
+            <div className="flex items-center gap-3">
               <CiViewList />
               <span>Products</span>
             </div>
             {dropdowns.products ? <IoIosArrowUp /> : <IoIosArrowDown />}
           </div>
-        </div>
-        {dropdowns.products && (
-          <div className="flex flex-col ml-10 gap-2">
-            <NavLink
-              to="/products"
-              className={({ isActive }) =>
-                `${
-                  isActive
-                    ? "text-navbar-color"
-                    : "group-hover:text-navbar-color transition-all duration-200"
-                }`
-              }
-              onClick={() => handleNavClick("product-list")}
-            >
-              Live Product
-            </NavLink>
-            <NavLink
-              to="/upload"
-              className={({ isActive }) =>
-                `${
-                  isActive
-                    ? "text-navbar-color"
-                    : "group-hover:text-navbar-color transition-all duration-200"
-                }`
-              }
-              onClick={() => handleNavClick("product-upload")}
-            >
-              Pending Product
-            </NavLink>
-          </div>
-        )}
-      </div>
 
-      {/* Logistics with Dropdown */}
-      <div className="flex flex-col">
-        <div
-          onClick={() => toggleDropdown("logistics")}
-          className={`flex gap-10 ${
-            activeNav === "logistics" || dropdowns.logistics
-              ? "bg-green-100"
-              : "group transition-all duration-200 hover:bg-green-100"
-          }`}
-        >
+          {dropdowns.products && (
+            <div className="pl-10 mt-2 space-y-1 transition-all duration-300">
+              <NavLink
+                to="/products"
+                className="block py-2 text-gray-700 hover:text-green-700"
+                onClick={() => handleNavClick("product-list")}
+              >
+                Live Product
+              </NavLink>
+              <NavLink
+                to="/upload"
+                className="block py-2 text-gray-700 hover:text-green-700"
+                onClick={() => handleNavClick("product-upload")}
+              >
+                Pending Product
+              </NavLink>
+            </div>
+          )}
+        </div>
+
+        {/* Logistics */}
+        <div className="group">
           <div
-            className={`h-14 w-[4px] ${
+            className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ${
               activeNav === "logistics" || dropdowns.logistics
-                ? "bg-navbar-color"
-                : "bg-white group-hover:bg-navbar-color transition-all duration-200"
+                ? "bg-green-100 text-green-700"
+                : "hover:bg-gray-100"
             }`}
-          ></div>
-          <div className="flex items-center justify-between gap-2 text-xl w-full">
-            <div className="flex items-center gap-2">
+            onClick={() => toggleDropdown("logistics")}
+          >
+            <div className="flex items-center gap-3">
               <CiDeliveryTruck />
               <span>Logistics</span>
             </div>
             {dropdowns.logistics ? <IoIosArrowUp /> : <IoIosArrowDown />}
           </div>
-        </div>
-        {dropdowns.logistics && (
-          <div className="flex flex-col ml-10 gap-2">
-            <NavLink
-              to="/logistics-overview"
-              className={({ isActive }) =>
-                `${
-                  isActive
-                    ? "text-navbar-color"
-                    : "group-hover:text-navbar-color transition-all duration-200"
-                }`
-              }
-              onClick={() => handleNavClick("logistics-overview")}
-            >
-              Logistics List
-            </NavLink>
-            <NavLink
-              to="/log-withdrawal"
-              className={({ isActive }) =>
-                `${
-                  isActive
-                    ? "text-navbar-color"
-                    : "group-hover:text-navbar-color transition-all duration-200"
-                }`
-              }
-              onClick={() => handleNavClick("log-withdrawal")}
-            >
-              Logistics Withdrawal
-            </NavLink>
-          </div>
-        )}
-      </div>
 
-      {/* food-assurance */}
-      <NavLink
-        to="/food-assurance"
-        className={({ isActive }) =>
-          `flex gap-10 ${
-            isActive
-              ? "bg-green-100 text-navbar-color"
-              : "group transition-all duration-200 hover:bg-green-100"
-          }`
-        }
-        onClick={() => handleNavClick("food-assurance")}
-      >
-        <div
-          className={`h-14 w-[4px] ${
-            activeNav === "food-assurance"
-              ? "bg-navbar-color"
-              : "bg-white group-hover:bg-navbar-color transition-all duration-200"
-          }`}
-        ></div>
-        <div className="flex items-center gap-2 text-xl">
-          <FaClipboardList />
-          <span>Food Assurance</span>
+          {dropdowns.logistics && (
+            <div className="pl-10 mt-2 space-y-1 transition-all duration-300">
+              <NavLink
+                to="/logistics-overview"
+                className="block py-2 text-gray-700 hover:text-green-700"
+                onClick={() => handleNavClick("logistics-overview")}
+              >
+                Logistics List
+              </NavLink>
+              <NavLink
+                to="/log-withdrawal"
+                className="block py-2 text-gray-700 hover:text-green-700"
+                onClick={() => handleNavClick("log-withdrawal")}
+              >
+                Logistics Withdrawal
+              </NavLink>
+            </div>
+          )}
         </div>
-      </NavLink>
-      <div className="flex flex-col">
-        <div
-          onClick={() => toggleDropdown("withdrawals")}
-          className={`flex gap-10 ${
-            activeNav === "withdrawals" || dropdowns.withdrawals
-              ? "bg-green-100"
-              : "group transition-all duration-200 hover:bg-green-100"
-          }`}
-        >
+
+        {/* Food Assurance */}
+        <div className="group">
+          <NavLink
+            to="/food-assurance"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 hover:bg-gray-100"
+            onClick={() => handleNavClick("food-assurance")}
+          >
+            <MdOutlineDashboard />
+            <span>Food Assurance</span>
+          </NavLink>
+        </div>
+
+        {/* Users (Withdrawals + Commission Requests) */}
+        <div className="group">
           <div
-            className={`h-14 w-[4px] ${
+            className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ${
               activeNav === "withdrawals" || dropdowns.withdrawals
-                ? "bg-navbar-color"
-                : "bg-white group-hover:bg-navbar-color transition-all duration-200"
+                ? "bg-green-100 text-green-700"
+                : "hover:bg-gray-100"
             }`}
-          ></div>
-          <div className="flex items-center justify-between gap-2 text-xl w-full">
-            <div className="flex items-center gap-2">
-              <FaClipboardList />
-              <span>Withdrawals</span>
+            onClick={() => toggleDropdown("withdrawals")}
+          >
+            <div className="flex items-center gap-3">
+              <LuUserSquare />
+              <span>Users</span>
             </div>
             {dropdowns.withdrawals ? <IoIosArrowUp /> : <IoIosArrowDown />}
           </div>
+
+          {dropdowns.withdrawals && (
+            <div className="pl-10 mt-2 space-y-1 transition-all duration-300">
+              <NavLink
+                to="/withdrawal-requests"
+                className="block py-2 text-gray-700 hover:text-green-700"
+                onClick={() => handleNavClick("withdrawal-requests")}
+              >
+                Withdrawal Requests
+              </NavLink>
+              <NavLink
+                to="/commission-withdrawal-requests"
+                className="block py-2 text-gray-700 hover:text-green-700"
+                onClick={() => handleNavClick("commission-withdrawal")}
+              >
+                Commission Withdrawals
+              </NavLink>
+            </div>
+          )}
         </div>
-        {dropdowns.withdrawals && (
-          <div className="flex flex-col ml-10 gap-2">
-            <NavLink
-              to="/withdrawal-requests"
-              className={({ isActive }) =>
-                `${
-                  isActive
-                    ? "text-navbar-color"
-                    : "group-hover:text-navbar-color transition-all duration-200"
-                }`
-              }
-              onClick={() => handleNavClick("withdrawal-requests")}
-            >
-              All Requests
-            </NavLink>
-            <NavLink
-              to="/withdrawal-history"
-              className={({ isActive }) =>
-                `${
-                  isActive
-                    ? "text-navbar-color"
-                    : "group-hover:text-navbar-color transition-all duration-200"
-                }`
-              }
-              onClick={() => handleNavClick("withdrawal-history")}
-            >
-              Request History
-            </NavLink>
-          </div>
-        )}
       </div>
 
       {/* Logout */}
-      <div className="flex items-center gap-3 text-xl mt-auto ml-10 text-[#EB5757]">
-        <CiLogout />
-        <button onClick={handleLogout}>Logout</button>
+      <div className="mt-auto px-4">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 w-full py-3 text-red-600 hover:bg-red-100 rounded-lg transition-all duration-300"
+        >
+          <CiLogout />
+          <span>Logout</span>
+        </button>
       </div>
     </nav>
   );
