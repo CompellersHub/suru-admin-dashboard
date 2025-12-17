@@ -20,6 +20,7 @@ import LogWithdrawals from "./components/Dashboard/LogWithdrawals";
 import FoodAssuranceOrg from "./components/Dashboard/FoodAssuranceOrg";
 import FoodAssuranceOrgSingle from "./components/Dashboard/FoodAssuranceOrgSingle";
 import CommissionWithdrawalRequests from "./components/Dashboard/CommissionWithdrawalRequests";
+import BulkUploadLogistics from "./components/Dashboard/BulkUploadLogistics";
 
 function App() {
   const dispatch = useDispatch();
@@ -118,6 +119,14 @@ function App() {
           element={
             <RequireAuth>
               <LogWithdrawals />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/logistics/bulk-upload"
+          element={
+            <RequireAuth>
+              <BulkUploadLogistics />
             </RequireAuth>
           }
         />

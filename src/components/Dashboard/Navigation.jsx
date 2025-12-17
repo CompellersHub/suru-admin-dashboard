@@ -100,6 +100,20 @@ const Navigation = ({ toggleNav }) => {
           <span>Orders</span>
         </NavLink>
 
+        {/* Bulk Upload Logistics */}
+        <NavLink
+          to="/logistics/bulk-upload"
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 ${
+            activeNav === "bulk-upload-logistics"
+              ? "bg-green-100 text-green-700"
+              : "hover:bg-gray-100"
+          }`}
+          onClick={() => handleNavClick("bulk-upload-logistics")}
+        >
+          <CiDeliveryTruck />
+          <span>Add Logistics</span>
+        </NavLink>
+
         {/* Products */}
         <div className="group">
           <div
@@ -162,6 +176,13 @@ const Navigation = ({ toggleNav }) => {
                 onClick={() => handleNavClick("logistics-overview")}
               >
                 Logistics List
+              </NavLink>
+              <NavLink
+                to="/logistics/bulk-upload"
+                className="block py-2 text-gray-700 hover:text-green-700"
+                onClick={() => handleNavClick("bulk-upload-logistics")}
+              >
+                Bulk Upload
               </NavLink>
               <NavLink
                 to="/log-withdrawal"
