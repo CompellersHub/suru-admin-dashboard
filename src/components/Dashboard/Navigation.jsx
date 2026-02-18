@@ -157,11 +157,25 @@ const Navigation = ({ toggleNav }) => {
           {dropdowns.logistics && (
             <div className="pl-10 mt-2 space-y-1 transition-all duration-300">
               <NavLink
+                to="/logistics-companies"
+                className="block py-2 text-gray-700 hover:text-green-700"
+                onClick={() => handleNavClick("logistics-companies")}
+              >
+                Add Logistics
+              </NavLink>
+              <NavLink
                 to="/logistics-overview"
                 className="block py-2 text-gray-700 hover:text-green-700"
                 onClick={() => handleNavClick("logistics-overview")}
               >
                 Logistics List
+              </NavLink>
+              <NavLink
+                to="/logistics/bulk-upload"
+                className="block py-2 text-gray-700 hover:text-green-700"
+                onClick={() => handleNavClick("bulk-upload-logistics")}
+              >
+                Bulk Upload
               </NavLink>
               <NavLink
                 to="/log-withdrawal"
