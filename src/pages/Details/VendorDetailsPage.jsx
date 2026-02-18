@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import VendorDetails from "../../components/Details/VendorDetails";
 
 const VendorDetailsPage = () => {

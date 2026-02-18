@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
 import { CiSearch } from 'react-icons/ci'
-import WithdrawalDetailsModal from '../Details/WithdrawalDetailsModal'
 import {
-  useFetchSingleWithdrawal,
-  useFetchWithdrawals,
+  useFetchLogWithdrawals,
+  useFetchSingleLogWithdrawal,
 } from '../../hooks/withdrawalApi'
+import LogWithdrawalDetailsModal from '../Details/LogWithdrawalDetailsModal'
 
-const Withdrawals = () => {
+const LogWithdrawals = () => {
   const [orderType, setOrderType] = useState('all')
-  const { data: fetchWithdrawal, isPending } = useFetchWithdrawals()
+  const { data: fetchWithdrawal, isPending } = useFetchLogWithdrawals()
   const [filteredWithdrawal, setFilteredWithdrawal] = useState(fetchWithdrawal)
+
   const [modalOpen, setModalOpen] = useState(false)
   const [page, setPage] = useState(0)
   const [selectedProductId, setSelectedProductId] = useState(null)
@@ -18,7 +19,7 @@ const Withdrawals = () => {
     data: singleProductData,
     isFetching: singleLoading,
     refetch,
-  } = useFetchSingleWithdrawal(selectedProductId, { enabled: false })
+  } = useFetchSingleLogWithdrawal(selectedProductId, { enabled: false })
 
   useEffect(() => {
     setFilteredWithdrawal(fetchWithdrawal)
@@ -87,7 +88,7 @@ const Withdrawals = () => {
     <>
       <div className='flex flex-col gap-3 p-5'>
         <h3 className='flex items-center gap-3 text-2xl font-bold text-gray-700'>
-          Withdrawals
+          Logistic Withdrawals
           <span className='text-navbar-color text-base bg-green-100 font-bold rounded-md p-1'>
             {fetchWithdrawal?.length} withdrawals
           </span>
@@ -168,7 +169,7 @@ const Withdrawals = () => {
             {/* Table Head */}
             <thead className='bg-green-100'>
               <tr className='text-navbar-color py-2 h-14'>
-                <th className='p-2 text-left'>Vendors Name</th>
+                <th className='p-2 text-left'>Logistic Name</th>
                 <th className='p-2 text-left'>Withdrawal Amount</th>
                 <th className='p-2 text-left'>Date of Request</th>
                 <th className='p-2 text-left'>Bank Name</th>
@@ -246,7 +247,7 @@ const Withdrawals = () => {
       </div>
 
       {modalOpen && selectedProductId && !singleLoading && (
-        <WithdrawalDetailsModal
+        <LogWithdrawalDetailsModal
           isOpen={modalOpen}
           onClose={handleModalClose}
           productDetails={singleProductData}
@@ -257,4 +258,4 @@ const Withdrawals = () => {
   )
 }
 
-export default Withdrawals
+export default LogWithdrawals
