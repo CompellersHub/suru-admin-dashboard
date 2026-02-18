@@ -171,13 +171,6 @@ const Navigation = ({ toggleNav }) => {
                 Logistics List
               </NavLink>
               <NavLink
-                to="/logistics/bulk-upload"
-                className="block py-2 text-gray-700 hover:text-green-700"
-                onClick={() => handleNavClick("bulk-upload-logistics")}
-              >
-                Bulk Upload
-              </NavLink>
-              <NavLink
                 to="/log-withdrawal"
                 className="block py-2 text-gray-700 hover:text-green-700"
                 onClick={() => handleNavClick("log-withdrawal")}
