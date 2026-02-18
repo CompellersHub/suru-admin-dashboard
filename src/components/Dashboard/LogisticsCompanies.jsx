@@ -44,6 +44,8 @@ const LogisticsCompanies = () => {
     }
   }
 
+// TODO: Add a section to list existing logistics companies with options to edit or delete them in the future
+
   return (
     <div className='flex flex-col gap-3 p-5'>
       <h3 className='flex items-center gap-3 text-2xl font-bold text-gray-700'>
