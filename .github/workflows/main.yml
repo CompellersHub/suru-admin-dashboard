@@ -1,0 +1,54 @@
+name: Deployment
+run-name: "Deployment started by @${{github.actor}}"
+on:
+  workflow_dispatch:
+  #push:
+    #branches: [main]
+
+jobs:
+  buildAndDelploy:
+    name: Build and deploy artifacts
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        
+      - uses: actions/setup-node@v3.9.1
+        with:
+          node-version: 23.11.0
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Copy env
+        run: echo "${{ vars.ENV_FILE_CONTENT }}" > .env
+
+      - name: Build app
+        run: npm run build -- --outDir ./build --emptyOutDir
+        
+      - name: Zip Build
+        run: cd build && zip -r ../public-build.zip *
+
+      - name: Copying Build to server
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          source: public-build.zip
+          target: /tmp
+      
+      - name: Updating Application
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          script: |
+            set -e
+            if [ -d admin.suruhub.com  ]; then rm -r admin.suruhub.com ; fi;
+            unzip /tmp/public-build.zip -d admin.suruhub.com
+            rm /tmp/public-build.zip
+            
