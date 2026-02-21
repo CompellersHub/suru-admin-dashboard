@@ -27,7 +27,7 @@ jobs:
         run: npm run build -- --outDir ./build --emptyOutDir
         
       - name: Zip Build
-        run: cd build && zip -r ../public-build.zip *
+        run: cp .htaccess build && cd build && zip -r ../public-build.zip *
 
       - name: Copying Build to server
         uses: appleboy/scp-action@v1
